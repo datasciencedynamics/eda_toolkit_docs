@@ -1848,7 +1848,7 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
     :raises KeyError: If any column in ``col`` or ``func_col`` is missing from the DataFrame.
 
     :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is ``True``. Otherwise, returns ``None``.
-    :rtype: dict or None
+    :rtype: dict or ``None``
 
 .. admonition:: Notes
 
@@ -2407,7 +2407,7 @@ The ``outcome_crosstab_plot`` function produces stacked bar plots for each categ
     :param show_value_counts: If True, append counts or percentages to the legend.
     :type show_value_counts: bool
     :param color_schema: Color mapping options. Can be:
-                         - None (use default colors)
+                         - ``None`` (use default colors)
                          - list/tuple (applies across all subplots)
                          - dict mapping variable name to color list
     :type color_schema: ``None``, list, tuple, or dict
@@ -2493,6 +2493,7 @@ Box and Violin Plots
 The ``box_violin_plot`` function generates individual and/or subplot-based plots of boxplots or violin plots for specified metrics against comparison categories in a DataFrame. It offers extensive customization options, including control over plot type, display mode, axis label rotation, figure size, and saving preferences, making it suitable for a wide range of data visualization needs.
 
 This function supports:
+
 - Rotating plots (swapping x and y axes).
 - Adjusting font sizes for axis labels and tick labels.
 - Wrapping plot titles for better readability.
@@ -2553,7 +2554,7 @@ This function supports:
         - If ``individual_figsize`` is not a tuple or list of two numbers.
         - If ``subplot_figsize`` is provided and is not a tuple or list of two numbers.
 
-    :returns: None
+    :returns: ``None``
 
 .. admonition:: Notes
 
@@ -3265,7 +3266,7 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
     :param df: The DataFrame containing the data.
     :type df: pandas.DataFrame
 
-    :param cols: List of column names to include in the correlation matrix. If None, all columns are included.
+    :param cols: List of column names to include in the correlation matrix. If ``None``, all columns are included.
     :type cols: list of str, optional
 
     :param annot: Whether to annotate the heatmap with correlation coefficients. Default is ``True``.

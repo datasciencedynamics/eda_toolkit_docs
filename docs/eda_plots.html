@@ -1642,7 +1642,7 @@ New Column Name: age_robust
 <dd class="field-odd"><p>Dictionary of crosstabs DataFrames if <code class="docutils literal notranslate"><span class="pre">return_dict</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>. Otherwise, returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a> or None</p>
+<dd class="field-even"><p>dict or <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2085,7 +2085,7 @@ regular bar plots for income by age, without stacking.</p>
 <li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – If True, show proportions instead of raw counts.</p></li>
 <li><p><strong>show_value_counts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – If True, append counts or percentages to the legend.</p></li>
 <li><p><strong>color_schema</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code>, list, tuple, or dict) – Color mapping options. Can be:
-- None (use default colors)
+- <code class="docutils literal notranslate"><span class="pre">None</span></code> (use default colors)
 - list/tuple (applies across all subplots)
 - dict mapping variable name to color list</p></li>
 <li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether to save the plots.</p></li>
@@ -2153,12 +2153,14 @@ regular bar plots for income by age, without stacking.</p>
 <h1>Box and Violin Plots<a class="headerlink" href="#box-and-violin-plots" title="Link to this heading"></a></h1>
 <p><strong>Create and save individual boxplots or violin plots, an entire grid of subplots, or both for specified metrics and comparisons.</strong></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">box_violin_plot</span></code> function generates individual and/or subplot-based plots of boxplots or violin plots for specified metrics against comparison categories in a DataFrame. It offers extensive customization options, including control over plot type, display mode, axis label rotation, figure size, and saving preferences, making it suitable for a wide range of data visualization needs.</p>
-<p>This function supports:
-- Rotating plots (swapping x and y axes).
-- Adjusting font sizes for axis labels and tick labels.
-- Wrapping plot titles for better readability.
-- Saving plots in PNG and/or SVG format with customizable file paths.
-- Visualizing the distribution of metrics across categories, either individually, as subplots, or both.</p>
+<p>This function supports:</p>
+<ul class="simple">
+<li><p>Rotating plots (swapping x and y axes).</p></li>
+<li><p>Adjusting font sizes for axis labels and tick labels.</p></li>
+<li><p>Wrapping plot titles for better readability.</p></li>
+<li><p>Saving plots in PNG and/or SVG format with customizable file paths.</p></li>
+<li><p>Visualizing the distribution of metrics across categories, either individually, as subplots, or both.</p></li>
+</ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="box_violin_plot">
 <span class="sig-name descname"><span class="pre">box_violin_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'boxplot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel_rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">individual_figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplot_figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_wrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_violin_plot" title="Link to this definition"></a></dt>
@@ -2200,7 +2202,7 @@ regular bar plots for income by age, without stacking.</p>
 </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2675,7 +2677,7 @@ approach efficient for exploratory analysis or preprocessing.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing the data.</p></li>
-<li><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – List of column names to include in the correlation matrix. If None, all columns are included.</p></li>
+<li><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – List of column names to include in the correlation matrix. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all columns are included.</p></li>
 <li><p><strong>annot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to annotate the heatmap with correlation coefficients. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The colormap to use for the heatmap. Default is <code class="docutils literal notranslate"><span class="pre">&quot;coolwarm&quot;</span></code>.</p></li>
 <li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Controls whether to save the plots. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
