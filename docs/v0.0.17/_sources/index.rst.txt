@@ -33,12 +33,6 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 4
-   :caption: Theoretical Overview
-
-   theoretical_overview
-
-.. toctree::
-   :maxdepth: 4
    :caption: Data Management
 
    data_management
@@ -49,6 +43,12 @@ Table of Contents
 
    eda_plots
 
+.. toctree::
+   :maxdepth: 4
+   :caption: Theoretical Overview
+
+   theoretical_overview
+   
 .. toctree::
    :maxdepth: 4
    :caption: About EDA Toolkit
