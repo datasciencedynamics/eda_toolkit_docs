@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating Effective Visualizations &mdash; EDA Toolkit 0.0.16 documentation</title>
+  <title>Creating Effective Visualizations &mdash; EDA Toolkit 0.0.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=c7cdf6fe"></script>
+      <script src="_static/documentation_options.js?v=63b572e7"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,6 +111,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#pivoted-stacked-bar-plots-example">Pivoted Stacked Bar Plots Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#non-normalized-stacked-bar-plots-example">Non-Normalized Stacked Bar Plots Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#regular-non-stacked-bar-plots-example">Regular Non-Stacked Bar Plots Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#outcome-crosstab-plots">Outcome Crosstab Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#outcome_crosstab_plot"><code class="docutils literal notranslate"><span class="pre">outcome_crosstab_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#outcome-crosstab-example">Outcome Crosstab Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#box-and-violin-plots">Box and Violin Plots</a><ul>
@@ -2051,6 +2056,96 @@ order, making it easier to visualize the most prevalent categories.</p>
 and the legend has been removed by setting <code class="docutils literal notranslate"><span class="pre">show_legend=False</span></code>. This illustrates
 regular bar plots for income by age, without stacking.</p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/Bar_Age_regular_income.svg"><img alt="Bar Plot Age vs. Income (Regular)" class="align-center" src="_images/Bar_Age_regular_income.svg" style="width: 900px;" />
+</a>
+</div><div style="height: 50px;"></div></section>
+</section>
+<section id="outcome-crosstab-plots">
+<h1>Outcome Crosstab Plots<a class="headerlink" href="#outcome-crosstab-plots" title="Link to this heading"></a></h1>
+<p><strong>Visualize the distribution of multiple categorical predictors with respect to a binary outcome.</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">outcome_crosstab_plot</span></code> function produces stacked bar plots for each categorical variable provided, segmented by a binary outcome. It supports both count-based and normalized percentage views, optional value annotations, flexible color configurations, and output saving. Each subplot compares a predictor variable against the outcome.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="outcome_crosstab_plot">
+<span class="sig-name descname"><span class="pre">outcome_crosstab_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outcome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_to_anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">-0.25)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_value_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_schema</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#outcome_crosstab_plot" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing your data.</p></li>
+<li><p><strong>list_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – List of column names (categorical variables) to plot.</p></li>
+<li><p><strong>outcome</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the binary outcome variable.</p></li>
+<li><p><strong>bbox_to_anchor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a>) – Location for legend anchoring. Default is <code class="docutils literal notranslate"><span class="pre">(0.5,</span> <span class="pre">-0.25)</span></code>.</p></li>
+<li><p><strong>w_pad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Padding between columns in the subplot grid.</p></li>
+<li><p><strong>h_pad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Padding between rows in the subplot grid.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Tuple specifying the overall figure size.</p></li>
+<li><p><strong>label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Font size for axis labels, titles, and legend text.</p></li>
+<li><p><strong>tick_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Font size for tick labels.</p></li>
+<li><p><strong>n_rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Optional number of subplot rows. If not provided, it’s auto-calculated.</p></li>
+<li><p><strong>n_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Optional number of subplot columns. If not provided, it’s auto-calculated.</p></li>
+<li><p><strong>label_0</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Optional custom label for outcome value <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>label_1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Optional custom label for outcome value <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – If True, show proportions instead of raw counts.</p></li>
+<li><p><strong>show_value_counts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – If True, append counts or percentages to the legend.</p></li>
+<li><p><strong>color_schema</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code>, list, tuple, or dict) – Color mapping options. Can be:
+- None (use default colors)
+- list/tuple (applies across all subplots)
+- dict mapping variable name to color list</p></li>
+<li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether to save the plots.</p></li>
+<li><p><strong>image_path_png</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save PNG files.</p></li>
+<li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save SVG files.</p></li>
+<li><p><strong>string</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Base name for output files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>. Displays plots and optionally saves them.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<ul class="simple">
+<li><p>The function assumes a binary outcome. For multiclass, use alternative plotting strategies.</p></li>
+<li><p>You can format outcome axis labels using <code class="docutils literal notranslate"><span class="pre">label_0</span></code> and <code class="docutils literal notranslate"><span class="pre">label_1</span></code> for better readability.</p></li>
+<li><p>Normalization (<code class="docutils literal notranslate"><span class="pre">normalize=True</span></code>) adjusts bar heights to percentages rather than counts.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">show_value_counts=True</span></code>, each legend entry includes either <code class="docutils literal notranslate"><span class="pre">n=</span></code> counts or percentage values.</p></li>
+</ul>
+</div>
+<section id="outcome-crosstab-example">
+<h2>Outcome Crosstab Example<a class="headerlink" href="#outcome-crosstab-example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to generate outcome-wise crosstab plots for multiple categorical variables (<code class="docutils literal notranslate"><span class="pre">race</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code>) against a binary outcome variable (<code class="docutils literal notranslate"><span class="pre">income</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">outcome_crosstab_plot</span>
+
+<span class="n">bar_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">]</span>
+
+<span class="n">outcome_crosstab_plot</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">list_name</span><span class="o">=</span><span class="n">bar_list</span><span class="p">,</span>
+    <span class="n">label_0</span><span class="o">=</span><span class="s2">&quot;&lt;=50K&quot;</span><span class="p">,</span>
+    <span class="n">label_1</span><span class="o">=</span><span class="s2">&quot;&gt;50K&quot;</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">string</span><span class="o">=</span><span class="s2">&quot;outcome_by_feature&quot;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s2">&quot;income&quot;</span><span class="p">,</span>
+    <span class="n">show_value_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Ensure that the DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> contains the specified categorical variables in <code class="docutils literal notranslate"><span class="pre">bar_list</span></code> and the binary outcome variable <code class="docutils literal notranslate"><span class="pre">income</span></code>. The function will generate stacked bar plots for each categorical variable, comparing their distributions against the binary outcome.</p>
+<p>In this example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">df</span></code> is the DataFrame containing your dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bar_list</span></code> defines the list of categorical variables to compare against <code class="docutils literal notranslate"><span class="pre">income</span></code>.</p></li>
+<li><p>The labels <code class="docutils literal notranslate"><span class="pre">&lt;=50K</span></code> and <code class="docutils literal notranslate"><span class="pre">&gt;50K</span></code> are shown on the x-axis instead of default numeric values.</p></li>
+<li><p>Setting <code class="docutils literal notranslate"><span class="pre">normalize=False</span></code> plots raw counts instead of percentages.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show_value_counts=True</span></code> includes value counts in the legend.</p></li>
+<li><p>Output plots are saved as PNG and SVG files to the provided paths with the prefix <code class="docutils literal notranslate"><span class="pre">outcome_by_feature</span></code>.</p></li>
+</ul>
+</div>
+<div class="no-click"><a class="reference internal image-reference" href="_images/outcome_by_var.svg"><img alt="Outcome vs. Variable" class="align-center" src="_images/outcome_by_var.svg" style="width: 900px;" />
 </a>
 </div><div style="height: 50px;"></div></section>
 </section>

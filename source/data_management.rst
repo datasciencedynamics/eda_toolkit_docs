@@ -33,7 +33,7 @@ Data Management Techniques
 ===============================
 
 Path directories
-----------------
+------------------
 
 **Ensure that the directory exists. If not, create it.**
 

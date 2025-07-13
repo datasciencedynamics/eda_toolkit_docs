@@ -2367,6 +2367,124 @@ regular bar plots for income by age, without stacking.
    <div style="height: 50px;"></div>
 
 
+Outcome Crosstab Plots
+=======================
+
+**Visualize the distribution of multiple categorical predictors with respect to a binary outcome.**
+
+The ``outcome_crosstab_plot`` function produces stacked bar plots for each categorical variable provided, segmented by a binary outcome. It supports both count-based and normalized percentage views, optional value annotations, flexible color configurations, and output saving. Each subplot compares a predictor variable against the outcome.
+
+.. function:: outcome_crosstab_plot(df, list_name, outcome, bbox_to_anchor=(0.5, -0.25), w_pad=4, h_pad=4, figsize=(12, 8), label_fontsize=12, tick_fontsize=10, n_rows=None, n_cols=None, label_0=None, label_1=None, normalize=False, show_value_counts=False, color_schema=None, save_plots=False, image_path_png=None, image_path_svg=None, string=None)
+
+    :param df: The DataFrame containing your data.
+    :type df: pandas.DataFrame
+    :param list_name: List of column names (categorical variables) to plot.
+    :type list_name: list of str
+    :param outcome: Name of the binary outcome variable.
+    :type outcome: str
+    :param bbox_to_anchor: Location for legend anchoring. Default is ``(0.5, -0.25)``.
+    :type bbox_to_anchor: tuple
+    :param w_pad: Padding between columns in the subplot grid.
+    :type w_pad: float
+    :param h_pad: Padding between rows in the subplot grid.
+    :type h_pad: float
+    :param figsize: Tuple specifying the overall figure size.
+    :type figsize: tuple of int
+    :param label_fontsize: Font size for axis labels, titles, and legend text.
+    :type label_fontsize: int
+    :param tick_fontsize: Font size for tick labels.
+    :type tick_fontsize: int
+    :param n_rows: Optional number of subplot rows. If not provided, it's auto-calculated.
+    :type n_rows: int, optional
+    :param n_cols: Optional number of subplot columns. If not provided, it's auto-calculated.
+    :type n_cols: int, optional
+    :param label_0: Optional custom label for outcome value ``0``.
+    :type label_0: str, optional
+    :param label_1: Optional custom label for outcome value ``1``.
+    :type label_1: str, optional
+    :param normalize: If True, show proportions instead of raw counts.
+    :type normalize: bool
+    :param show_value_counts: If True, append counts or percentages to the legend.
+    :type show_value_counts: bool
+    :param color_schema: Color mapping options. Can be:
+                         - None (use default colors)
+                         - list/tuple (applies across all subplots)
+                         - dict mapping variable name to color list
+    :type color_schema: ``None``, list, tuple, or dict
+    :param save_plots: Whether to save the plots.
+    :type save_plots: bool
+    :param image_path_png: Directory path to save PNG files.
+    :type image_path_png: str, optional
+    :param image_path_svg: Directory path to save SVG files.
+    :type image_path_svg: str, optional
+    :param string: Base name for output files.
+    :type string: str, optional
+
+    :returns: ``None``. Displays plots and optionally saves them.
+    :rtype: ``None``
+
+.. admonition:: Notes
+
+    - The function assumes a binary outcome. For multiclass, use alternative plotting strategies.
+    - You can format outcome axis labels using ``label_0`` and ``label_1`` for better readability.
+    - Normalization (``normalize=True``) adjusts bar heights to percentages rather than counts.
+    - When ``show_value_counts=True``, each legend entry includes either ``n=`` counts or percentage values.
+
+Outcome Crosstab Example
+-------------------------
+
+This example demonstrates how to generate outcome-wise crosstab plots for multiple categorical variables (``race`` and ``sex``) against a binary outcome variable (``income``).
+
+.. code-block:: python
+
+    from eda_toolkit import outcome_crosstab_plot
+
+    bar_list = ["race", "sex"]
+
+    outcome_crosstab_plot(
+        df=df,
+        list_name=bar_list,
+        label_0="<=50K",
+        label_1=">50K",
+        figsize=(10, 6),
+        normalize=False,
+        string="outcome_by_feature",
+        outcome="income",
+        show_value_counts=True,
+    )
+
+.. note::
+
+    Ensure that the DataFrame ``df`` contains the specified categorical variables in ``bar_list`` and the binary outcome variable ``income``. The function will generate stacked bar plots for each categorical variable, comparing their distributions against the binary outcome.
+    
+    In this example:
+
+    - ``df`` is the DataFrame containing your dataset.
+    - ``bar_list`` defines the list of categorical variables to compare against ``income``.
+    - The labels ``<=50K`` and ``>50K`` are shown on the x-axis instead of default numeric values.
+    - Setting ``normalize=False`` plots raw counts instead of percentages.
+    - ``show_value_counts=True`` includes value counts in the legend.
+    - Output plots are saved as PNG and SVG files to the provided paths with the prefix ``outcome_by_feature``.
+
+
+.. raw:: html
+
+    <div class="no-click">
+
+.. image:: ../assets/outcome_by_var.svg
+   :alt: Outcome vs. Variable
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+    </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
 Box and Violin Plots
 =====================
 

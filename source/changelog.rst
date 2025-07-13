@@ -24,6 +24,24 @@
 Changelog
 =========
 
+
+`Version 0.0.17`_
+----------------------
+
+.. _Version 0.0.17: https://lshpaner.github.io/eda_toolkit_docs/v0.0.17/index.html
+
+- Changed all instances of the word/term ``grid`` to ``subplots`` where applicable.
+- Introduced a new function, ``outcome_crosstab_plot``, which generates crosstab-based stacked bar plots for visualizing the relationship between a binary outcome variable and multiple categorical features. The function supports:
+
+  - Normalized or raw counts
+  - Custom label fonts and layout control
+  - Flexible color customization (default, list, or column-specific dict)
+  - Optional value count or percentage annotations in the legend
+  - PNG/SVG export support
+  
+  This adds a compact, interpretable way to explore variable–outcome relationships during EDA.
+
+
 `Version 0.0.16`_
 ----------------------
 
