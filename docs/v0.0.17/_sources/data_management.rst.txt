@@ -1225,53 +1225,74 @@ Generating Summaries (Table 1)
 Create a summary statistics table for both categorical and continuous variables 
 in a DataFrame. This section describes how to generate a summary "Table 1" from 
 a given dataset using the ``generate_table1`` function. It supports automatic detection 
-of variable types, pretty-printing, and optional export to Markdown.
+of variable types, pretty-printing, optional export to Markdown, and *p*-value adjustments.
 
-.. function:: generate_table1(df, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False, include_types="both", combine=True)
+.. function:: generate_table1(df, apply_bonferroni=False, apply_bh_fdr=False, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, drop_columns=None, drop_variables=None, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False, include_types="both", combine=True, groupby_col=None, use_fisher_exact=False, use_welch=True)
 
-    :param df: Input DataFrame containing the data to summarize.
-    :type df: pandas.DataFrame
+   :param df: Input DataFrame containing the data to summarize.
+   :type df: pandas.DataFrame
 
-    :param categorical_cols: List of categorical column names. If ``None``, columns will be auto-detected based on ``dtype``.
-    :type categorical_cols: list of str, optional
+   :param apply_bonferroni: Whether to apply Bonferroni correction to p-values.
+   :type apply_bonferroni: bool, optional
 
-    :param continuous_cols: List of continuous (numeric) column names. If ``None``, columns will be auto-detected.
-    :type continuous_cols: list of str, optional
+   :param apply_bh_fdr: Whether to apply Benjamini-Hochberg FDR correction to p-values.
+   :type apply_bh_fdr: bool, optional
 
-    :param decimal_places: Number of decimal places to round summary statistics. Defaults to ``2``.
-    :type decimal_places: int, optional
+   :param categorical_cols: List of categorical column names. If None, inferred automatically.
+   :type categorical_cols: list of str, optional
 
-    :param export_markdown: If ``True``, exports the summary to Markdown format.
-    :type export_markdown: bool, optional
+   :param continuous_cols: List of continuous column names. If None, inferred automatically.
+   :type continuous_cols: list of str, optional
 
-    :param markdown_path: Full path and filename prefix for Markdown output. Files will be saved as ``<prefix>_continuous.md`` and/or ``<prefix>_categorical.md`` depending on type(s) selected.
-    :type markdown_path: str, optional
+   :param decimal_places: Number of decimal places for rounding statistics.
+   :type decimal_places: int, optional
 
-    :param max_categories: Maximum number of categories to include per categorical variable (if ``value_counts=True``).
-    :type max_categories: int, optional
+   :param export_markdown: Whether to export the table(s) to Markdown files.
+   :type export_markdown: bool, optional
 
-    :param detect_binary_numeric: If ``True``, numeric columns with <=2 unique values will be treated as categorical.
-    :type detect_binary_numeric: bool, optional
+   :param drop_columns: Column name or list of column names to drop from the final output.
+   :type drop_columns: str or list of str, optional
 
-    :param return_markdown_only: If ``True`` and exporting to Markdown, returns Markdown string(s) instead of DataFrame(s).
-    :type return_markdown_only: bool, optional
+   :param drop_variables: Variable name or list of variables to exclude from output.
+   :type drop_variables: str or list of str, optional
 
-    :param value_counts: If ``True``, provides frequency breakdown of each categorical value.
-    :type value_counts: bool, optional
+   :param markdown_path: Output path or filename prefix for Markdown export.
+   :type markdown_path: str or Path, optional
 
-    :param include_types: Type of variables to summarize. One of ``"continuous"``, ``"categorical"``, or ``"both"``.
-    :type include_types: str
+   :param max_categories: Maximum number of category levels to display in value counts.
+   :type max_categories: int, optional
 
-    :param combine: If ``True`` and ``include_types`` is ``"both"``, returns a single DataFrame. If ``False``, returns a tuple of (``continuous_df``, ``categorical_df``).
-    :type combine: bool, optional
+   :param detect_binary_numeric: Whether to reclassify numeric variables with ≤2 unique values as categorical.
+   :type detect_binary_numeric: bool, optional
 
-    :returns: 
-        - If ``include_types="both"`` and ``combine=False``: returns a tuple of DataFrames.
-        - If ``include_types="both"`` and ``combine=True``: returns a single combined DataFrame.
-        - If ``include_types="continuous"`` or ``"categorical"``: returns a single DataFrame.
-        - If ``export_markdown=True`` and ``return_markdown_only=True``: returns a Markdown string or dictionary of strings.
+   :param return_markdown_only: If ``True``, returns Markdown string(s) instead of DataFrame(s).
+   :type return_markdown_only: bool, optional
 
-    :rtype: pandas.DataFrame, tuple, str, or dict
+   :param value_counts: If ``True``, include value counts and proportions for categorical variables.
+   :type value_counts: bool, optional
+
+   :param include_types: Which types of variables to include: ``"categorical"``, ``"continuous"``, or ``"both"``.
+   :type include_types: str
+
+   :param combine: If ``True``, return a single DataFrame when ``include_types`` is ``"both"``; otherwise, return tuple.
+   :type combine: bool, optional
+
+   :param groupby_col: Optional column name for binary group comparisons (e.g., treatment vs. control).
+   :type groupby_col: str, optional
+
+   :param use_fisher_exact: Whether to use Fisher's Exact Test for 2x2 categorical comparisons.
+   :type use_fisher_exact: bool, optional
+
+   :param use_welch: Whether to use Welch’s t-test (default). If ``False``, uses Student’s t-test.
+   :type use_welch: bool, optional
+
+   :returns:
+      - If ``include_types="both"`` and ``combine=False``: tuple of two DataFrames (continuous, categorical)
+      - If ``include_types="both"`` and ``combine=True``: single combined DataFrame
+      - If ``include_types="continuous"`` or ``"categorical"``: single DataFrame
+      - If ``export_markdown=True`` and ``return_markdown_only=True``: returns Markdown string or dict of strings
+
+   :rtype: pandas.DataFrame or tuple or str or dict
 
 
 .. important::
@@ -1855,6 +1876,262 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">16.05</td>
     </tr>
     </tbody></table></div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+Example 3: Group Comparisons (*P*-Values)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+In this example we first turn the continuous `fnlwgt` variable into two new categorical factors:
+
+1. **Equal-width bins** (``fnlwgt_bin``), so each interval spans the same numeric range.  
+2. **Quantile bins** (``fnlwgt_bin_quantile``), so each bin holds roughly the same number of observations.
+
+
+After creating those, we build a mixed summary table that computes *p*-values for the two income groups (``<=50K`` vs. ``>50K``), alongside other categorical variables.
+
+.. code-block:: python
+
+    import pandas as pd
+
+    # Equal-width bins
+    df["fnlwgt_bin"] = pd.cut(
+        df["fnlwgt"],
+        bins=5,
+        labels=[f"Bin {i}" for i in range(1, 6)],
+        include_lowest=True,
+    )
+    # Select our new bins plus other categorical fields
+    df_table1_cat = df[["fnlwgt_bin", "age_group", "income"]]
+
+
+.. code-block:: python
+
+    from eda_toolkit import generate_table1
+
+    # Generate Table 1 comparing income groups
+    p_value_table_1_cat = generate_table1(
+        df=df_table1_cat,
+        value_counts=True,
+        include_types="categorical",
+        export_markdown=True,
+        groupby_col="income",
+        drop_columns=[
+            "Missing (n)",
+            "Missing (%)",
+            "income",   # drop the raw income column itself
+            "Type",     # drop internal type metadata
+            "Mode",     # drop mode metadata
+        ],
+        drop_variables="income",
+    )
+
+    print(p_value_table_1_cat)
+
+.. code-block:: text
+
+    Using Chi-squared test for variable: fnlwgt_bin_width
+    Using Chi-squared test for variable: age_group
+    Using Chi-squared test for variable: sex
+    Using Chi-squared test for variable: marital-status
+    Using Chi-squared test for variable: income
+
+
+**Output**
+
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:0px 0px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:0px 0px;word-break:normal;}
+    .tg .tg-2b7s{text-align:right;vertical-align:bottom}
+    .tg .tg-l2oz{font-weight:bold;text-align:right;vertical-align:top}
+    .tg .tg-amwm{font-weight:bold;text-align:right;vertical-align:top}
+    .tg .tg-8d8j{text-align:right;vertical-align:bottom}
+    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}
+    </style>
+    <div class="tg-wrap">
+      <table class="tg" style="table-layout: fixed; width: 696px">
+        <colgroup>
+          <col style="width: 95px">
+          <col style="width: 65px">
+          <col style="width: 65px">
+          <col style="width: 65px">
+          <col style="width: 65px">
+          <col style="width: 65px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="tg-l2oz">Variable</th>
+            <th class="tg-amwm">Count</th>
+            <th class="tg-amwm">Proportion (%)</th>
+            <th class="tg-amwm">&le;50K (n = 37,155)</th>
+            <th class="tg-amwm">&gt;50K (n = 11,687)</th>
+            <th class="tg-amwm">P-value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-2b7s">fnlwgt_bin_width</td>
+            <td class="tg-8d8j">48,842</td>
+            <td class="tg-8d8j">100.00</td>
+            <td class="tg-8d8j">37,155</td>
+            <td class="tg-8d8j">11,687</td>
+            <td class="tg-8d8j">0.66</td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">fnlwgt_bin_width = Bin 1</td>
+            <td class="tg-8d8j">42,729</td>
+            <td class="tg-8d8j">87.48</td>
+            <td class="tg-8d8j">32,517 (87.52%)</td>
+            <td class="tg-8d8j">10,212 (87.38%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">fnlwgt_bin_width = Bin 2</td>
+            <td class="tg-8d8j">5,898</td>
+            <td class="tg-8d8j">12.08</td>
+            <td class="tg-8d8j">4,466 (12.02%)</td>
+            <td class="tg-8d8j">1,432 (12.25%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">fnlwgt_bin_width = Bin 3</td>
+            <td class="tg-8d8j">186</td>
+            <td class="tg-8d8j">0.38</td>
+            <td class="tg-8d8j">148 (0.40%)</td>
+            <td class="tg-8d8j">38 (0.33%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">fnlwgt_bin_width = Bin 4</td>
+            <td class="tg-8d8j">22</td>
+            <td class="tg-8d8j">0.05</td>
+            <td class="tg-8d8j">18 (0.05%)</td>
+            <td class="tg-8d8j">4 (0.03%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">fnlwgt_bin_width = Bin 5</td>
+            <td class="tg-8d8j">7</td>
+            <td class="tg-8d8j">0.01</td>
+            <td class="tg-8d8j">6 (0.02%)</td>
+            <td class="tg-8d8j">1 (0.01%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group</td>
+            <td class="tg-8d8j">48,842</td>
+            <td class="tg-8d8j">100.00</td>
+            <td class="tg-8d8j">37,155</td>
+            <td class="tg-8d8j">11,687</td>
+            <td class="tg-8d8j">0.00</td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 18–29</td>
+            <td class="tg-8d8j">13,920</td>
+            <td class="tg-8d8j">28.50</td>
+            <td class="tg-8d8j">13,174 (35.46%)</td>
+            <td class="tg-8d8j">746 (6.38%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 30–39</td>
+            <td class="tg-8d8j">12,929</td>
+            <td class="tg-8d8j">26.47</td>
+            <td class="tg-8d8j">9,468 (25.48%)</td>
+            <td class="tg-8d8j">3,461 (29.61%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 40–49</td>
+            <td class="tg-8d8j">10,724</td>
+            <td class="tg-8d8j">21.96</td>
+            <td class="tg-8d8j">6,738 (18.13%)</td>
+            <td class="tg-8d8j">3,986 (34.11%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 50–59</td>
+            <td class="tg-8d8j">6,619</td>
+            <td class="tg-8d8j">13.55</td>
+            <td class="tg-8d8j">4,110 (11.06%)</td>
+            <td class="tg-8d8j">2,509 (21.47%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 60–69</td>
+            <td class="tg-8d8j">3,054</td>
+            <td class="tg-8d8j">6.25</td>
+            <td class="tg-8d8j">2,245 (6.04%)</td>
+            <td class="tg-8d8j">809 (6.92%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 70–79</td>
+            <td class="tg-8d8j">815</td>
+            <td class="tg-8d8j">1.67</td>
+            <td class="tg-8d8j">668 (1.80%)</td>
+            <td class="tg-8d8j">147 (1.26%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = &lt; 18</td>
+            <td class="tg-8d8j">595</td>
+            <td class="tg-8d8j">1.22</td>
+            <td class="tg-8d8j">595 (1.60%)</td>
+            <td class="tg-8d8j">0 (0.00%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 80–89</td>
+            <td class="tg-8d8j">131</td>
+            <td class="tg-8d8j">0.27</td>
+            <td class="tg-8d8j">115 (0.31%)</td>
+            <td class="tg-8d8j">16 (0.14%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 90–99</td>
+            <td class="tg-8d8j">55</td>
+            <td class="tg-8d8j">0.11</td>
+            <td class="tg-8d8j">42 (0.11%)</td>
+            <td class="tg-8d8j">13 (0.11%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+          <tr>
+            <td class="tg-2b7s">age_group = 100 +</td>
+            <td class="tg-8d8j">0</td>
+            <td class="tg-8d8j">0.00</td>
+            <td class="tg-8d8j">0 (0.00%)</td>
+            <td class="tg-8d8j">0 (0.00%)</td>
+            <td class="tg-8d8j"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+.. note::
+
+    - ``groupby_col="income"`` enables group comparison across the two income categories.
+    - ``age_group`` and ``fnlwgt_bin_width`` are summarized as categorical variables with frequency counts and group-wise breakdowns.
+    - ``value_counts=True`` includes one row per unique value in each categorical variable.
+    - ``drop_columns`` and ``drop_variables`` help simplify the final output for presentation by removing metadata and redundant columns.
+    - ``export_markdown=True`` writes the summary table to a Markdown file for convenient reporting and sharing.
+
+
+This example illustrates how the same function can be used to perform basic univariate statistical testing across groups while producing a ready-to-export Markdown summary.
 
 .. raw:: html
    
