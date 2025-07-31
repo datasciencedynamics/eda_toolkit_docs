@@ -22,7 +22,97 @@
 \
 
 Changelog
-=========
+==========
+
+`Version 0.0.18`_
+----------------------
+
+**What’s changed**
+
+1. Thousand-separator support for dynamic group columns
+We now include the two group-by columns (e.g. ``<=50K (n = 37,155)`` and ``>50K (n = 11,687)``) in our integer-formatting step. That means any time you run:
+
+.. code:: python
+
+    generate_table1(df, groupby_col="income")
+    
+2. Automatic pretty-printing with ``TableWrapper``
+At the end of ``generate_table1()``, we wrap any returned DataFrame(s) in your existing ``TableWrapper``. Its ``__str__ calls`` ``table1_to_str()``, so a plain:
+
+.. code:: python
+
+    t1 = generate_table1(df, groupby_col="income")
+    print(t1)
+  
+
+**Why**
+
+- It was confusing that some columns (the group-by counts) weren’t showing commas while everything else did.
+- We want *p*-values and group counts to respect the same ``decimal_places`` and thousands-separator rules.
+- Wrapping in ``TableWrapper`` means users get pretty output by default when they do ``print()`` or interactive display; no need to remember a ``pretty=True`` flag or manually call ``table1_to_str()``.
+
+Major Changes
+~~~~~~~~~~~~~~~~~~~~
+
+**Typing and Codebase-Wide Updates**
+
+- Added **full type annotations** to all functions across the following modules:
+  - ``data_manager.py``
+  - ``plots.py``
+
+- Improved parameter validation and error messages for invalid input types.
+
+
+Enhancements to ``generate_table1``
++++++++++++++++++++++++++++++++++++++
+
+- **New Parameter**: ``use_welch`` (default ``True``)
+
+  - Allows toggling between **Welch’s t-test** and **Student’s t-test** for continuous variable comparisons across groups.
+  - Adds printed output indicating which test is being applied.
+  - Add ``drop_columns`` option for markdown export
+  - Add ``drop_variables`` option for markdown export
+  -  Updated type hints to ``Union[str, List[str]]``
+  - Normalized to list using ``isinstance(..., str)`` check
+
+- **Cleaner Logical Flow**:
+
+  - Removed redundant ``elif not groupby_col`` checks.
+  - Condensed conditional branches and avoided repeated blocks.
+
+- **Improved Markdown Export Handling**:
+
+  - ``markdown_path`` now supports both ``str`` and ``Path`` objects.
+  - Unified and simplified output logic for continuous, categorical, and both types.
+
+- **Return Types Now Explicit**:
+
+  .. code:: python
+
+    Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame], str, Dict[str, str], Tuple[str, str]]
+
+Tests and Coverage 
++++++++++++++++++++++++++++++
+
+- Updated unit tests to reflect all refactored logic.
+
+- Test coverage now exceeds 80% across core modules (``generate_table1``, ``data_manager.py``, ``plots.py``).
+
+.. code:: text
+
+  ---------- coverage: platform linux, python 3.11.11-final-0 ----------
+  Name                              Stmts   Miss  Cover
+  -----------------------------------------------------
+  src/eda_toolkit/__init__.py          19      2    89%
+  src/eda_toolkit/art.py               55      3    95%
+  src/eda_toolkit/data_manager.py     468     86    82%
+  src/eda_toolkit/plots.py            904    179    80%
+  -----------------------------------------------------
+  TOTAL                              1446    270    81%
+
+
+
+
 
 
 `Version 0.0.17`_
