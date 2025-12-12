@@ -63,7 +63,7 @@ Project Links
 
 
 .. tip::
-   A comprehensive Google Colab notebook is available (linked below) that walks through
+   A comprehensive Google Colab notebook is linked below that walks through
    nearly everything discussed in this documentation, including data loading,
    cleaning, visualization, and reporting workflows using the ``eda_toolkit``.
    This notebook is designed as a practical, end-to-end companion to the documentation
