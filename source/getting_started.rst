@@ -45,7 +45,21 @@ Project Links
 
 1. `PyPI Page <https://pypi.org/project/eda_toolkit/>`_  
 
-2. `GitHub Repository <https://github.com/lshpaner/eda_toolkit>`_
+2. `GitHub Repository <https://github.com/lshpaner/eda_toolkit>`_  
+
+3. `Comprehensive Google Colab Notebook (End-to-End Examples) <https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n>`_
+
+
+
+.. tip::
+   A comprehensive Google Colab notebook is available that walks through
+   nearly everything discussed in this documentation, including data loading,
+   cleaning, visualization, and reporting workflows using ``eda_toolkit``.
+   This notebook is designed as a practical, end-to-end companion to the docs
+   and can be run entirely in the browser without any local setup.
+
+   **Google Colab Notebook:**
+   `https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n <https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n>`_
 
 
 What is EDA?
