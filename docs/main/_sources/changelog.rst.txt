@@ -24,6 +24,59 @@
 Changelog
 ==========
 
+`Version 0.0.19`_
+----------------------
+
+.. _Version 0.0.19: https://lshpaner.github.io/eda_toolkit_docs/v0.0.19/index.html
+
+**Summary**
+
+Refactored ``data_doctor()`` to guarantee index-safe, deterministic feature
+transformations and column creation. This release resolves previously observed
+row-misalignment issues and improves reliability for both exploratory workflows
+and production pipelines.
+
+**Key Changes**
+
+- **Index Preservation**
+  All transformation outputs are now explicitly aligned to the original
+  DataFrame index, ensuring consistent row-level mapping in all cases.
+
+- **Deterministic Column Creation**
+  When writing transformed features back to the DataFrame
+  (``apply_as_new_col_to_df=True``), the full dataset is always used.
+  Sampling is now restricted to exploratory and plotting modes only.
+
+- **Safe Assignment Logic**
+  Replaced ``.values``-based assignments with index-aware reindexing
+  to prevent silent row misplacement.
+
+- **Robust Cutoff Handling**
+  Replaced ``np.where`` cutoff logic with pandas ``.clip()``,
+  preserving index integrity during value bounding.
+
+- **Consistent Transformation Output**
+  All transformation results are now returned as ``pd.Series`` objects
+  with explicit index preservation.
+
+- **Internal Consistency Checks**
+  Added validation to ensure identical input values always produce
+  identical transformed outputs across all supported
+  ``scale_conversion`` options.
+
+**User Impact**
+
+- Eliminates misaligned or duplicated transformed values.
+- Safer feature engineering when writing transformed columns to DataFrames.
+- Fully deterministic and reproducible behavior across runs.
+
+**Testing**
+
+- Manually validated all supported ``scale_conversion`` options.
+- Verified absence of duplicate transformed values using ``value_counts()``.
+- Confirmed correct full-DataFrame column creation behavior.
+
+
 
 `Version 0.0.18`_
 ----------------------

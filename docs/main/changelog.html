@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-19">Version 0.0.19</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-18">Version 0.0.18</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#major-changes">Major Changes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#enhancements-to-generate-table1">Enhancements to <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code></a></li>
@@ -121,9 +122,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id16">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id17">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id18">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id19">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -157,6 +158,49 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-19">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.19/index.html">Version 0.0.19</a><a class="headerlink" href="#version-0-0-19" title="Link to this heading"></a></h2>
+<p><strong>Summary</strong></p>
+<p>Refactored <code class="docutils literal notranslate"><span class="pre">data_doctor()</span></code> to guarantee index-safe, deterministic feature
+transformations and column creation. This release resolves previously observed
+row-misalignment issues and improves reliability for both exploratory workflows
+and production pipelines.</p>
+<p><strong>Key Changes</strong></p>
+<ul class="simple">
+<li><p><strong>Index Preservation</strong>
+All transformation outputs are now explicitly aligned to the original
+DataFrame index, ensuring consistent row-level mapping in all cases.</p></li>
+<li><p><strong>Deterministic Column Creation</strong>
+When writing transformed features back to the DataFrame
+(<code class="docutils literal notranslate"><span class="pre">apply_as_new_col_to_df=True</span></code>), the full dataset is always used.
+Sampling is now restricted to exploratory and plotting modes only.</p></li>
+<li><p><strong>Safe Assignment Logic</strong>
+Replaced <code class="docutils literal notranslate"><span class="pre">.values</span></code>-based assignments with index-aware reindexing
+to prevent silent row misplacement.</p></li>
+<li><p><strong>Robust Cutoff Handling</strong>
+Replaced <code class="docutils literal notranslate"><span class="pre">np.where</span></code> cutoff logic with pandas <code class="docutils literal notranslate"><span class="pre">.clip()</span></code>,
+preserving index integrity during value bounding.</p></li>
+<li><p><strong>Consistent Transformation Output</strong>
+All transformation results are now returned as <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code> objects
+with explicit index preservation.</p></li>
+<li><p><strong>Internal Consistency Checks</strong>
+Added validation to ensure identical input values always produce
+identical transformed outputs across all supported
+<code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> options.</p></li>
+</ul>
+<p><strong>User Impact</strong></p>
+<ul class="simple">
+<li><p>Eliminates misaligned or duplicated transformed values.</p></li>
+<li><p>Safer feature engineering when writing transformed columns to DataFrames.</p></li>
+<li><p>Fully deterministic and reproducible behavior across runs.</p></li>
+</ul>
+<p><strong>Testing</strong></p>
+<ul class="simple">
+<li><p>Manually validated all supported <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> options.</p></li>
+<li><p>Verified absence of duplicate transformed values using <code class="docutils literal notranslate"><span class="pre">value_counts()</span></code>.</p></li>
+<li><p>Confirmed correct full-DataFrame column creation behavior.</p></li>
+</ul>
+</section>
 <section id="version-0-0-18">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.18/index.html">Version 0.0.18</a><a class="headerlink" href="#version-0-0-18" title="Link to this heading"></a></h2>
 <p><strong>What’s changed</strong></p>
@@ -1012,8 +1056,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id16">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id16" title="Link to this heading"></a></h2>
+<section id="id17">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1031,8 +1075,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id17">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<section id="id18">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1114,8 +1158,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id18">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
+<section id="id19">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
