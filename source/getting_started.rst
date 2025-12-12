@@ -43,21 +43,39 @@ in their data.
 Project Links
 ---------------
 
-1. `PyPI Page <https://pypi.org/project/eda_toolkit/>`_  
+1. .. raw:: html
 
-2. `GitHub Repository <https://github.com/lshpaner/eda_toolkit>`_  
+      <a href="https://pypi.org/project/eda_toolkit/" target="_blank" rel="noopener noreferrer">
+        PyPI Page
+      </a>
 
-3. `Comprehensive Google Colab Notebook (End-to-End Examples) <https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n>`_
+2. .. raw:: html
+
+      <a href="https://github.com/lshpaner/eda_toolkit" target="_blank" rel="noopener noreferrer">
+        GitHub Repository
+      </a>
+
+3. .. raw:: html
+
+      <a href="https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n" target="_blank" rel="noopener noreferrer">
+        Comprehensive Google Colab Notebook (End-to-End Examples)
+      </a>
+
 
 .. tip::
    A comprehensive Google Colab notebook is available that walks through
    nearly everything discussed in this documentation, including data loading,
    cleaning, visualization, and reporting workflows using the ``eda_toolkit``.
-   This notebook is designed as a practical, end-to-end companion to the documentation   
+   This notebook is designed as a practical, end-to-end companion to the documentation
    and can be run entirely in the browser without any local setup.
 
-   **Google Colab Notebook:**
-   `https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n <https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n>`_
+   .. raw:: html
+
+      <a href="https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n"
+         target="_blank" rel="noopener noreferrer">
+         Open the Google Colab notebook
+      </a>
+
 
 
 What is EDA?
