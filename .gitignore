@@ -28,3 +28,11 @@ setup.py
 .coverage
 requirements.txt
 htmlcov/
+
+# Sphinx build artifacts
+docs/_build/
+docs/.doctrees/
+docs/.buildinfo
+docs/searchindex.js
+docs/objects.inv
+docs/_static/
