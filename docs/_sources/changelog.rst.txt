@@ -24,9 +24,6 @@
 Changelog
 ==========
 
-`Version 0.0.18`_
-----------------------
-
 .. _Version 0.0.18: https://lshpaner.github.io/eda_toolkit_docs/v0.0.18/index.html
 
 **What’s changed**
