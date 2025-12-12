@@ -49,13 +49,11 @@ Project Links
 
 3. `Comprehensive Google Colab Notebook (End-to-End Examples) <https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n>`_
 
-
-
 .. tip::
    A comprehensive Google Colab notebook is available that walks through
    nearly everything discussed in this documentation, including data loading,
    cleaning, visualization, and reporting workflows using the ``eda_toolkit``.
-   This notebook is designed as a practical, end-to-end companion to the docs
+   This notebook is designed as a practical, end-to-end companion to the documentation   
    and can be run entirely in the browser without any local setup.
 
    **Google Colab Notebook:**
