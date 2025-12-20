@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.21 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.22 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a11416ff"></script>
+      <script src="_static/documentation_options.js?v=96ec9c95"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-22">Version 0.0.22</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-21">Version 0.0.21</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-20">Version 0.0.20</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-s-changed">What’s Changed</a></li>
@@ -144,9 +145,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id19">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id20">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id21">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id22">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -180,6 +181,13 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-22">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.22/index.html">Version 0.0.22</a><a class="headerlink" href="#version-0-0-22" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Renamed <code class="docutils literal notranslate"><span class="pre">conditional_histograms</span></code> to <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code></p></li>
+<li><p>Updated SciPy version requirement in <code class="docutils literal notranslate"><span class="pre">README</span></code></p></li>
+</ul>
+</section>
 <section id="version-0-0-21">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.21/index.html">Version 0.0.21</a><a class="headerlink" href="#version-0-0-21" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -268,6 +276,7 @@ At the end of <code class="docutils literal notranslate"><span class="pre">gener
 <li><p>We want <em>p</em>-values and group counts to respect the same <code class="docutils literal notranslate"><span class="pre">decimal_places</span></code> and thousands-separator rules.</p></li>
 <li><p>Wrapping in <code class="docutils literal notranslate"><span class="pre">TableWrapper</span></code> means users get pretty output by default when they do <code class="docutils literal notranslate"><span class="pre">print()</span></code> or interactive display; no need to remember a <code class="docutils literal notranslate"><span class="pre">pretty=True</span></code> flag or manually call <code class="docutils literal notranslate"><span class="pre">table1_to_str()</span></code>.</p></li>
 </ul>
+<p><strong>Major Changes</strong></p>
 <p><strong>Typing and Codebase-Wide Updates</strong></p>
 <ul class="simple">
 <li><p>Added <strong>full type annotations</strong> to all functions across the following modules:
@@ -275,6 +284,7 @@ At the end of <code class="docutils literal notranslate"><span class="pre">gener
 - <code class="docutils literal notranslate"><span class="pre">plots.py</span></code></p></li>
 <li><p>Improved parameter validation and error messages for invalid input types.</p></li>
 </ul>
+<p><strong>Enhancements to ``generate_table1``</strong></p>
 <ul>
 <li><p><strong>New Parameter</strong>: <code class="docutils literal notranslate"><span class="pre">use_welch</span></code> (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
 <ul class="simple">
@@ -304,6 +314,7 @@ At the end of <code class="docutils literal notranslate"><span class="pre">gener
 </div>
 </li>
 </ul>
+<p><strong>Tests and Coverage</strong></p>
 <ul class="simple">
 <li><p>Updated unit tests to reflect all refactored logic.</p></li>
 <li><p>Test coverage now exceeds 80% across core modules (<code class="docutils literal notranslate"><span class="pre">generate_table1</span></code>, <code class="docutils literal notranslate"><span class="pre">data_manager.py</span></code>, <code class="docutils literal notranslate"><span class="pre">plots.py</span></code>).</p></li>
@@ -1130,8 +1141,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id19">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<section id="id20">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1149,8 +1160,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id20">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<section id="id21">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1232,8 +1243,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id21">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
+<section id="id22">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id22" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>

@@ -660,18 +660,18 @@ models.
    <div style="height: 50px;"></div>
 
 
-Conditional Distributions
+Grouped Distributions
 ===========================
 
 .. raw:: html
 
-    <a id="conditional_histograms"></a>
+    <a id="grouped_distributions"></a>
 
 
-**Plot conditional distributions of numeric features given a binary variable.**
+**Plot grouped distributions of numeric features given a binary variable.**
 
-The ``conditional_histograms`` function visualizes how selected numeric features
-are distributed conditional on a binary grouping variable (for example, an
+The ``grouped_distributions`` function visualizes how selected numeric features
+are distributed grouped by a binary grouping variable (for example, an
 outcome label or class membership). For each feature, the distributions of the
 two groups are overlaid on the same axis, either as histograms or as filled
 kernel density curves.
@@ -690,7 +690,7 @@ groups is critical.
 - ``normalize="count"``: Raw counts (histograms only)
 - ``normalize="density"``: Probability density (histograms or density plots)
 
-.. function:: conditional_histograms(df, features, by, *, bins=30, normalize="density", plot_style="hist", alpha=0.6, colors=None, n_rows=None, n_cols=None, common_bins=True, show_legend=True, legend_loc="best", label_fontsize=12, tick_fontsize=10, text_wrap=50, figsize=(10, 6), image_path_png=None, image_path_svg=None, image_filename=None)
+.. function:: grouped_distributions(df, features, by, *, bins=30, normalize="density", plot_style="hist", alpha=0.6, colors=None, n_rows=None, n_cols=None, common_bins=True, show_legend=True, legend_loc="best", label_fontsize=12, tick_fontsize=10, text_wrap=50, figsize=(10, 6), image_path_png=None, image_path_svg=None, image_filename=None)
 
     :param df: Input DataFrame containing the features and grouping variable.
     :type df: pandas.DataFrame
@@ -777,7 +777,7 @@ groups is critical.
 
 .. admonition:: Notes
 
-    - All conditional distributions are plotted as overlays on a single axis
+    - All grouped distributions are plotted as overlays on a single axis
       per feature.
     - Density plots always represent probability density and do not support
       count-based normalization.
@@ -786,13 +786,13 @@ groups is critical.
     - Font sizes are specified in absolute points and may appear small on large
       figures or dense subplot grids.
 
-Conditional Density Plot Example
+Grouped Density Plot Example
 -------------------------------------
 
-In the example below, the ``conditional_histograms`` function is used to compare
+In the example below, the ``grouped_distributions`` function is used to compare
 the distributions of several numeric features conditioned on income category.
 The grouping variable ``"income"`` is binary (``"<=50K"`` vs ``">50K"``), making
-it suitable for conditional overlay plots.
+it suitable for grouped overlay plots.
 
 The selected features include demographic and financial attributes:
 
@@ -815,7 +815,7 @@ filename.
 
 .. code-block:: python
 
-    from eda_toolkit.plots import conditional_histograms
+    from eda_toolkit.plots import grouped_distributions
 
     features = [
         "age",
@@ -828,7 +828,7 @@ filename.
         ">50K": "orange",  # orange
     }
 
-    conditional_histograms(
+    grouped_distributions(
         df=df,
         features=features,
         by="income",
@@ -841,7 +841,7 @@ filename.
         plot_style="density",
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        image_filename="conditional_histograms_adult_income",
+        image_filename="grouped_distributions_adult_income",
         label_fontsize=16,
         tick_fontsize=14,
     )
@@ -850,8 +850,8 @@ filename.
 
    <div class="no-click">
 
-.. image:: ../assets/cond_hist_adult_income.svg
-   :alt: Conditional Histograms with Income Groups
+.. image:: ../assets/grouped_dist_adult_income.svg
+   :alt: Grouped Histograms with Income Groups
    :align: center
    :width: 900px
 
@@ -864,11 +864,11 @@ filename.
    <div style="height: 50px;"></div>
 
 
-Conditional Histogram Plot Example
+Grouped Histogram Plot Example
 --------------------------------------
 
-In this example, the ``conditional_histograms`` function is used to visualize
-**overlaid conditional histograms** for several numeric features, grouped by
+In this example, the ``grouped_distributions`` function is used to visualize
+**overlaid grouped histograms** for several numeric features, grouped by
 income category. As in the previous example, the grouping variable ``"income"``
 is binary (``"<=50K"`` vs ``">50K"``), enabling direct comparison between the two
 subpopulations.
@@ -893,7 +893,7 @@ reports or publications.
 
 .. code-block:: python
 
-    from eda_toolkit.plots import conditional_histograms
+    from eda_toolkit.plots import grouped_distributions
 
     features = [
         "age",
@@ -906,7 +906,7 @@ reports or publications.
         ">50K": "orange",  
     }
 
-    conditional_histograms(
+    grouped_distributions(
         df=df,
         features=features,
         by="income",
@@ -928,8 +928,8 @@ reports or publications.
 
    <div class="no-click">
 
-.. image:: ../assets/cond_hist_adult_income_hist.svg
-   :alt: Conditional Histograms with Income Groups
+.. image:: ../assets/grouped_dist_adult_income_hist.svg
+   :alt: Grouped Histograms with Income Groups
    :align: center
    :width: 900px
 
@@ -1132,7 +1132,7 @@ distributional assumptions in downstream modeling.
    <div class="no-click">
 
 .. image:: ../assets/gof_qq_age_adult_income.png
-   :alt: Conditional Histograms with Income Groups
+   :alt: Grouped Histograms with Income Groups
    :align: center
    :width: 500px
 
