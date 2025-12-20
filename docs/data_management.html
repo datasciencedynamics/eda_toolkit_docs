@@ -2530,14 +2530,14 @@ Imputed (global fallback) mean: 38.621605730469135
 <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
 <span class="c1"># 2. Group-wise mean imputation with fixed fallback</span>
-    <span class="n">X_fixed</span> <span class="o">=</span> <span class="n">groupby_imputer</span><span class="p">(</span>
-        <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-        <span class="n">impute_col</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
-        <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;workclass&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">],</span>
-        <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
-        <span class="n">fallback</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-        <span class="n">as_new_col</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
+<span class="n">X_fixed</span> <span class="o">=</span> <span class="n">groupby_imputer</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">impute_col</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
+    <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;workclass&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">],</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+    <span class="n">fallback</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">as_new_col</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Head with fixed fallback=50 ###&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">X_fixed</span><span class="p">[[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;age_mean_imputed&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>

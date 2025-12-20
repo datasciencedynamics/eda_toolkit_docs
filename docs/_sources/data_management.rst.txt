@@ -2525,14 +2525,14 @@ Two fallback strategies are demonstrated:
     ] = np.nan
 
     # 2. Group-wise mean imputation with fixed fallback
-        X_fixed = groupby_imputer(
-            df=df,
-            impute_col="age",
-            by=["workclass", "education"],
-            stat="mean",
-            fallback=50,
-            as_new_col=True,
-        )
+    X_fixed = groupby_imputer(
+        df=df,
+        impute_col="age",
+        by=["workclass", "education"],
+        stat="mean",
+        fallback=50,
+        as_new_col=True,
+    )
 
     print("\n### Head with fixed fallback=50 ###")
     print(X_fixed[["age", "age_mean_imputed"]].head())
