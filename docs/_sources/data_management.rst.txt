@@ -2681,7 +2681,6 @@ Inspect which DataFrames are currently active without deleting anything.
 
 .. code-block:: python
 
-    import pandas as pd
     from eda_toolkit import del_inactive_dataframes
 
     df_main = pd.DataFrame({"a": range(10)})
@@ -2712,6 +2711,8 @@ Example 2: Delete Everything Except a Single DataFrame
 Remove all DataFrames except the one explicitly listed.
 
 .. code-block:: python
+
+    from eda_toolkit import del_inactive_dataframes
 
     df_main = pd.DataFrame({"a": range(10)})
     df_tmp = pd.DataFrame({"b": range(100)})
@@ -2760,6 +2761,8 @@ Preview which DataFrames *would* be deleted without actually removing them.
 
 .. code-block:: python
 
+    from eda_toolkit import del_inactive_dataframes
+
     df_main = pd.DataFrame({"a": range(10)})
     df_tmp = pd.DataFrame({"b": range(100)})
 
@@ -2806,6 +2809,8 @@ In Jupyter notebooks, output cache variables such as ``_14`` may reference large
 DataFrames. These are ignored by default but can be included explicitly.
 
 .. code-block:: python
+
+    from eda_toolkit import del_inactive_dataframes
 
     df_main = pd.DataFrame({"a": range(10)})
     df_tmp = pd.DataFrame({"b": range(100)})
@@ -2857,6 +2862,8 @@ Example 5: Track DataFrame Memory Usage
 Report total DataFrame memory usage before and after cleanup.
 
 .. code-block:: python
+
+    from eda_toolkit import del_inactive_dataframes
 
     df_main = pd.DataFrame({"a": range(10)})
     df_tmp = pd.DataFrame({"b": range(100)})
@@ -2912,6 +2919,8 @@ Example 6: Track DataFrame Memory and Process RSS
 Enable power-user memory tracking, including process-level RSS when available.
 
 .. code-block:: python
+
+    from eda_toolkit import del_inactive_dataframes
 
     df_main = pd.DataFrame({"a": range(10)})
     df_tmp = pd.DataFrame({"b": range(100)})
@@ -2970,6 +2979,8 @@ Example 7: Programmatic Usage (No Console Output)
 Suppress console output and consume the returned summary dictionary directly.
 
 .. code-block:: python
+
+    from eda_toolkit import del_inactive_dataframes
 
     df_main = pd.DataFrame({"a": range(10)})
     df_tmp = pd.DataFrame({"b": range(100)})

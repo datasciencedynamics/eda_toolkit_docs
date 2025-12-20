@@ -2671,8 +2671,7 @@ in this script or notebook.</p>
 <section id="example-1-list-active-dataframes-no-deletion">
 <h3>Example 1: List Active DataFrames (No Deletion)<a class="headerlink" href="#example-1-list-active-dataframes-no-deletion" title="Link to this heading"></a></h3>
 <p>Inspect which DataFrames are currently active without deleting anything.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
 
 <span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
@@ -2697,7 +2696,9 @@ Current Active DataFrames:
 <section id="example-2-delete-everything-except-a-single-dataframe">
 <h3>Example 2: Delete Everything Except a Single DataFrame<a class="headerlink" href="#example-2-delete-everything-except-a-single-dataframe" title="Link to this heading"></a></h3>
 <p>Remove all DataFrames except the one explicitly listed.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+
+<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
@@ -2738,7 +2739,9 @@ Remaining Active DataFrames:
 <section id="example-3-dry-run-preview-deletions">
 <h3>Example 3: Dry Run (Preview Deletions)<a class="headerlink" href="#example-3-dry-run-preview-deletions" title="Link to this heading"></a></h3>
 <p>Preview which DataFrames <em>would</em> be deleted without actually removing them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+
+<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
@@ -2778,7 +2781,9 @@ Remaining Active DataFrames:
 <h3>Example 4: Include IPython Output Cache Variables<a class="headerlink" href="#example-4-include-ipython-output-cache-variables" title="Link to this heading"></a></h3>
 <p>In Jupyter notebooks, output cache variables such as <code class="docutils literal notranslate"><span class="pre">_14</span></code> may reference large
 DataFrames. These are ignored by default but can be included explicitly.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+
+<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">_</span> <span class="o">=</span> <span class="n">df_tmp</span>  <span class="c1"># simulates an IPython output cache reference</span>
@@ -2825,7 +2830,9 @@ Remaining Active DataFrames:
 <section id="example-5-track-dataframe-memory-usage">
 <h3>Example 5: Track DataFrame Memory Usage<a class="headerlink" href="#example-5-track-dataframe-memory-usage" title="Link to this heading"></a></h3>
 <p>Report total DataFrame memory usage before and after cleanup.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+
+<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
@@ -2873,7 +2880,9 @@ DataFrames total: 0.0 -&gt; 0.0 (-0.0)
 <section id="example-6-track-dataframe-memory-and-process-rss">
 <h3>Example 6: Track DataFrame Memory and Process RSS<a class="headerlink" href="#example-6-track-dataframe-memory-and-process-rss" title="Link to this heading"></a></h3>
 <p>Enable power-user memory tracking, including process-level RSS when available.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+
+<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
@@ -2924,7 +2933,9 @@ after garbage collection.</p>
 <section id="example-7-programmatic-usage-no-console-output">
 <h3>Example 7: Programmatic Usage (No Console Output)<a class="headerlink" href="#example-7-programmatic-usage-no-console-output" title="Link to this heading"></a></h3>
 <p>Suppress console output and consume the returned summary dictionary directly.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+
+<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">summary</span> <span class="o">=</span> <span class="n">del_inactive_dataframes</span><span class="p">(</span>
