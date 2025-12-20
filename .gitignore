@@ -36,3 +36,15 @@ docs/.buildinfo
 docs/searchindex.js
 docs/objects.inv
 docs/_static/
+
+# Environments
+.env
+.venv
+**/*venv*/
+venv_eda_311/
+edatkit_374/
+edatkit_311/
+env/
+env.bak/
+venv.bak/
+eda/
