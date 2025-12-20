@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Table of Contents &mdash; EDA Toolkit 0.0.19 documentation</title>
+  <title>Welcome to the EDA Toolkit Python Library Documentation! &mdash; EDA Toolkit 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=2fd7553c"></script>
+      <script src="_static/documentation_options.js?v=056c92e6"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,10 +58,12 @@
 <li class="toctree-l1"><a class="reference internal" href="data_management.html">Data Management Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_management.html#data-management-techniques">Data Management Techniques</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<p class="caption" role="heading"><span class="caption-text">Plotting Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#histogram-distribution-plots">Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#conditional-distributions">Conditional Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#distribution-goodness-of-fit-plots">Distribution Goodness-of-Fit Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#feature-scaling-and-outliers">Feature Scaling and Outliers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#outcome-crosstab-plots">Outcome Crosstab Plots</a></li>
@@ -77,6 +79,8 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul>
@@ -102,7 +106,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Table of Contents</li>
+      <li class="breadcrumb-item active">Welcome to the EDA Toolkit Python Library Documentation!</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -113,7 +117,128 @@
              
   <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" />
 </a>
-</div><div style="height: 100px;"></div><section id="table-of-contents">
+</div><div style="height: 100px;"></div><span class="target" id="getting-started"></span><section id="welcome-to-the-eda-toolkit-python-library-documentation">
+<h1>Welcome to the EDA Toolkit Python Library Documentation!<a class="headerlink" href="#welcome-to-the-eda-toolkit-python-library-documentation" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This documentation is for <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> version <code class="docutils literal notranslate"><span class="pre">0.0.20</span></code>.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> is a comprehensive library designed to streamline and
+enhance the process of Exploratory Data Analysis (EDA) for data scientists,
+analysts, and researchers. This toolkit provides a suite of functions and
+utilities that facilitate the initial investigation of datasets, enabling users
+to quickly gain insights, identify patterns, and uncover underlying structures
+in their data.</p>
+<section id="project-links">
+<h2>Project Links<a class="headerlink" href="#project-links" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><a href="https://pypi.org/project/eda_toolkit/" target="_blank" rel="noopener noreferrer">
+  PyPI Page
+</a></li>
+<li><a href="https://github.com/lshpaner/eda_toolkit" target="_blank" rel="noopener noreferrer">
+  GitHub Repository
+</a></li>
+<li><a href="https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n" target="_blank" rel="noopener noreferrer">
+  Comprehensive Google Colab Notebook (End-to-End Examples)
+</a></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A comprehensive Google Colab notebook is linked below that walks through
+nearly everything discussed in this documentation, including data loading,
+cleaning, visualization, and reporting workflows using the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.
+This notebook is designed as a practical, end-to-end companion to the documentation
+and can be run entirely in the browser without any local setup.</p>
+<a href="https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n"
+   target="_blank" rel="noopener noreferrer">
+   Open the Google Colab notebook
+</a></div>
+</section>
+<section id="what-is-eda">
+<h2>What is EDA?<a class="headerlink" href="#what-is-eda" title="Link to this heading"></a></h2>
+<p>Exploratory Data Analysis (EDA) is a crucial step in the data science workflow.
+It involves various techniques to summarize the main characteristics of the data,
+often with visual methods. EDA helps in understanding the data better, identifying
+anomalies, discovering patterns, and forming hypotheses. This process is essential
+before applying any machine learning models, as it ensures the quality and relevance
+of the data.</p>
+</section>
+<section id="purpose-of-eda-toolkit">
+<h2>Purpose of EDA Toolkit<a class="headerlink" href="#purpose-of-eda-toolkit" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library is a comprehensive suite of tools designed to
+streamline and automate many of the tasks associated with Exploratory Data
+Analysis (EDA). It offers a broad range of functionalities, including:</p>
+<ul class="simple">
+<li><p><strong>Data Management:</strong> Tools for managing directories, generating unique IDs,
+standardizing dates, and handling common DataFrame manipulations.</p></li>
+<li><p><strong>Data Cleaning:</strong> Functions to address missing values, remove outliers, and
+correct formatting issues, ensuring data is ready for analysis.</p></li>
+<li><p><strong>Data Visualization:</strong> A variety of plotting functions, including KDE
+distribution plots, stacked bar plots, scatter plots with optional best fit
+lines, and box/violin plots, to visually explore data distributions,
+relationships, and trends.</p></li>
+<li><p><strong>Descriptive and Summary Statistics:</strong> Methods to generate comprehensive
+reports on data types, summary statistics (mean, median, standard deviation,
+etc.), and to summarize all possible combinations of specified variables.</p></li>
+<li><p><strong>Reporting and Export:</strong> Features to save DataFrames to Excel with
+customizable formatting, create contingency tables, and export generated
+plots in multiple formats.</p></li>
+</ul>
+</section>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Ease of Use:</strong> The toolkit is designed with simplicity in mind, offering intuitive and easy-to-use functions.</p></li>
+<li><p><strong>Customizable:</strong> Users can customize various aspects of the toolkit to fit their specific needs.</p></li>
+<li><p><strong>Integration:</strong> Seamlessly integrates with popular data science libraries such as <code class="docutils literal notranslate"><span class="pre">Pandas</span></code>, <code class="docutils literal notranslate"><span class="pre">NumPy</span></code>, <code class="docutils literal notranslate"><span class="pre">Matplotlib</span></code>, and <code class="docutils literal notranslate"><span class="pre">Seaborn</span></code>.</p></li>
+<li><p><strong>Documentation and Examples:</strong> Comprehensive documentation and examples to help users get started quickly and effectively.</p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<span id="id1"></span><h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p>Before you install <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>, ensure your system meets the following requirements:</p>
+<ul class="simple">
+<li><p><strong>Python</strong>: version <code class="docutils literal notranslate"><span class="pre">3.7.4</span></code> or higher is required to run <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p></li>
+</ul>
+<p>Additionally, <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> depends on the following packages, which will be automatically installed when you install <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jinja2</span></code>: version <code class="docutils literal notranslate"><span class="pre">3.1.4</span></code> (exact version required)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>: version <code class="docutils literal notranslate"><span class="pre">3.5.3</span></code> or higher, capped at <code class="docutils literal notranslate"><span class="pre">3.9.2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nbformat</span></code>: version <code class="docutils literal notranslate"><span class="pre">4.2.0</span></code> or higher, capped at <code class="docutils literal notranslate"><span class="pre">5.10.4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code>: version <code class="docutils literal notranslate"><span class="pre">1.21.6</span></code> or higher, capped at <code class="docutils literal notranslate"><span class="pre">2.1.0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pandas</span></code>: version <code class="docutils literal notranslate"><span class="pre">1.3.5</span></code> or higher, capped at <code class="docutils literal notranslate"><span class="pre">2.2.3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plotly</span></code>: version <code class="docutils literal notranslate"><span class="pre">5.18.0</span></code> or higher, capped at <code class="docutils literal notranslate"><span class="pre">5.24.0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>: version <code class="docutils literal notranslate"><span class="pre">1.0.2</span></code> or higher, capped at <code class="docutils literal notranslate"><span class="pre">1.5.2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scipy</span></code>: version <code class="docutils literal notranslate"><span class="pre">1.5.4</span></code> or higher, capped at <code class="docutils literal notranslate"><span class="pre">1.7.3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seaborn</span></code>: version <code class="docutils literal notranslate"><span class="pre">0.12.2</span></code> or higher, capped below <code class="docutils literal notranslate"><span class="pre">0.13.2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tqdm</span></code>: version <code class="docutils literal notranslate"><span class="pre">4.66.4</span></code> or higher, capped below <code class="docutils literal notranslate"><span class="pre">4.67.1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xlsxwriter</span></code>: version <code class="docutils literal notranslate"><span class="pre">3.2.0</span></code> (exact version required)</p></li>
+</ul>
+</section>
+<section id="installation">
+<span id="id2"></span><h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>You can install <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> directly from PyPI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>eda_toolkit
+</pre></div>
+</div>
+</section>
+</section>
+<section id="description">
+<h1>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h1>
+<p>This guide provides detailed instructions and examples for using the functions
+provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
+<p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
+<p>Kohavi, R. (1996). <em>Census Income</em>. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
+</aside>
+</aside>
+</section>
+<hr class="docutils" />
+<section id="table-of-contents">
 <h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
@@ -182,28 +307,55 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#binning-numerical-columns">Binning Numerical Columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_management.html#group-by-imputer">Group-by Imputer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#groupby_imputer"><code class="docutils literal notranslate"><span class="pre">groupby_imputer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#group-wise-imputation-examples">Group-wise Imputation Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_management.html#delete-inactive-dataframes">Delete Inactive DataFrames</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#del_inactive_dataframes"><code class="docutils literal notranslate"><span class="pre">del_inactive_dataframes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-1-list-active-dataframes-no-deletion">Example 1: List Active DataFrames (No Deletion)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-2-delete-everything-except-a-single-dataframe">Example 2: Delete Everything Except a Single DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-3-dry-run-preview-deletions">Example 3: Dry Run (Preview Deletions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-4-include-ipython-output-cache-variables">Example 4: Include IPython Output Cache Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-5-track-dataframe-memory-usage">Example 5: Track DataFrame Memory Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-6-track-dataframe-memory-and-process-rss">Example 6: Track DataFrame Memory and Process RSS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-7-programmatic-usage-no-console-output">Example 7: Programmatic Usage (No Console Output)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<p class="caption" role="heading"><span class="caption-text">Plotting Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#heuristics-for-visualizations">Heuristics for Visualizations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#methodologies">Methodologies</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#kde-distribution-function">KDE Distribution Function</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#kde_distributions"><code class="docutils literal notranslate"><span class="pre">kde_distributions()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#kde-and-histograms-example">KDE and Histograms Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histogram-example-density">Histogram Example (Density)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histogram-example-count">Histogram Example (Count)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histogram-example-mean-and-median">Histogram Example - (Mean and Median)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histogram-example-mean-median-and-std-deviation">Histogram Example - (Mean, Median, and Std. Deviation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#histogram-distribution-plots">Histogram Distribution Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#plot_distributions"><code class="docutils literal notranslate"><span class="pre">plot_distributions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#kde-and-histograms-example">KDE and Histograms Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#histogram-example-density">Histogram Example (Density)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#histogram-example-count">Histogram Example (Count)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#histogram-example-mean-and-median">Histogram Example - (Mean and Median)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#histogram-example-mean-median-and-std-deviation">Histogram Example - (Mean, Median, and Std. Deviation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#kde-and-parametric-density-fit-example">KDE and Parametric Density Fit Example</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#conditional-distributions">Conditional Distributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#conditional_histograms"><code class="docutils literal notranslate"><span class="pre">conditional_histograms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#conditional-density-plot-example">Conditional Density Plot Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#conditional-histogram-plot-example">Conditional Histogram Plot Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#distribution-goodness-of-fit-plots">Distribution Goodness-of-Fit Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#distribution_gof_plots"><code class="docutils literal notranslate"><span class="pre">distribution_gof_plots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#theoretical-qq-plot-example">Theoretical QQ Plot Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#empirical-qq-plot-example-sample-vs-reference-data">Empirical QQ Plot Example (Sample vs Reference Data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#cdf-plot-example-lower-and-upper-tails">CDF Plot Example (Lower and Upper Tails)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#feature-scaling-and-outliers">Feature Scaling and Outliers</a><ul>
@@ -221,7 +373,8 @@
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#treated-outliers-with-cutoffs">Treated Outliers With Cutoffs</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#robustscaler-outliers-examples">RobustScaler Outliers Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#robustscaler-outliers-example">RobustScaler Outliers Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#ecdf-distribution-example">ECDF Distribution Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
@@ -296,6 +449,27 @@
 <li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#purpose-and-assumptions">Purpose and Assumptions</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#method-of-moments-mom">Method of Moments (MoM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#maximum-likelihood-estimation-mle">Maximum Likelihood Estimation (MLE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#relationship-to-density-overlays">Relationship to Density Overlays</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#definition">Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#statistical-properties">Statistical Properties</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoretical_overview.html#consistency">Consistency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoretical_overview.html#unbiasedness">Unbiasedness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoretical_overview.html#variance">Variance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#relationship-to-order-statistics">Relationship to Order Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#comparison-with-histogram-and-kde">Comparison with Histogram and KDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#tail-behavior-and-exceedance-functions">Tail Behavior and Exceedance Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#id3">Practical Considerations</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -315,26 +489,43 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-20">Version 0.0.20</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#what-s-changed">What’s Changed</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-19">Version 0.0.19</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-18">Version 0.0.18</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#major-changes">Major Changes</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="changelog.html#enhancements-to-generate-table1">Enhancements to <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="changelog.html#tests-and-coverage">Tests and Coverage</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-18">Version 0.0.18</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-17">Version 0.0.17</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-16">Version 0.0.16</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-15">Version 0.0.15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#avoid-in-place-modification-of-exclude-combinations">Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#improve-progress-tracking-and-resolve-last-plot-saving-issue">Improve Progress Tracking and Resolve Last Plot Saving Issue</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#updated-tqdm-saving-logic-in-scatter-fit-plot">Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#scatter-plot-function-updates">Scatter Plot Function Updates</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="changelog.html#avoid-in-place-modification-of-exclude-combinations">Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="changelog.html#improve-progress-tracking-and-resolve-last-plot-saving-issue">Improve Progress Tracking and Resolve Last Plot Saving Issue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="changelog.html#updated-tqdm-saving-logic-in-scatter-fit-plot">Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-14">Version 0.0.14</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-13">Version 0.0.13</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-12">Version 0.0.12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-14">Version 0.0.14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#ensure-crosstabs-dictionary-is-populated-with-return-dict-true">Ensure Crosstabs Dictionary is Populated with <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#enhancements-and-fixes-for-scatter-fit-plot-function">Enhancements and Fixes for <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fix-default-title-and-filename-handling-in-flex-corr-matrix">Fix Default Title and Filename Handling in <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-13">Version 0.0.13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication">Add <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for Insufficient Pool Size in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> and Enhance ID Deduplication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#enhance-strip-trailing-period-to-support-strings-and-mixed-data-types">Enhance <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> to Support Strings and Mixed Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changes-in-stacked-crosstab-plot">Changes in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#add-environment-detection-to-dataframe-columns-function">Add Environment Detection to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#add-tqdm-progress-bar-to-dataframe-columns-function">Add <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Progress Bar to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#other-enhancements-and-fixes">Other Enhancements and Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-12">Version 0.0.12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#new-features">New Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#improvements">Improvements</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-11">Version 0.0.11</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-10">Version 0.0.10</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-9">Version 0.0.9</a></li>
@@ -350,9 +541,9 @@
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id17">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#id18">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#id19">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id20">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>

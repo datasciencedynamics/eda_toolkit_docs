@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Management Overview &mdash; EDA Toolkit 0.0.19 documentation</title>
+  <title>Data Management Overview &mdash; EDA Toolkit 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=2fd7553c"></script>
+      <script src="_static/documentation_options.js?v=056c92e6"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -106,13 +106,31 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#binning-numerical-columns">Binning Numerical Columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#group-by-imputer">Group-by Imputer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#groupby_imputer"><code class="docutils literal notranslate"><span class="pre">groupby_imputer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#group-wise-imputation-examples">Group-wise Imputation Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#delete-inactive-dataframes">Delete Inactive DataFrames</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#del_inactive_dataframes"><code class="docutils literal notranslate"><span class="pre">del_inactive_dataframes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-1-list-active-dataframes-no-deletion">Example 1: List Active DataFrames (No Deletion)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-2-delete-everything-except-a-single-dataframe">Example 2: Delete Everything Except a Single DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-3-dry-run-preview-deletions">Example 3: Dry Run (Preview Deletions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-4-include-ipython-output-cache-variables">Example 4: Include IPython Output Cache Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-5-track-dataframe-memory-usage">Example 5: Track DataFrame Memory Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-6-track-dataframe-memory-and-process-rss">Example 6: Track DataFrame Memory and Process RSS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-7-programmatic-usage-no-console-output">Example 7: Programmatic Usage (No Console Output)</a></li>
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plotting Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#histogram-distribution-plots">Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#conditional-distributions">Conditional Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#distribution-goodness-of-fit-plots">Distribution Goodness-of-Fit Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#feature-scaling-and-outliers">Feature Scaling and Outliers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#outcome-crosstab-plots">Outcome Crosstab Plots</a></li>
@@ -128,6 +146,8 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul>
@@ -1337,8 +1357,8 @@ of variable types, pretty-printing, optional export to Markdown, and <em>p</em>-
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Input DataFrame containing the data to summarize.</p></li>
-<li><p><strong>apply_bonferroni</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to apply Bonferroni correction to p-values.</p></li>
-<li><p><strong>apply_bh_fdr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to apply Benjamini-Hochberg FDR correction to p-values.</p></li>
+<li><p><strong>apply_bonferroni</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to apply Bonferroni correction to <em>p</em>-values.</p></li>
+<li><p><strong>apply_bh_fdr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to apply Benjamini-Hochberg FDR correction to <em>p</em>-values.</p></li>
 <li><p><strong>categorical_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – List of categorical column names. If None, inferred automatically.</p></li>
 <li><p><strong>continuous_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – List of continuous column names. If None, inferred automatically.</p></li>
 <li><p><strong>decimal_places</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Number of decimal places for rounding statistics.</p></li>
@@ -2379,6 +2399,559 @@ and right-exclusive, except for the last bin, which is always right-inclusive
 when the upper bound is infinity (<code class="docutils literal notranslate"><span class="pre">float(&quot;inf&quot;)</span></code>).</p>
 </li>
 </ol>
+</section>
+<section id="group-by-imputer">
+<h2>Group-by Imputer<a class="headerlink" href="#group-by-imputer" title="Link to this heading"></a></h2>
+<p><strong>Impute missing values using group-level statistics with optional fallback logic</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">groupby_imputer</span></code> function provides a simple, transparent, and statistically
+grounded approach for imputing missing values in a DataFrame using <strong>group-specific
+summary statistics</strong>. Instead of applying a single global imputation value, this
+function computes statistics within meaningful subgroups, preserving structure
+and heterogeneity in the data.</p>
+<p>This approach is especially useful when missingness depends on categorical
+attributes such as demographic groups, job categories, or experimental conditions.</p>
+<p><strong>Key Features</strong></p>
+<ul class="simple">
+<li><p><strong>Group-aware imputation</strong> using one or more categorical variables</p></li>
+<li><p>Supports common summary statistics: mean, median, min, max</p></li>
+<li><p><strong>Fallback logic</strong> for sparse or empty groups</p></li>
+<li><p>Option to <strong>preserve the original column</strong> or overwrite in place</p></li>
+<li><p>Fully vectorized and interpretable, no black-box modeling</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="groupby_imputer">
+<span class="sig-name descname"><span class="pre">groupby_imputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impute_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_new_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#groupby_imputer" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Input DataFrame containing missing values to impute.</p></li>
+<li><p><strong>impute_col</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name of the column containing missing values.</p></li>
+<li><p><strong>by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – One or more categorical columns used to define groups.
+Group-level statistics are computed within each unique combination
+of these columns.</p></li>
+<li><p><strong>stat</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Summary statistic used for imputation.
+Supported values are <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;median&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>.</p></li>
+<li><p><strong>fallback</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Value used when a group contains no non-null observations
+for <code class="docutils literal notranslate"><span class="pre">impute_col</span></code>.
+- <code class="docutils literal notranslate"><span class="pre">&quot;global&quot;</span></code> uses the overall statistic computed across the entire column
+- A numeric value (int or float) uses a fixed fallback</p></li>
+<li><p><strong>as_new_col</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, a new imputed column is created and the original
+column is left unchanged. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, imputation is performed in place.</p></li>
+<li><p><strong>new_col_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Optional custom name for the imputed column.
+Ignored if <code class="docutils literal notranslate"><span class="pre">as_new_col=False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with missing values imputed according to group-level
+statistics and fallback logic.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – <ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">stat</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;median&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<ul class="simple">
+<li><p>Group statistics are computed using non-null values only.</p></li>
+<li><p>If a group contains only missing values, the fallback value is applied.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">as_new_col=True</span></code> is recommended for exploratory workflows to
+preserve the original data for comparison.</p></li>
+<li><p>This method is deterministic and fully interpretable, making it suitable
+for regulated or audited modeling environments.</p></li>
+</ul>
+</div>
+<p></p>
+<section id="group-wise-imputation-examples">
+<h3>Group-wise Imputation Examples<a class="headerlink" href="#group-wise-imputation-examples" title="Link to this heading"></a></h3>
+<p>In the example below, missing values are introduced artificially into the
+<code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code> column of the Adult Income dataset. The goal is to impute these missing
+values using <strong>group-level means</strong>, defined by combinations of <code class="docutils literal notranslate"><span class="pre">&quot;workclass&quot;</span></code>
+and <code class="docutils literal notranslate"><span class="pre">&quot;education&quot;</span></code>.</p>
+<p>Two fallback strategies are demonstrated:</p>
+<ol class="arabic simple">
+<li><p><strong>Global fallback</strong>, where groups with insufficient data fall back to the
+overall mean</p></li>
+<li><p><strong>Fixed-value fallback</strong>, where a constant value is used instead</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">groupby_imputer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Introduce missingness for demonstration</span>
+<span class="n">adult_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="n">adult_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span>
+<span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+<span class="c1"># 1. Group-wise mean imputation with global fallback</span>
+<span class="n">X_global</span> <span class="o">=</span> <span class="n">groupby_imputer</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">adult_df</span><span class="p">,</span>
+    <span class="n">impute_col</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
+    <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;workclass&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">],</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+    <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span>
+    <span class="n">as_new_col</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Head with global fallback ###&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_global</span><span class="p">[[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;age_mean_imputed&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Means:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original adult_df[&#39;age&#39;].mean(): </span><span class="si">{</span><span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Imputed (global fallback) mean: </span><span class="si">{</span><span class="n">X_global</span><span class="p">[</span><span class="s1">&#39;age_mean_imputed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>### Head with global fallback ###
+    age  age_mean_imputed
+0   NaN         38.495238
+1   NaN         45.110837
+2  38.0         38.000000
+3  53.0         53.000000
+4   NaN         37.249330
+
+Means:
+Original adult_df[&#39;age&#39;].mean(): 38.597911608997045
+Imputed (global fallback) mean: 38.621605730469135
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">groupby_imputer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Introduce missingness for demonstration</span>
+<span class="n">adult_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="n">adult_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span>
+<span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+<span class="c1"># 2. Group-wise mean imputation with fixed fallback</span>
+    <span class="n">X_fixed</span> <span class="o">=</span> <span class="n">groupby_imputer</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">adult_df</span><span class="p">,</span>
+        <span class="n">impute_col</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
+        <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;workclass&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">],</span>
+        <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+        <span class="n">fallback</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">as_new_col</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Head with fixed fallback=50 ###&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_fixed</span><span class="p">[[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;age_mean_imputed&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Means:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original adult_df[&#39;age&#39;].mean(): </span><span class="si">{</span><span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Imputed (fixed fallback=50) mean: </span><span class="si">{</span><span class="n">X_fixed</span><span class="p">[</span><span class="s1">&#39;age_mean_imputed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>### Head with fixed fallback=50 ###
+    age  age_mean_imputed
+0   NaN         38.495238
+1   NaN         45.110837
+2  38.0         38.000000
+3  53.0         53.000000
+4   NaN         37.249330
+
+Means:
+Original adult_df[&#39;age&#39;].mean(): 38.597911608997045
+Imputed (fixed fallback=50) mean: 38.6904730183637
+
+### Comparison summary ###
+Missingness in original age: 0.30000818967282256
+Global fallback mean: 38.621605730469135
+Fixed fallback=50 mean: 38.6904730183637
+</pre></div>
+</div>
+<p><strong>Interpretation</strong></p>
+<ul class="simple">
+<li><p>Group-level imputation preserves differences across workclass and education
+categories that would be lost under global imputation.</p></li>
+<li><p>The global fallback maintains consistency with the original distribution.</p></li>
+<li><p>Fixed fallback values may be useful for domain-driven constraints but can
+introduce bias if not chosen carefully.</p></li>
+</ul>
+<p>Group-aware imputation provides a strong baseline that often outperforms naive
+global strategies while remaining transparent and easy to audit.</p>
+</section>
+</section>
+<section id="delete-inactive-dataframes">
+<h2>Delete Inactive DataFrames<a class="headerlink" href="#delete-inactive-dataframes" title="Link to this heading"></a></h2>
+<p><strong>Safely clean up unused pandas DataFrames from a namespace to reduce memory usage</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">del_inactive_dataframes</span></code> utility is designed to help manage memory in
+interactive environments such as Jupyter notebooks, scripts, and cloud runtimes.
+It inspects a namespace (for example, <code class="docutils literal notranslate"><span class="pre">globals()</span></code> or a custom dictionary),
+identifies pandas DataFrames, and optionally deletes those that are no longer
+needed.</p>
+<p>Unlike manual <code class="docutils literal notranslate"><span class="pre">del</span></code> calls, this function provides <strong>visibility, safety, and
+auditability</strong>:</p>
+<ul class="simple">
+<li><p>Preview what would be deleted before committing</p></li>
+<li><p>Preserve explicitly named DataFrames</p></li>
+<li><p>Handle Jupyter output-cache variables that can silently retain memory</p></li>
+<li><p>Optionally track memory usage before and after cleanup</p></li>
+<li><p>Produce readable summaries using Rich tables when available</p></li>
+</ul>
+<p>This makes it particularly useful during exploratory analysis, large ETL
+pipelines, and long-running notebooks.</p>
+<p><strong>Key Capabilities</strong></p>
+<ul class="simple">
+<li><p><strong>Selective deletion</strong> based on an explicit keep list</p></li>
+<li><p><strong>Dry-run mode</strong> to preview deletions without modifying state</p></li>
+<li><p>Optional inclusion of IPython cache variables (e.g. <code class="docutils literal notranslate"><span class="pre">_14</span></code>, <code class="docutils literal notranslate"><span class="pre">_27</span></code>)</p></li>
+<li><p>Optional <strong>garbage collection</strong> after deletion</p></li>
+<li><p>Optional <strong>memory tracking</strong> at the DataFrame and process level</p></li>
+<li><p>Works with <code class="docutils literal notranslate"><span class="pre">globals()</span></code>, <code class="docutils literal notranslate"><span class="pre">locals()</span></code>, or any user-managed namespace dictionary</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="del_inactive_dataframes">
+<span class="sig-name descname"><span class="pre">del_inactive_dataframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfs_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">del_dataframes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_ipython_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_gc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dataframes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#del_inactive_dataframes" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dfs_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><em>iterable</em><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name or names of DataFrame variables to preserve.
+All other DataFrames may be deleted when <code class="docutils literal notranslate"><span class="pre">del_dataframes=True</span></code>.</p></li>
+<li><p><strong>del_dataframes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to actually delete inactive DataFrames.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the function only reports what would be deleted.</p></li>
+<li><p><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – Namespace dictionary to inspect and optionally modify.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the function uses <code class="docutils literal notranslate"><span class="pre">globals()</span></code> of the calling scope.</p></li>
+<li><p><strong>include_ipython_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to include IPython output-cache
+variables (e.g. <code class="docutils literal notranslate"><span class="pre">_14</span></code>) when searching for DataFrames.</p></li>
+<li><p><strong>dry_run</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, show planned deletions without deleting anything.</p></li>
+<li><p><strong>run_gc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to call <code class="docutils literal notranslate"><span class="pre">gc.collect()</span></code> after deletions occur.</p></li>
+<li><p><strong>track_memory</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to record memory usage before and after cleanup.</p></li>
+<li><p><strong>memory_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Controls which memory metrics are reported:
+- <code class="docutils literal notranslate"><span class="pre">&quot;dataframes&quot;</span></code> reports total pandas DataFrame memory
+- <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> also reports process RSS (requires <code class="docutils literal notranslate"><span class="pre">psutil</span></code>)</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print formatted output. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the function
+returns results silently.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Summary dictionary describing detected, deleted, and remaining
+DataFrames, along with optional memory metrics.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – <ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">memory_mode</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;dataframes&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<ul class="simple">
+<li><p>A namespace is simply a dictionary mapping variable names to objects.</p></li>
+<li><p>Deletion is performed by removing keys from the namespace dictionary.</p></li>
+<li><p>Modifying <code class="docutils literal notranslate"><span class="pre">locals()</span></code> inside a function is not guaranteed to free memory.
+For reliable cleanup inside functions, store DataFrames in a dict and
+pass that dict as <code class="docutils literal notranslate"><span class="pre">namespace</span></code>.</p></li>
+<li><p>Process RSS memory may not decrease immediately even after garbage collection.</p></li>
+</ul>
+</div>
+<p><strong>Usage Examples</strong></p>
+<p>The following examples demonstrate common and advanced usage patterns for
+<code class="docutils literal notranslate"><span class="pre">del_inactive_dataframes</span></code>. Each example recreates its own DataFrames so behavior
+is isolated and easy to follow.</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">del_inactive_dataframes</span></code> inspects a namespace dictionary, these examples
+explicitly pass <code class="docutils literal notranslate"><span class="pre">namespace=globals()</span></code> so the function can see variables defined
+in this script or notebook.</p>
+<section id="example-1-list-active-dataframes-no-deletion">
+<h3>Example 1: List Active DataFrames (No Deletion)<a class="headerlink" href="#example-1-list-active-dataframes-no-deletion" title="Link to this heading"></a></h3>
+<p>Inspect which DataFrames are currently active without deleting anything.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit.data_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+
+<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
+
+<span class="n">del_inactive_dataframes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
+Active DataFrames
+=================
+Current Active DataFrames:
+- df_main
+- df_tmp
+</pre></div>
+</div>
+</section>
+<section id="example-2-delete-everything-except-a-single-dataframe">
+<h3>Example 2: Delete Everything Except a Single DataFrame<a class="headerlink" href="#example-2-delete-everything-except-a-single-dataframe" title="Link to this heading"></a></h3>
+<p>Remove all DataFrames except the one explicitly listed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
+
+<span class="n">del_inactive_dataframes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
+Active DataFrames
+=================
+Current Active DataFrames:
+- df_main
+- df_tmp
+
+=================
+Planned Deletions
+=================
+DataFrames Marked for Deletion:
+- df_tmp
+
+==================
+Deleted DataFrames
+==================
+Deleted DataFrames:
+- df_tmp
+
+====================
+Remaining DataFrames
+====================
+Remaining Active DataFrames:
+- df_main
+</pre></div>
+</div>
+</section>
+<section id="example-3-dry-run-preview-deletions">
+<h3>Example 3: Dry Run (Preview Deletions)<a class="headerlink" href="#example-3-dry-run-preview-deletions" title="Link to this heading"></a></h3>
+<p>Preview which DataFrames <em>would</em> be deleted without actually removing them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
+
+<span class="n">del_inactive_dataframes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
+Active DataFrames
+=================
+Current Active DataFrames:
+- df_main
+- df_tmp
+
+=================
+Planned Deletions
+=================
+DataFrames Marked for Deletion:
+- df_tmp
+Dry run enabled. No DataFrames were deleted.
+
+====================
+Remaining DataFrames
+====================
+Remaining Active DataFrames:
+- df_main
+- df_tmp
+</pre></div>
+</div>
+<p>This mode is recommended before running destructive cleanup steps.</p>
+</section>
+<section id="example-4-include-ipython-output-cache-variables">
+<h3>Example 4: Include IPython Output Cache Variables<a class="headerlink" href="#example-4-include-ipython-output-cache-variables" title="Link to this heading"></a></h3>
+<p>In Jupyter notebooks, output cache variables such as <code class="docutils literal notranslate"><span class="pre">_14</span></code> may reference large
+DataFrames. These are ignored by default but can be included explicitly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">df_tmp</span>  <span class="c1"># simulates an IPython output cache reference</span>
+
+<span class="n">del_inactive_dataframes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_ipython_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
+Active DataFrames
+=================
+Current Active DataFrames:
+- _
+- df_main
+- df_tmp
+
+=================
+Planned Deletions
+=================
+DataFrames Marked for Deletion:
+- _
+- df_tmp
+
+==================
+Deleted DataFrames
+==================
+Deleted DataFrames:
+- _
+- df_tmp
+
+====================
+Remaining DataFrames
+====================
+Remaining Active DataFrames:
+- df_main
+</pre></div>
+</div>
+</section>
+<section id="example-5-track-dataframe-memory-usage">
+<h3>Example 5: Track DataFrame Memory Usage<a class="headerlink" href="#example-5-track-dataframe-memory-usage" title="Link to this heading"></a></h3>
+<p>Report total DataFrame memory usage before and after cleanup.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
+
+<span class="n">del_inactive_dataframes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">track_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
+Active DataFrames
+=================
+Current Active DataFrames:
+- df_main
+- df_tmp
+
+=================
+Planned Deletions
+=================
+DataFrames Marked for Deletion:
+- df_tmp
+
+==================
+Deleted DataFrames
+==================
+Deleted DataFrames:
+- df_tmp
+
+====================
+Remaining DataFrames
+====================
+Remaining Active DataFrames:
+- df_main
+
+=================
+Memory Usage (MB)
+=================
+DataFrames total: 0.0 -&gt; 0.0 (-0.0)
+</pre></div>
+</div>
+<p>This mode uses <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame.memory_usage(deep=True)</span></code> for reporting.</p>
+</section>
+<section id="example-6-track-dataframe-memory-and-process-rss">
+<h3>Example 6: Track DataFrame Memory and Process RSS<a class="headerlink" href="#example-6-track-dataframe-memory-and-process-rss" title="Link to this heading"></a></h3>
+<p>Enable power-user memory tracking, including process-level RSS when available.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
+
+<span class="n">del_inactive_dataframes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">track_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">memory_mode</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
+Active DataFrames
+=================
+Current Active DataFrames:
+- df_main
+- df_tmp
+
+=================
+Planned Deletions
+=================
+DataFrames Marked for Deletion:
+- df_tmp
+
+==================
+Deleted DataFrames
+==================
+Deleted DataFrames:
+- df_tmp
+
+====================
+Remaining DataFrames
+====================
+Remaining Active DataFrames:
+- df_main
+
+=================
+Memory Usage (MB)
+=================
+Process RSS: 189.0 -&gt; 189.0 (+0.0)
+DataFrames total: 0.0 -&gt; 0.0 (-0.0)
+</pre></div>
+</div>
+<p>Process RSS reporting requires <code class="docutils literal notranslate"><span class="pre">psutil</span></code> and may not immediately decrease
+after garbage collection.</p>
+</section>
+<section id="example-7-programmatic-usage-no-console-output">
+<h3>Example 7: Programmatic Usage (No Console Output)<a class="headerlink" href="#example-7-programmatic-usage-no-console-output" title="Link to this heading"></a></h3>
+<p>Suppress console output and consume the returned summary dictionary directly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="n">del_inactive_dataframes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">track_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Returned summary dict:
+{&#39;active&#39;: [&#39;df_main&#39;, &#39;df_tmp&#39;], &#39;to_delete&#39;: [&#39;df_tmp&#39;], &#39;deleted&#39;: [&#39;df_tmp&#39;],
+&#39;remaining&#39;: [&#39;df_main&#39;], &#39;used_rich&#39;: False, &#39;memory&#39;: {&#39;dataframes_mb&#39;:
+{&#39;before&#39;: 0.00109100341796875, &#39;after&#39;: 0.000202178955078125,
+&#39;delta&#39;: -0.000888824462890625}, &#39;mode&#39;: &#39;dataframes&#39;}}
+</pre></div>
+</div>
+<p>This pattern is useful in pipelines, automated scripts, and testing workflows.</p>
+<p><strong>When to Use This Utility</strong></p>
+<ul class="simple">
+<li><p>Long-lived Jupyter notebooks with many intermediate DataFrames</p></li>
+<li><p>Cloud notebooks with limited RAM</p></li>
+<li><p>ETL pipelines with staged intermediate results</p></li>
+<li><p>Teaching environments where reproducibility and clarity matter</p></li>
+<li><p>Any workflow where memory pressure needs to be controlled explicitly</p></li>
+</ul>
+<p>This function is intentionally conservative, explicit, and observable, favoring
+safe cleanup over implicit or destructive behavior.</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id9" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
@@ -2386,6 +2959,7 @@ when the upper bound is infinity (<code class="docutils literal notranslate"><sp
 <p>Kohavi, R. (1996). <em>Census Income</em>. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
 </aside>
+</section>
 </section>
 </section>
 

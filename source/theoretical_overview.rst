@@ -1,7 +1,5 @@
 .. _theoretical_overview:   
 
-.. _target-link:
-
 .. raw:: html
 
    <div class="no-click">
@@ -425,5 +423,296 @@ If :math:`p = 0.5`, then:
 
     \text{logit}(0.5) = \ln\left(\frac{0.5}{1 - 0.5}\right) = \ln(1) = 0
 
+.. _density_parameter_estimation:
 
+Parameter Estimation for Density Models and Distribution GOF Plots
+-------------------------------------------------------------------------------
 
+When fitting parametric probability density functions to data, the key task is
+to estimate the unknown parameters of the assumed distribution. In
+``plot_distributions`` and ``distribution_gof_plots``, this estimation step is required whenever a parametric
+density (e.g., Normal, Lognormal, Gamma) is overlaid on the empirical
+distribution.
+
+Two classical estimation frameworks are commonly used for this purpose:
+
+- **Method of Moments (MoM)**
+- **Maximum Likelihood Estimation (MLE)**
+
+Both approaches seek to infer distributional parameters from observed data, but
+they do so using fundamentally different principles.
+
+Method of Moments (MoM)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The **Method of Moments** estimates distribution parameters by equating
+theoretical moments of a probability distribution to the corresponding sample
+moments computed from the data.
+
+Let :math:`X_1, X_2, \dots, X_n` be a random sample drawn from a distribution
+with parameter vector :math:`\theta`. The :math:`k^{th}` theoretical moment is:
+
+.. math::
+
+    \mu_k(\theta) = \mathbb{E}[X^k]
+
+The corresponding sample moment is:
+
+.. math::
+
+    \hat{\mu}_k = \frac{1}{n} \sum_{i=1}^{n} X_i^k
+
+The Method of Moments estimator :math:`\hat{\theta}_{\text{MoM}}` is obtained by
+solving the system:
+
+.. math::
+
+    \mu_k(\theta) = \hat{\mu}_k \quad \text{for } k = 1, \dots, p
+
+where :math:`p` is the number of parameters in the distribution.
+
+**Example: Normal Distribution**
+
+For a Normal distribution :math:`\mathcal{N}(\mu, \sigma^2)`:
+
+- First theoretical moment: :math:`\mathbb{E}[X] = \mu`
+- Second central moment: :math:`\mathbb{E}[(X - \mu)^2] = \sigma^2`
+
+Equating moments yields:
+
+.. math::
+
+    \hat{\mu}_{\text{MoM}} = \bar{X}, \quad
+    \hat{\sigma}^2_{\text{MoM}} = \frac{1}{n} \sum_{i=1}^{n} (X_i - \bar{X})^2
+
+**Characteristics of MoM**
+
+- Computationally simple and fast
+- Closed-form solutions for many distributions
+- Does not require specifying a likelihood function
+- Can be inefficient or biased for small samples
+- Does not optimize a global objective
+
+Method of Moments is often used as a baseline or initialization strategy,
+especially when likelihood optimization is unstable.
+
+Maximum Likelihood Estimation (MLE)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Maximum Likelihood Estimation** estimates parameters by maximizing the
+probability of observing the given data under the assumed distribution.
+
+Let :math:`f(x \mid \theta)` be the probability density function of a distribution
+with parameter vector :math:`\theta`. The likelihood function for an i.i.d.
+sample is:
+
+.. math::
+
+    \mathcal{L}(\theta \mid X)
+    = \prod_{i=1}^{n} f(X_i \mid \theta)
+
+It is more convenient to work with the log-likelihood:
+
+.. math::
+
+    \ell(\theta)
+    = \sum_{i=1}^{n} \log f(X_i \mid \theta)
+
+The MLE estimator :math:`\hat{\theta}_{\text{MLE}}` is defined as:
+
+.. math::
+
+    \hat{\theta}_{\text{MLE}}
+    = \arg\max_{\theta} \; \ell(\theta)
+
+**Example: Normal Distribution**
+
+For :math:`X_i \sim \mathcal{N}(\mu, \sigma^2)`:
+
+.. math::
+
+    \ell(\mu, \sigma^2)
+    = -\frac{n}{2} \log(2\pi\sigma^2)
+      - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (X_i - \mu)^2
+
+Maximizing this expression yields:
+
+.. math::
+
+    \hat{\mu}_{\text{MLE}} = \bar{X}, \quad
+    \hat{\sigma}^2_{\text{MLE}} = \frac{1}{n} \sum_{i=1}^{n} (X_i - \bar{X})^2
+
+For the Normal distribution, MoM and MLE coincide. For many other distributions
+(e.g., Lognormal, Gamma), they differ substantially.
+
+**Characteristics of MLE**
+
+- Statistically efficient under correct model specification
+- Asymptotically unbiased and consistent
+- Naturally supports hypothesis testing and confidence intervals
+- Requires numerical optimization for many distributions
+- Sensitive to model misspecification and outliers
+
+In practice, MLE is preferred when a well-justified parametric assumption is
+available and sample size is sufficient.
+
+Relationship to Density Overlays
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When ``plot_distributions`` overlays parametric densities on histograms or KDE
+curves, the following workflow is implicitly assumed:
+
+1. A parametric family is selected (e.g., Normal, Lognormal).
+2. Parameters are estimated using either:
+
+   - Method of Moments, or
+   - Maximum Likelihood Estimation.
+
+3. The fitted probability density function is evaluated across the data range.
+4. The resulting curve is plotted alongside the empirical distribution.
+
+The choice between MoM and MLE affects the **shape, scale, and tail behavior**
+of the fitted density, and therefore influences how closely the parametric model
+aligns with the observed data.
+
+Using multiple density overlays simultaneously allows visual comparison of
+different modeling assumptions and estimation strategies.
+
+.. _ecdf_theory:
+
+Empirical Cumulative Distribution Function: ECDF
+------------------------------------------------------
+
+The **Empirical Cumulative Distribution Function (ECDF)** provides a non-parametric
+estimate of the cumulative distribution function (CDF) of a random variable based
+directly on observed data. Unlike parametric approaches, the ECDF makes **no
+assumptions about the underlying probability distribution** and depends solely on
+the sample itself.
+
+Definition
+^^^^^^^^^^^^^
+
+Let :math:`X_1, X_2, \dots, X_n` be an independent and identically distributed sample
+drawn from an unknown distribution with true cumulative distribution function
+:math:`F(x)`.
+
+The empirical cumulative distribution function :math:`\hat{F}_n(x)` is defined as:
+
+.. math::
+
+    \hat{F}_n(x) = \frac{1}{n} \sum_{i=1}^{n} \mathbf{1}\{X_i \le x\}
+
+where :math:`\mathbf{1}\{\cdot\}` denotes the indicator function, which equals 1 if
+its argument is true and 0 otherwise.
+
+Interpretation
+^^^^^^^^^^^^^^^^
+
+For any real value :math:`x`, the ECDF :math:`\hat{F}_n(x)` represents the proportion
+of observed data points less than or equal to :math:`x`. The ECDF is therefore a
+**step function** that:
+
+- Starts at 0 and increases monotonically to 1
+- Jumps upward by increments of :math:`1/n` at each observed data point
+- Is right-continuous with left limits
+
+Each jump corresponds exactly to an observed value in the sample.
+
+Statistical Properties
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ECDF possesses several important theoretical properties.
+
+Consistency
+"""""""""""""
+
+By the **Glivenko–Cantelli Theorem**, the ECDF converges uniformly to the true CDF:
+
+.. math::
+
+    \sup_x \left| \hat{F}_n(x) - F(x) \right|
+    \xrightarrow{a.s.} 0
+    \quad \text{as } n \to \infty
+
+This guarantees that the ECDF is a **strongly consistent estimator** of the true
+distribution function.
+
+Unbiasedness
+""""""""""""""
+
+For any fixed :math:`x`, the ECDF is an unbiased estimator of the true CDF:
+
+.. math::
+
+    \mathbb{E}[\hat{F}_n(x)] = F(x)
+
+Variance
+""""""""""
+
+The variance of the ECDF at a fixed point :math:`x` is given by:
+
+.. math::
+
+    \mathrm{Var}[\hat{F}_n(x)] = \frac{F(x)(1 - F(x))}{n}
+
+This shows that uncertainty decreases at the standard parametric rate
+:math:`O(n^{-1})`.
+
+Relationship to Order Statistics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Let :math:`X_{(1)} \le X_{(2)} \le \dots \le X_{(n)}` denote the order statistics of the
+sample. The ECDF increases by exactly :math:`1/n` at each order statistic:
+
+.. math::
+
+    \hat{F}_n(x) =
+    \begin{cases}
+        0, & x < X_{(1)} \\
+        k/n, & X_{(k)} \le x < X_{(k+1)} \\
+        1, & x \ge X_{(n)}
+    \end{cases}
+
+This representation makes explicit the direct connection between the ECDF and the
+empirical quantile function.
+
+Comparison with Histogram and KDE
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ECDF differs fundamentally from histogram- and kernel-based density estimates:
+
+- **Histograms** depend on bin width and bin placement
+- **Kernel density estimates (KDEs)** depend on bandwidth and kernel choice
+- **ECDFs** require no tuning parameters and introduce no smoothing bias
+
+As a result, ECDFs are particularly well suited for:
+
+- Distributional diagnostics
+- Model checking and goodness-of-fit assessment
+- Comparing empirical and theoretical distributions
+- Visualizing cumulative probability mass and tail behavior
+
+Tail Behavior and Exceedance Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ECDF naturally supports tail analysis through the **empirical survival function**
+(or exceedance function):
+
+.. math::
+
+    \hat{S}_n(x) = 1 - \hat{F}_n(x)
+
+This representation is especially useful for analyzing upper-tail behavior,
+heavy-tailed distributions, and rare events, particularly when combined with
+logarithmic axis scaling.
+
+Practical Considerations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- ECDFs are invariant to monotone transformations of the data ordering
+- They remain interpretable under log or power transformations
+- They provide exact cumulative probabilities at observed values
+- They scale well computationally for large datasets
+
+Because of these properties, ECDFs are a foundational tool in exploratory data
+analysis and serve as a robust complement to density-based visualizations.

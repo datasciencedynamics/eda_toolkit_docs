@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.19 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=2fd7553c"></script>
+      <script src="_static/documentation_options.js?v=056c92e6"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,10 +60,12 @@
 <li class="toctree-l1"><a class="reference internal" href="data_management.html">Data Management Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_management.html#data-management-techniques">Data Management Techniques</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<p class="caption" role="heading"><span class="caption-text">Plotting Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#histogram-distribution-plots">Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#conditional-distributions">Conditional Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#distribution-goodness-of-fit-plots">Distribution Goodness-of-Fit Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#feature-scaling-and-outliers">Feature Scaling and Outliers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#outcome-crosstab-plots">Outcome Crosstab Plots</a></li>
@@ -79,6 +81,8 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul class="current">
@@ -87,26 +91,43 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-20">Version 0.0.20</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-s-changed">What’s Changed</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-19">Version 0.0.19</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#version-0-0-18">Version 0.0.18</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#major-changes">Major Changes</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#enhancements-to-generate-table1">Enhancements to <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#tests-and-coverage">Tests and Coverage</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-18">Version 0.0.18</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-17">Version 0.0.17</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-16">Version 0.0.16</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-15">Version 0.0.15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#avoid-in-place-modification-of-exclude-combinations">Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#improve-progress-tracking-and-resolve-last-plot-saving-issue">Improve Progress Tracking and Resolve Last Plot Saving Issue</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#updated-tqdm-saving-logic-in-scatter-fit-plot">Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scatter-plot-function-updates">Scatter Plot Function Updates</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#avoid-in-place-modification-of-exclude-combinations">Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#improve-progress-tracking-and-resolve-last-plot-saving-issue">Improve Progress Tracking and Resolve Last Plot Saving Issue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updated-tqdm-saving-logic-in-scatter-fit-plot">Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#version-0-0-14">Version 0.0.14</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#version-0-0-13">Version 0.0.13</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#version-0-0-12">Version 0.0.12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-14">Version 0.0.14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ensure-crosstabs-dictionary-is-populated-with-return-dict-true">Ensure Crosstabs Dictionary is Populated with <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enhancements-and-fixes-for-scatter-fit-plot-function">Enhancements and Fixes for <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fix-default-title-and-filename-handling-in-flex-corr-matrix">Fix Default Title and Filename Handling in <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-13">Version 0.0.13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication">Add <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for Insufficient Pool Size in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> and Enhance ID Deduplication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enhance-strip-trailing-period-to-support-strings-and-mixed-data-types">Enhance <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> to Support Strings and Mixed Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changes-in-stacked-crosstab-plot">Changes in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-environment-detection-to-dataframe-columns-function">Add Environment Detection to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-tqdm-progress-bar-to-dataframe-columns-function">Add <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Progress Bar to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-enhancements-and-fixes">Other Enhancements and Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-12">Version 0.0.12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#improvements">Improvements</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-11">Version 0.0.11</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-10">Version 0.0.10</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-9">Version 0.0.9</a></li>
@@ -122,9 +143,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id17">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id18">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id19">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -158,6 +179,22 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-20">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.20/index.html">Version 0.0.20</a><a class="headerlink" href="#version-0-0-20" title="Link to this heading"></a></h2>
+<section id="what-s-changed">
+<h3>What’s Changed<a class="headerlink" href="#what-s-changed" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>flexible summarize_combinations sans excel by &#64;lshpaner in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/104">https://github.com/lshpaner/eda_toolkit/pull/104</a></p></li>
+<li><p>Groupby imputer by &#64;Oscar-Gil-Data in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/109">https://github.com/lshpaner/eda_toolkit/pull/109</a></p></li>
+<li><p>Refactor <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> and extract density overlay logic into plot utilities by &#64;lshpaner in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/110">https://github.com/lshpaner/eda_toolkit/pull/110</a></p></li>
+<li><p>Introduce Enhanced Q-Q Plot Support for Distribution GOF Diagnostics by &#64;lshpaner in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/111">https://github.com/lshpaner/eda_toolkit/pull/111</a></p></li>
+<li><p>Add ECDF plot type to data_doctor; add SciPy to requirements by &#64;Oscar-Gil-Data in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/112">https://github.com/lshpaner/eda_toolkit/pull/112</a></p></li>
+<li><p>Add conditional histograms and unify figure-saving utilities by &#64;lshpaner in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/114">https://github.com/lshpaner/eda_toolkit/pull/114</a></p></li>
+<li><p>DataFrame memory management utility, del_inactive_dataframes by &#64;Oscar-Gil-Data in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/115">https://github.com/lshpaner/eda_toolkit/pull/115</a></p></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/compare/0.0.19...0.0.20">https://github.com/lshpaner/eda_toolkit/compare/0.0.19…0.0.20</a></p>
+</section>
+</section>
 <section id="version-0-0-19">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.19/index.html">Version 0.0.19</a><a class="headerlink" href="#version-0-0-19" title="Link to this heading"></a></h2>
 <p><strong>Summary</strong></p>
@@ -221,8 +258,6 @@ At the end of <code class="docutils literal notranslate"><span class="pre">gener
 <li><p>We want <em>p</em>-values and group counts to respect the same <code class="docutils literal notranslate"><span class="pre">decimal_places</span></code> and thousands-separator rules.</p></li>
 <li><p>Wrapping in <code class="docutils literal notranslate"><span class="pre">TableWrapper</span></code> means users get pretty output by default when they do <code class="docutils literal notranslate"><span class="pre">print()</span></code> or interactive display; no need to remember a <code class="docutils literal notranslate"><span class="pre">pretty=True</span></code> flag or manually call <code class="docutils literal notranslate"><span class="pre">table1_to_str()</span></code>.</p></li>
 </ul>
-<section id="major-changes">
-<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
 <p><strong>Typing and Codebase-Wide Updates</strong></p>
 <ul class="simple">
 <li><p>Added <strong>full type annotations</strong> to all functions across the following modules:
@@ -230,8 +265,6 @@ At the end of <code class="docutils literal notranslate"><span class="pre">gener
 - <code class="docutils literal notranslate"><span class="pre">plots.py</span></code></p></li>
 <li><p>Improved parameter validation and error messages for invalid input types.</p></li>
 </ul>
-<section id="enhancements-to-generate-table1">
-<h4>Enhancements to <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code><a class="headerlink" href="#enhancements-to-generate-table1" title="Link to this heading"></a></h4>
 <ul>
 <li><p><strong>New Parameter</strong>: <code class="docutils literal notranslate"><span class="pre">use_welch</span></code> (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
 <ul class="simple">
@@ -261,9 +294,6 @@ At the end of <code class="docutils literal notranslate"><span class="pre">gener
 </div>
 </li>
 </ul>
-</section>
-<section id="tests-and-coverage">
-<h4>Tests and Coverage<a class="headerlink" href="#tests-and-coverage" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Updated unit tests to reflect all refactored logic.</p></li>
 <li><p>Test coverage now exceeds 80% across core modules (<code class="docutils literal notranslate"><span class="pre">generate_table1</span></code>, <code class="docutils literal notranslate"><span class="pre">data_manager.py</span></code>, <code class="docutils literal notranslate"><span class="pre">plots.py</span></code>).</p></li>
@@ -279,8 +309,6 @@ src/eda_toolkit/plots.py            904    179    80%
 TOTAL                              1446    270    81%
 </pre></div>
 </div>
-</section>
-</section>
 </section>
 <section id="version-0-0-17">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.17/index.html">Version 0.0.17</a><a class="headerlink" href="#version-0-0-17" title="Link to this heading"></a></h2>
@@ -323,8 +351,10 @@ TOTAL                              1446    270    81%
 </section>
 <section id="version-0-0-15">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.15/index.html">Version 0.0.15</a><a class="headerlink" href="#version-0-0-15" title="Link to this heading"></a></h2>
+<section id="scatter-plot-function-updates">
+<h3>Scatter Plot Function Updates<a class="headerlink" href="#scatter-plot-function-updates" title="Link to this heading"></a></h3>
 <section id="avoid-in-place-modification-of-exclude-combinations">
-<h3>Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code><a class="headerlink" href="#avoid-in-place-modification-of-exclude-combinations" title="Link to this heading"></a></h3>
+<h4>Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code><a class="headerlink" href="#avoid-in-place-modification-of-exclude-combinations" title="Link to this heading"></a></h4>
 <p>This addresses an issue where the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function modifies the <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code> parameter in-place, causing errors when reused in subsequent calls.</p>
 <ul>
 <li><p>Created a local copy of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code> for normalization instead of modifying the input directly:</p>
@@ -335,7 +365,7 @@ TOTAL                              1446    270    81%
 </ul>
 </section>
 <section id="improve-progress-tracking-and-resolve-last-plot-saving-issue">
-<h3>Improve Progress Tracking and Resolve Last Plot Saving Issue<a class="headerlink" href="#improve-progress-tracking-and-resolve-last-plot-saving-issue" title="Link to this heading"></a></h3>
+<h4>Improve Progress Tracking and Resolve Last Plot Saving Issue<a class="headerlink" href="#improve-progress-tracking-and-resolve-last-plot-saving-issue" title="Link to this heading"></a></h4>
 <ol class="arabic simple">
 <li><p>Separate Progress Bars for Grid Plot:</p>
 <ul class="simple">
@@ -357,7 +387,7 @@ TOTAL                              1446    270    81%
 </ol>
 </section>
 <section id="updated-tqdm-saving-logic-in-scatter-fit-plot">
-<h3>Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code><a class="headerlink" href="#updated-tqdm-saving-logic-in-scatter-fit-plot" title="Link to this heading"></a></h3>
+<h4>Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code><a class="headerlink" href="#updated-tqdm-saving-logic-in-scatter-fit-plot" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Refactored <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> to track the overall plot-saving process, covering both individual and grid plots.</p></li>
 <li><p>Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar description in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> to use universal phrasing: “Saving scatter plot(s).”</p></li>
@@ -365,8 +395,11 @@ TOTAL                              1446    270    81%
 </ul>
 </section>
 </section>
+</section>
 <section id="version-0-0-14">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.14/index.html">Version 0.0.14</a><a class="headerlink" href="#version-0-0-14" title="Link to this heading"></a></h2>
+<section id="ensure-crosstabs-dictionary-is-populated-with-return-dict-true">
+<h3>Ensure Crosstabs Dictionary is Populated with <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code><a class="headerlink" href="#ensure-crosstabs-dictionary-is-populated-with-return-dict-true" title="Link to this heading"></a></h3>
 <p>This resolves the issue where the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function fails to
 populate and return the crosstabs dictionary (<code class="docutils literal notranslate"><span class="pre">crosstabs_dict</span></code>) when
 <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code> and <code class="docutils literal notranslate"><span class="pre">output=&quot;plots_only&quot;</span></code>. The fix ensures that crosstabs
@@ -384,6 +417,9 @@ are always generated when <code class="docutils literal notranslate"><span class
 </ul>
 </li>
 </ul>
+</section>
+<section id="enhancements-and-fixes-for-scatter-fit-plot-function">
+<h3>Enhancements and Fixes for <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> Function<a class="headerlink" href="#enhancements-and-fixes-for-scatter-fit-plot-function" title="Link to this heading"></a></h3>
 <p>This addresses critical issues and introduces key enhancements for the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function.
 These changes aim to improve usability, flexibility, and robustness of the function.</p>
 <ol class="arabic simple">
@@ -393,6 +429,9 @@ These changes aim to improve usability, flexibility, and robustness of the funct
 <li><p>Changed the default value of <code class="docutils literal notranslate"><span class="pre">show_plot</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code> to prevent excessive individual plots when handling large variable sets.</p></li>
 <li><p>Fixed Issues with Legend, <code class="docutils literal notranslate"><span class="pre">xlim</span></code>, and <code class="docutils literal notranslate"><span class="pre">ylim</span></code>; inputs were not being used; these have been corrected.</p></li>
 </ol>
+</section>
+<section id="fix-default-title-and-filename-handling-in-flex-corr-matrix">
+<h3>Fix Default Title and Filename Handling in <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code><a class="headerlink" href="#fix-default-title-and-filename-handling-in-flex-corr-matrix" title="Link to this heading"></a></h3>
 <p>This resolves issues in the <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code> function where:</p>
 <ol class="arabic simple">
 <li><p>No default title was provided when <code class="docutils literal notranslate"><span class="pre">title=None</span></code>, resulting in missing titles on plots.</p></li>
@@ -406,9 +445,12 @@ but the saved filename will still use <code class="docutils literal notranslate"
 <li><p>File names are generated based on the <code class="docutils literal notranslate"><span class="pre">title</span></code> or default to <code class="docutils literal notranslate"><span class="pre">&quot;correlation_matrix&quot;</span></code> if <code class="docutils literal notranslate"><span class="pre">title</span></code> is not provided. Spaces in the <code class="docutils literal notranslate"><span class="pre">title</span></code> are replaced with underscores, and special characters like <code class="docutils literal notranslate"><span class="pre">:</span></code> are removed to ensure valid filenames.</p></li>
 </ol>
 </section>
+</section>
 <section id="version-0-0-13">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.13/index.html">Version 0.0.13</a><a class="headerlink" href="#version-0-0-13" title="Link to this heading"></a></h2>
 <p>This version introduces a series of updates and fixes across multiple functions to enhance error handling, improve cross-environment compatibility, streamline usability, and optimize performance. These changes address critical issues, add new features, and ensure consistent behavior in both terminal and notebook environments.</p>
+<section id="add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication">
+<h3>Add <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for Insufficient Pool Size in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> and Enhance ID Deduplication<a class="headerlink" href="#add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication" title="Link to this heading"></a></h3>
 <p>This update enhances the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function by adding explicit error handling and improving the uniqueness guarantee for generated IDs.</p>
 <p><strong>Key Changes</strong></p>
 <ul class="simple">
@@ -431,6 +473,9 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </ul>
 </li>
 </ul>
+</section>
+<section id="enhance-strip-trailing-period-to-support-strings-and-mixed-data-types">
+<h3>Enhance <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> to Support Strings and Mixed Data Types<a class="headerlink" href="#enhance-strip-trailing-period-to-support-strings-and-mixed-data-types" title="Link to this heading"></a></h3>
 <p>This update enhances the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to handle trailing periods in both numeric and string values. The updated implementation ensures robustness for columns with mixed data types and gracefully handles special cases like <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
 <p><strong>Key Enhancements</strong></p>
 <ul class="simple">
@@ -456,6 +501,9 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </ul>
 </li>
 </ul>
+</section>
+<section id="changes-in-stacked-crosstab-plot">
+<h3>Changes in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code><a class="headerlink" href="#changes-in-stacked-crosstab-plot" title="Link to this heading"></a></h3>
 <p>Remove <code class="docutils literal notranslate"><span class="pre">IPython</span></code> Dependency by Replacing <code class="docutils literal notranslate"><span class="pre">display</span></code> with <code class="docutils literal notranslate"><span class="pre">print</span></code></p>
 <p>This resolves an issue where the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library required <code class="docutils literal notranslate"><span class="pre">IPython</span></code> as a dependency due to the use of <code class="docutils literal notranslate"><span class="pre">display(crosstab_df)</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function. The dependency caused import failures in environments without <code class="docutils literal notranslate"><span class="pre">IPython</span></code>, especially in non-Jupyter terminal-based workflows.</p>
 <p><strong>Changes Made</strong></p>
@@ -477,6 +525,9 @@ but the saved filename will still use <code class="docutils literal notranslate"
 <li><p><strong>Jupyter Notebook</strong>: Crosstabs are displayed as plain text via <code class="docutils literal notranslate"><span class="pre">print()</span></code>, rendered neatly in notebook outputs.</p></li>
 <li><p><strong>Terminal Session</strong>: Crosstabs are printed as expected, ensuring seamless use in terminal-based workflows.</p></li>
 </ul>
+</section>
+<section id="add-environment-detection-to-dataframe-columns-function">
+<h3>Add Environment Detection to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function<a class="headerlink" href="#add-environment-detection-to-dataframe-columns-function" title="Link to this heading"></a></h3>
 <p>This enhances the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> function to dynamically adjust its output based on the runtime environment (Jupyter Notebook or terminal).</p>
 <p><strong>Changes Made</strong></p>
 <ol class="arabic">
@@ -509,6 +560,9 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </ul>
 </li>
 </ol>
+</section>
+<section id="add-tqdm-progress-bar-to-dataframe-columns-function">
+<h3>Add <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Progress Bar to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function<a class="headerlink" href="#add-tqdm-progress-bar-to-dataframe-columns-function" title="Link to this heading"></a></h3>
 <p>This enhances the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> function by incorporating a <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar to track column processing. This is particularly useful for analyzing large DataFrames, providing real-time feedback.</p>
 <p><strong>Changes Made</strong>:</p>
 <ul>
@@ -519,14 +573,20 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </div>
 </li>
 </ul>
+</section>
+<section id="other-enhancements-and-fixes">
+<h3>Other Enhancements and Fixes<a class="headerlink" href="#other-enhancements-and-fixes" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Improved <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> with <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> integration.</p></li>
 <li><p>Fixed <code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code> plot display logic to adhere strictly to the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter.</p></li>
 <li><p>Updated project dependencies and added robust environment testing.</p></li>
 </ul>
 </section>
+</section>
 <section id="version-0-0-12">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.12/index.html">Version 0.0.12</a><a class="headerlink" href="#version-0-0-12" title="Link to this heading"></a></h2>
+<section id="new-features">
+<h3>New Features<a class="headerlink" href="#new-features" title="Link to this heading"></a></h3>
 <ul>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function:</p>
 <p>A versatile tool designed to facilitate detailed feature analysis, outlier detection, and data transformation within a DataFrame.</p>
@@ -563,6 +623,9 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </ul>
 </li>
 </ul>
+</section>
+<section id="improvements">
+<h3>Improvements<a class="headerlink" href="#improvements" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><strong>Enhanced</strong> <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> <strong>function</strong>:</p>
 <ul>
@@ -586,6 +649,7 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </li>
 </ul>
 <p>The updated implementation removes custom logic for ID generation, leveraging NumPy’s built-in array operations for a more concise and readable codebase.</p>
+</section>
 </section>
 <section id="version-0-0-11">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.11/index.html">Version 0.0.11</a><a class="headerlink" href="#version-0-0-11" title="Link to this heading"></a></h2>
@@ -1056,8 +1120,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id17">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<section id="id18">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1075,8 +1139,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id18">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
+<section id="id19">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1158,8 +1222,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id19">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<section id="id20">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>

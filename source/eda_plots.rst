@@ -38,7 +38,7 @@ When creating visualizations, there are several key heuristics to keep in mind:
   to facilitate comparisons.
 
 Methodologies
--------------
+--------------
 
 The EDA Toolkit supports the following methodologies for creating effective visualizations:
 
@@ -71,127 +71,137 @@ The EDA Toolkit supports the following methodologies for creating effective visu
   to understand how specific variables influence predictions.
 
 
-KDE and Histogram Distribution Plots
+Histogram Distribution Plots
 =======================================
-
 
 .. raw:: html
 
-    <a id="kde_hist_plots"></a>
+    <a id="plot_distributions"></a>
 
-KDE Distribution Function
------------------------------
 
-**Generate KDE or histogram distribution plots for specified columns in a DataFrame.**
+**Generate histogram and/or density distribution plots (KDE or parametric) for specified columns in a DataFrame.**
 
-The ``kde_distributions`` function is a versatile tool designed for generating 
-Kernel Density Estimate (KDE) plots, histograms, or a combination of both for 
-specified columns within a DataFrame. This function is particularly useful for 
-visualizing the distribution of numerical data across various categories or groups. 
-It leverages the powerful seaborn library [2]_ for plotting, which is built on top of 
-matplotlib [3]_ and provides a high-level interface for drawing attractive and informative 
-statistical graphics.
+The ``plot_distributions`` function is a flexible tool designed for visualizing
+the distribution of numerical data using histograms, density plots, or a
+combination of both. It supports kernel density estimation (KDE) as well as
+parametric probability density functions, and provides extensive control over
+plot appearance, layout, scaling, and statistical overlays.
 
+This function is intended for exploratory data analysis where understanding the
+shape, spread, and modality of numeric variables is critical.
 
 **Key Features and Parameters**
 
-- **Flexible Plotting**: The function supports creating histograms, KDE plots, or a combination of both for specified columns, allowing users to visualize data distributions effectively.
-- **Leverages Seaborn Library**: The function is built on the `seaborn` library, which provides high-level, attractive visualizations, making it easy to create complex plots with minimal code.
-- **Customization**: Users have control over plot aesthetics, such as colors, fill options, subplot sizes, axis labels, tick marks, and more, allowing them to tailor the visualizations to their needs.
-- **Scientific Notation Control**: The function allows disabling scientific notation on the axes, providing better readability for certain types of data.
-- **Log Scaling**: The function includes an option to apply logarithmic scaling to specific variables, which is useful when dealing with data that spans several orders of magnitude.
-- **Output Options**: The function supports saving plots as PNG or SVG files, with customizable filenames and output directories, making it easy to integrate the plots into reports or presentations.
+- **Flexible Plotting**: Supports histogram-only, density-only, or combined
+  histogram and density visualizations.
+- **Density Estimation**: Density overlays may be rendered using KDE or
+  parametric distributions.
+- **Customization**: Fine-grained control over colors, binning, layout,
+  labels, titles, legends, and font sizes.
+- **Scientific Notation Control**: Optional disabling of scientific notation
+  on axes for improved readability.
+- **Log Scaling**: Supports selective log scaling of variables that span
+  multiple orders of magnitude.
+- **Output Options**: Supports saving combined figures or per-variable plots
+  in PNG or SVG format.
 
-.. function:: kde_distributions(df, vars_of_interest=None, figsize=(5, 5), subplot_figsize=None, hist_color="#0000FF", kde_color="#FF0000", mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, show_legend=True, **kwargs)
+.. function:: plot_distributions(df, vars_of_interest=None, figsize=(5, 5), subplot_figsize=None, hist_color="#0000FF", density_color=None, mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="hist", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, show_legend=True, legend_loc="best", custom_xlabels=None, custom_titles=None, **kwargs)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
-    :param vars_of_interest: List of column names for which to generate distribution plots. If 'all', plots will be generated for all numeric columns.
+    :param vars_of_interest: List of column names for which to generate distribution plots. If ``'all'``, plots will be generated for all numeric columns.
     :type vars_of_interest: list of str, optional
-    :param figsize: Size of each individual plot, default is ``(5, 5)``. Used when only one plot is being generated or when saving individual plots.
+    :param figsize: Size of each individual plot, default is ``(5, 5)``.
     :type figsize: tuple of int, optional
-    :param subplot_figsize: Size of the overall grid of subplots when multiple plots are generated. Ignored when only one plot is being generated or when saving individual plots. If not specified, it is calculated based on ``figsize``, ``n_rows``, and ``n_cols``.
+    :param subplot_figsize: Size of the overall grid of subplots when multiple plots are generated.
     :type subplot_figsize: tuple of int, optional
-    :param hist_color: Color of the histogram bars, default is ``'#0000FF'``.
+    :param hist_color: Color of the histogram bars.
     :type hist_color: str, optional
-    :param kde_color: Color of the KDE plot, default is ``'#FF0000'``.
-    :type kde_color: str, optional
-    :param mean_color: Color of the mean line if ``plot_mean`` is True, default is ``'#000000'``.
+    :param density_color: Color of the density plot. If ``None``, Matplotlib’s default line color is used.
+    :type density_color: str, optional
+    :param mean_color: Color of the mean line if ``plot_mean`` is True.
     :type mean_color: str, optional
-    :param median_color: Color of the median line if ``plot_median`` is True, default is ``'#000000'``.
+    :param median_color: Color of the median line if ``plot_median`` is True.
     :type median_color: str, optional
-    :param hist_edgecolor: Color of the histogram bar edges, default is ``'#000000'``.
+    :param hist_edgecolor: Color of the histogram bar edges.
     :type hist_edgecolor: str, optional
-    :param hue: Column name to group data by, adding different colors for each group.
+    :param hue: Column name to group data by.
     :type hue: str, optional
-    :param fill: Whether to fill the histogram bars with color, default is ``True``.
+    :param fill: Whether to fill the histogram bars with color.
     :type fill: bool, optional
-    :param fill_alpha: Alpha transparency for the fill color of the histogram bars, where ``0`` is fully transparent and ``1`` is fully opaque. Default is ``1``.
+    :param fill_alpha: Alpha transparency for histogram fill.
     :type fill_alpha: float, optional
-    :param n_rows: Number of rows in the subplot grid. If not provided, it will be calculated automatically.
+    :param n_rows: Number of rows in the subplot grid.
     :type n_rows: int, optional
-    :param n_cols: Number of columns in the subplot grid. If not provided, it will be calculated automatically.
+    :param n_cols: Number of columns in the subplot grid.
     :type n_cols: int, optional
-    :param w_pad: Width padding between subplots, default is ``1.0``.
+    :param w_pad: Width padding between subplots.
     :type w_pad: float, optional
-    :param h_pad: Height padding between subplots, default is ``1.0``.
+    :param h_pad: Height padding between subplots.
     :type h_pad: float, optional
-    :param image_path_png: Directory path to save the PNG image of the overall distribution plots.
+    :param image_path_png: Directory path to save PNG images.
     :type image_path_png: str, optional
-    :param image_path_svg: Directory path to save the SVG image of the overall distribution plots.
+    :param image_path_svg: Directory path to save SVG images.
     :type image_path_svg: str, optional
-    :param image_filename: Filename to use when saving the overall distribution plots.
+    :param image_filename: Filename to use when saving combined plots.
     :type image_filename: str, optional
-    :param bbox_inches: Bounding box to use when saving the figure. For example, ``'tight'``.
+    :param bbox_inches: Bounding box used when saving figures.
     :type bbox_inches: str, optional
-    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename. This parameter uses ``figsize`` for determining the plot size, ignoring ``subplot_figsize``.
+    :param single_var_image_filename: Filename prefix used when saving per-variable plots.
     :type single_var_image_filename: str, optional
-    :param y_axis_label: The label to display on the ``y-axis``, default is ``'Density'``.
+    :param y_axis_label: Label displayed on the y-axis.
     :type y_axis_label: str, optional
-    :param plot_type: The type of plot to generate, options are ``'hist'``, ``'kde'``, or ``'both'``. Default is ``'both'``.
+    :param plot_type: Type of plot to generate (``'hist'``, ``'density'``, or ``'both'``).
     :type plot_type: str, optional
-    :param log_scale_vars: Variable name(s) to apply log scaling. Can be a single string or a list of strings.
+    :param log_scale_vars: Variable name(s) to apply log scaling.
     :type log_scale_vars: str or list of str, optional
-    :param bins: Specification of histogram bins, default is ``'auto'``.
+    :param bins: Histogram bin specification.
     :type bins: int or sequence, optional
-    :param binwidth: Width of each bin, overrides bins but can be used with binrange.
+    :param binwidth: Width of histogram bins.
     :type binwidth: float, optional
-    :param label_fontsize: Font size for axis labels, including xlabel, ylabel, and tick marks, default is ``10``.
+    :param label_fontsize: Font size for axis labels and titles.
     :type label_fontsize: int, optional
-    :param tick_fontsize: Font size for tick labels on the axes, default is ``10``.
+    :param tick_fontsize: Font size for tick labels.
     :type tick_fontsize: int, optional
-    :param text_wrap: Maximum width of the title text before wrapping, default is ``50``.
+    :param text_wrap: Maximum width before wrapping labels or titles.
     :type text_wrap: int, optional
-    :param disable_sci_notation: Toggle to disable scientific notation on axes, default is ``False``.
+    :param disable_sci_notation: Disable scientific notation on axes.
     :type disable_sci_notation: bool, optional
-    :param stat: Aggregate statistic to compute in each bin (e.g., ``'count'``, ``'frequency'``, ``'probability'``, ``'percent'``, ``'density'``), default is ``'density'``.
+    :param stat: Aggregate statistic computed per bin.
     :type stat: str, optional
-    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min``, ``max``).
+    :param xlim: Limits for the x-axis.
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
+    :param ylim: Limits for the y-axis.
     :type ylim: tuple or list, optional
-    :param plot_mean: Whether to plot the mean as a vertical line, default is ``False``.
+    :param plot_mean: Plot the mean as a vertical line.
     :type plot_mean: bool, optional
-    :param plot_median: Whether to plot the median as a vertical line, default is ``False``.
+    :param plot_median: Plot the median as a vertical line.
     :type plot_median: bool, optional
-    :param std_dev_levels: Levels of standard deviation to plot around the mean.
+    :param std_dev_levels: Standard deviation levels to plot.
     :type std_dev_levels: list of int, optional
-    :param std_color: Color(s) for the standard deviation lines, default is ``'#808080'``.
+    :param std_color: Color(s) for standard deviation lines.
     :type std_color: str or list of str, optional
-    :param label_names: Custom labels for the variables of interest. Keys should be column names, and values should be the corresponding labels to display.
+    :param label_names: Custom labels for variables.
     :type label_names: dict, optional
-    :param show_legend: Whether to show the legend on the plots, default is ``True``.
+    :param show_legend: Whether to display the legend.
     :type show_legend: bool, optional
-    :param kwargs: Additional keyword arguments passed to the Seaborn plotting function.
+    :param legend_loc: Location of the legend.
+    :type legend_loc: str, optional
+    :param custom_xlabels: Custom x-axis labels per variable.
+    :type custom_xlabels: dict, optional
+    :param custom_titles: Custom titles per variable.
+    :type custom_titles: dict, optional
+    :param kwargs: Additional keyword arguments passed to the plotting backend.
     :type kwargs: additional keyword arguments
-    
-    :raises ValueError: 
-        - If ``plot_type`` is not one of ``'hist'``, ``'kde'``, or ``'both'``.
-        - If ``stat`` is not one of ``'count'``, ``'density'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``.
+
+    :raises ValueError:
+        - If ``plot_type`` is not one of ``'hist'``, ``'density'``, or ``'both'``.
+        - If ``stat`` is not one of ``'count'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``, or ``'density'``.
         - If ``log_scale_vars`` contains variables that are not present in the DataFrame.
-        - If ``fill`` is set to ``False`` and ``hist_edgecolor`` is not the default.
+        - If ``fill`` is set to ``False`` and ``hist_edgecolor`` or ``fill_alpha`` is specified.
+        - If ``bins`` and ``binwidth`` are both specified.
         - If ``subplot_figsize`` is provided when only one plot is being created.
-    
+
     :raises UserWarning:
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
 
@@ -199,61 +209,66 @@ statistical graphics.
 
 .. admonition:: Notes
 
-    If you do not set ``n_rows`` or ``n_cols`` to any values, the function will 
-    automatically calculate and create a subplot space based on the number of variables being 
-    plotted, ensuring an optimal arrangement of the plots.
+    If you do not set ``n_rows`` or ``n_cols``, the function will automatically
+    calculate an optimal subplot layout based on the number of variables being
+    plotted.
 
-    To save images, the paths for ``image_path_png`` or ``image_path_svg`` must be specified. 
-    The trigger for saving plots is the presence of ``image_filename`` as a string.
+    To save images, at least one of ``image_path_png`` or ``image_path_svg`` must
+    be specified. Saving is triggered by providing ``image_filename`` or
+    ``single_var_image_filename``.
+
 
 \
 
 .. raw:: html
-    
+
     <br>
 
 
-
 KDE and Histograms Example
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
-In the below example, the ``kde_distributions`` function is used to generate 
-histograms for several variables of interest: ``"age"``, ``"education-num"``, and
-``"hours-per-week"``. These variables represent different demographic and 
-financial attributes from the dataset. The ``plot_type="both"`` parameter ensures that a 
-Kernel Density Estimate (KDE) plot is overlaid on the histograms, providing a 
-smoothed representation of the data's probability density.
+In the example below, the ``plot_distributions`` function is used to generate
+histograms for several variables of interest: ``"age"``, ``"education-num"``,
+and ``"hours-per-week"``. These variables represent different demographic and
+work-related attributes from the dataset. The ``plot_type="both"`` parameter
+ensures that density curves are overlaid on the histograms, providing a
+smoothed representation of each variable’s distribution.
 
-The visualizations are arranged in a single row of four columns, as specified 
-by ``n_rows=1`` and ``n_cols=3``, respectively. The overall size of the subplot grid 
-figure is set to `14 inches` wide and `4 inches tall` (``subplot_figsize=(14, 4)``), 
-while each individual plot is configured to be `4 inches` by `4 inches` 
-(``single_figsize=(4, 4)``). The ``fill=True`` parameter fills the histogram 
-bars with color, and the spacing between the subplots is managed using 
-``w_pad=1`` and ``h_pad=1``, which add `1 inch` of padding both horizontally and 
-vertically.
+By default, density overlays are rendered using kernel density estimation (KDE).
+In this example, the density curves are explicitly colored red using
+``density_color="red"``. If no density color is provided, the function falls
+back to Matplotlib’s default line color.
 
-To handle longer titles, the ``text_wrap=50`` parameter ensures that the title 
-text wraps to a new line after `50 characters`. The ``bbox_inches="tight"`` setting 
-is used when saving the figure, ensuring that it is cropped to remove any excess 
-whitespace around the edges. The variables specified in ``vars_of_interest`` are 
-passed directly to the function for visualization.
+The visualizations are arranged in a single row of three columns, as specified
+by ``n_rows=1`` and ``n_cols=3``. The overall size of the subplot grid is set to
+14 inches wide and 4 inches tall using ``subplot_figsize=(14, 4)``, ensuring that
+each distribution is displayed clearly without overcrowding.
 
-Each plot is saved individually with filenames that are prefixed by 
-``"kde_density_single_distribution"``, followed by the variable name. The ```y-axis```
-for all plots is labeled as "Density" (``y_axis_label="Density"``), reflecting that 
-the height of the bars or KDE line represents the data's density. The histograms 
-are divided into `10 bins` (``bins=10``), offering a clear view of the distribution 
-of each variable.
+The ``fill=True`` parameter fills the histogram bars with color, while
+``fill_alpha=0.60`` applies partial transparency to allow the density overlays
+to remain visible. Spacing between subplots is controlled automatically, with
+the figure layout tightened using ``bbox_inches="tight"`` when rendering.
 
-Additionally, the font sizes for the axis labels and tick labels 
-are set to `16 points` (``label_fontsize=16``) and `14 points` (``tick_fontsize=14``), 
-respectively, ensuring that all text within the plots is legible and well-formatted.
+To handle longer titles and labels, the ``text_wrap=50`` parameter ensures that
+text wraps cleanly onto multiple lines after 50 characters. The variables listed
+in ``vars_of_interest`` are passed directly to the function and plotted in the
+order provided.
+
+The y-axis for all plots is labeled as ``"Density"`` via ``y_axis_label="Density"``,
+reflecting that both the histogram heights and the density curves represent
+probability density. The histograms are divided into 10 bins (``bins=10``),
+providing a clear and interpretable view of each distribution.
+
+Finally, the font sizes for axis labels and tick labels are set to 16 points
+(``label_fontsize=16``) and 14 points (``tick_fontsize=14``), respectively,
+ensuring that all text elements remain legible and presentation-ready.
+
 
 
 .. code-block:: python
 
-    from eda_toolkit import kde_distributions
+    from eda_toolkit import plot_distributions
 
     vars_of_interest = [
         "age",
@@ -261,21 +276,22 @@ respectively, ensuring that all text within the plots is legible and well-format
         "hours-per-week",
     ]
 
-    kde_distributions(
+    plot_distributions(
         df=df,
         n_rows=1,
         n_cols=3,
-        subplot_figsize=(14, 4),  
+        subplot_figsize=(14, 4),
         fill=True,
         fill_alpha=0.60,
         text_wrap=50,
+        density_color="red",
         bbox_inches="tight",
         vars_of_interest=vars_of_interest,
         y_axis_label="Density",
         bins=10,
-        plot_type="both", 
-        label_fontsize=16,  
-        tick_fontsize=14,  
+        plot_type="both",
+        label_fontsize=16,
+        tick_fontsize=14,
     )
 
 .. raw:: html
@@ -297,9 +313,9 @@ respectively, ensuring that all text within the plots is legible and well-format
 
 
 Histogram Example (Density)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
-In this example, the ``kde_distributions()`` function is used to generate histograms for 
+In this example, the ``plot_distributions()`` function is used to generate histograms for 
 the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with 
 ``plot_type="hist"``, meaning no KDE plots are included—only histograms are displayed. 
 The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
@@ -312,7 +328,7 @@ histogram representation without the KDE overlay.
 
 .. code-block:: python
 
-    from eda_toolkit import kde_distributions
+    from eda_toolkit import plot_distributions
 
     vars_of_interest = [
         "age",
@@ -320,11 +336,11 @@ histogram representation without the KDE overlay.
         "hours-per-week",
     ]
 
-    kde_distributions(
+    plot_distributions(
         df=df,
         n_rows=1,
         n_cols=3,
-        subplot_figsize=(14, 4), 
+        subplot_figsize=(14, 4),
         fill=True,
         text_wrap=50,
         bbox_inches="tight",
@@ -332,8 +348,8 @@ histogram representation without the KDE overlay.
         y_axis_label="Density",
         bins=10,
         plot_type="hist",
-        label_fontsize=16, 
-        tick_fontsize=14,  
+        label_fontsize=16,
+        tick_fontsize=14,
     )
 
 
@@ -356,9 +372,9 @@ histogram representation without the KDE overlay.
 
 
 Histogram Example (Count)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
-In this example, the ``kde_distributions()`` function is modified to generate histograms 
+In this example, the ``plot_distributions()`` function is modified to generate histograms 
 with a few key changes. The ``hist_color`` is set to `"orange"`, changing the color of the 
 histogram bars. The ``y-axis`` label is updated to "Count" (``y_axis_label="Count"``), 
 reflecting that the histograms display the count of observations within each bin. 
@@ -370,7 +386,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.
 
 .. code-block:: python
 
-    from eda_toolkit import kde_distributions
+    from eda_toolkit import plot_distributions
 
     vars_of_interest = [
         "age",
@@ -378,11 +394,11 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         "hours-per-week",
     ]
 
-    kde_distributions(
+    plot_distributions(
         df=df,
         n_rows=1,
         n_cols=3,
-        subplot_figsize=(14, 4),  
+        subplot_figsize=(14, 4),
         text_wrap=50,
         hist_color="orange",
         bbox_inches="tight",
@@ -391,8 +407,8 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         bins=10,
         plot_type="hist",
         stat="Count",
-        label_fontsize=16, 
-        tick_fontsize=14, 
+        label_fontsize=16,
+        tick_fontsize=14,
     )
 
 .. raw:: html
@@ -413,11 +429,11 @@ visualizing the raw counts in the dataset using orange-colored histograms.
    <div style="height: 50px;"></div>
 
 Histogram Example - (Mean and Median) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------------
 
-In this example, the ``kde_distributions()`` function is customized to generate 
+In this example, the ``plot_distributions()`` function is customized to generate 
 histograms that include mean and median lines. The ``mean_color`` is set to ``"blue"`` 
-and the ``median_color`` is set to ``"black"``, allowing for a clear distinction
+and the ``median_color`` is set to ``"black"`` (default), allowing for a clear distinction
 between the two statistical measures. The function parameters are adjusted to 
 ensure that both the mean and median lines are plotted ``(plot_mean=True, plot_median=True)``. 
 The ``y_axis_label`` remains ``"Density"``, indicating that the histograms 
@@ -431,7 +447,7 @@ the mean and median.
 
 .. code-block:: python
 
-    from eda_toolkit import kde_distributions
+    from eda_toolkit import plot_distributions
 
     vars_of_interest = [
         "age",
@@ -439,11 +455,11 @@ the mean and median.
         "hours-per-week",
     ]
 
-    kde_distributions(
+    plot_distributions(
         df=df,
         n_rows=1,
         n_cols=3,
-        subplot_figsize=(14, 4), 
+        subplot_figsize=(14, 4),
         text_wrap=50,
         hist_color="brown",
         bbox_inches="tight",
@@ -453,8 +469,8 @@ the mean and median.
         fill_alpha=0.60,
         plot_type="hist",
         stat="Density",
-        label_fontsize=16,  
-        tick_fontsize=14,  
+        label_fontsize=16,
+        tick_fontsize=14,
         plot_mean=True,
         plot_median=True,
         mean_color="blue",
@@ -480,9 +496,9 @@ the mean and median.
 
 
 Histogram Example - (Mean, Median, and Std. Deviation)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------------------------------------
 
-In this example, the ``kde_distributions()`` function is customized to generate 
+In this example, the ``plot_distributions()`` function is customized to generate 
 a histogram that include mean, median, and 3 standard deviation lines. The 
 ``mean_color`` is set to ``"blue"`` and the median_color is set to ``"black"``, 
 allowing for a clear distinction between these two central tendency measures. 
@@ -508,13 +524,13 @@ statistical overlays to provide deeper insights into the data.
 
 .. code-block:: python
 
-    from eda_toolkit import kde_distributions
+    from eda_toolkit import plot_distributions
 
     vars_of_interest = [
         "age",
     ]
 
-    kde_distributions(
+    plot_distributions(
         df=df,
         figsize=(10, 6),
         text_wrap=50,
@@ -526,8 +542,9 @@ statistical overlays to provide deeper insights into the data.
         fill_alpha=0.40,
         plot_type="both",
         stat="Density",
-        label_fontsize=16, 
-        tick_fontsize=14,  
+        density_color="red",
+        label_fontsize=16,
+        tick_fontsize=14,
         plot_mean=True,
         plot_median=True,
         mean_color="blue",
@@ -560,6 +577,711 @@ statistical overlays to provide deeper insights into the data.
    
    <div style="height: 50px;"></div>
 
+
+KDE and Parametric Density Fit Example
+----------------------------------------
+
+In the example below, the ``plot_distributions`` function is used to visualize the
+distribution of several numeric variables, including ``"age"``,
+``"education-num"``, and ``"hours-per-week"``. 
+
+The ``plot_type="both"`` parameter instructs the function to render both
+histograms and density overlays on the same axes. In this case, the density
+overlays include a combination of kernel density estimation (KDE) and two
+parametric probability density functions, a normal distribution
+(``"norm"``) and a log-normal distribution (``"lognorm"``), specified via
+``density_function=["kde", "norm", "lognorm"]``.
+
+Each density overlay is rendered in a distinct color, controlled by
+``density_color=["blue", "black", "red"]``, allowing the KDE, normal fit, and
+log-normal fit to be visually distinguished. The parametric distributions are
+fit using maximum likelihood estimation (``density_fit="MLE"``), providing a
+statistically principled comparison between empirical density and theoretical
+models.
+
+.. note::
+
+    For a detailed mathematical discussion of kernel density estimation,
+    parametric density models, and parameter estimation via the
+    **Method of Moments (MoM)** and **Maximum Likelihood Estimation (MLE)**, see
+    :ref:`density_parameter_estimation`.
+
+
+.. code-block:: python
+
+    from eda_toolkit import plot_distributions
+
+    vars_of_interest = [
+        "age",
+    ]
+
+    plot_distributions(
+        df=df,
+        vars_of_interest=vars_of_interest,
+        # layout
+        n_rows=1,
+        n_cols=3,
+        hue=None,
+        hist_color="yellow",
+        figsize=(10, 6),
+        plot_type="both",  
+        stat="density",
+        density_function=["kde", "norm", "lognorm"],
+        density_color=["blue", "black", "red"],
+        density_fit="MLE",
+        bins=10,
+        fill=True,
+        y_axis_label="Density",
+        text_wrap=50,
+        label_fontsize=16,
+        tick_fontsize=14,
+        legend_loc="best",
+        bbox_inches="tight",
+        image_filename="age_distribution_norm_fit",
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/age_distribution_density_fit.svg
+   :alt: KDE Distributions - Histograms (Count)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Conditional Distributions
+===========================
+
+.. raw:: html
+
+    <a id="conditional_histograms"></a>
+
+
+**Plot conditional distributions of numeric features given a binary variable.**
+
+The ``conditional_histograms`` function visualizes how selected numeric features
+are distributed conditional on a binary grouping variable (for example, an
+outcome label or class membership). For each feature, the distributions of the
+two groups are overlaid on the same axis, either as histograms or as filled
+kernel density curves.
+
+This function is designed for exploratory analysis, subgroup comparison, and
+fairness inspection, where understanding distributional differences between two
+groups is critical.
+
+**Supported plot styles:**
+
+- ``"hist"``: Overlaid histograms using shared or independent bins
+- ``"density"``: Overlaid filled kernel density estimates (always normalized)
+
+**Normalization behavior:**
+
+- ``normalize="count"``: Raw counts (histograms only)
+- ``normalize="density"``: Probability density (histograms or density plots)
+
+.. function:: conditional_histograms(df, features, by, *, bins=30, normalize="density", plot_style="hist", alpha=0.6, colors=None, n_rows=None, n_cols=None, common_bins=True, show_legend=True, legend_loc="best", label_fontsize=12, tick_fontsize=10, text_wrap=50, figsize=(10, 6), image_path_png=None, image_path_svg=None, image_filename=None)
+
+    :param df: Input DataFrame containing the features and grouping variable.
+    :type df: pandas.DataFrame
+
+    :param features: List of numeric feature column names to plot.
+    :type features: list of str
+
+    :param by: Name of the binary column used to condition the distributions.
+        The column must contain exactly two unique, non-null values.
+    :type by: str
+
+    :param bins: Number of bins or explicit bin edges for histogram plots.
+        Default is ``30``.
+    :type bins: int or sequence, optional
+
+    :param normalize: Controls histogram normalization. Options are
+        ``"density"`` or ``"count"``. Ignored for density plots, which always
+        use probability density.
+    :type normalize: str, optional
+
+    :param plot_style: Plot type to generate. Options are ``"hist"`` or
+        ``"density"``. Default is ``"hist"``.
+    :type plot_style: str, optional
+
+    :param alpha: Transparency level for histogram bars or density fills.
+        Default is ``0.6``.
+    :type alpha: float, optional
+
+    :param colors: Mapping from group value to color. Keys must match the two
+        unique values in the ``by`` column. If ``None``, a default color scheme
+        is used.
+    :type colors: dict, optional
+
+    :param n_rows: Number of subplot rows. If ``None``, determined automatically.
+    :type n_rows: int, optional
+
+    :param n_cols: Number of subplot columns. If ``None``, determined automatically.
+    :type n_cols: int, optional
+
+    :param common_bins: If ``True``, both groups share identical histogram bin
+        edges. Ignored for density plots.
+    :type common_bins: bool, optional
+
+    :param show_legend: Whether to display a legend identifying the two groups.
+        Default is ``True``.
+    :type show_legend: bool, optional
+
+    :param legend_loc: Legend placement passed directly to Matplotlib.
+        Default is ``"best"``.
+    :type legend_loc: str, optional
+
+    :param label_fontsize: Font size for axis labels and titles.
+    :type label_fontsize: int, optional
+
+    :param tick_fontsize: Font size for tick labels and legend text.
+    :type tick_fontsize: int, optional
+
+    :param text_wrap: Maximum character width before wrapping titles.
+    :type text_wrap: int, optional
+
+    :param figsize: Size of the overall figure in inches.
+        Default is ``(10, 6)``.
+    :type figsize: tuple of int, optional
+
+    :param image_path_png: Directory path to save the figure as a PNG file.
+    :type image_path_png: str, optional
+
+    :param image_path_svg: Directory path to save the figure as an SVG file.
+    :type image_path_svg: str, optional
+
+    :param image_filename: Base filename (without extension) for saving the figure.
+    :type image_filename: str, optional
+
+    :raises ValueError:
+        - If the ``by`` column is not binary.
+        - If ``plot_style`` is not one of ``"hist"`` or ``"density"``.
+        - If ``normalize`` is not one of ``"density"`` or ``"count"``.
+        - If ``plot_style="density"`` and ``normalize!="density"``.
+        - If ``image_filename`` is provided but neither
+          ``image_path_png`` nor ``image_path_svg`` is specified.
+        - If the subplot grid is too small for the number of features.
+
+    :returns: ``None``
+
+.. admonition:: Notes
+
+    - All conditional distributions are plotted as overlays on a single axis
+      per feature.
+    - Density plots always represent probability density and do not support
+      count-based normalization.
+    - When ``common_bins=True``, histogram bin edges are computed jointly across
+      both groups to enable direct shape comparison.
+    - Font sizes are specified in absolute points and may appear small on large
+      figures or dense subplot grids.
+
+Conditional Density Plot Example
+-------------------------------------
+
+In the example below, the ``conditional_histograms`` function is used to compare
+the distributions of several numeric features conditioned on income category.
+The grouping variable ``"income"`` is binary (``"<=50K"`` vs ``">50K"``), making
+it suitable for conditional overlay plots.
+
+The selected features include demographic and financial attributes:
+
+- ``"age"``
+- ``"education-num"``
+- ``"hours-per-week"``
+
+The ``plot_style="density"`` option instructs the function to render **filled
+kernel density estimates** for each group rather than histograms. Density plots
+are always normalized, allowing direct comparison of distributional shape even
+when group sizes differ substantially.
+
+Custom colors are explicitly provided via the ``colors`` argument to ensure
+consistent visual identification of income groups across all features. The
+``alpha=0.6`` parameter applies partial transparency, making overlapping density
+regions easier to interpret.
+
+The resulting figure is saved in both PNG and SVG formats using a shared base
+filename.
+
+.. code-block:: python
+
+    from eda_toolkit.plots import conditional_histograms
+
+    features = [
+        "age",
+        "education-num",
+        "hours-per-week",
+    ]
+
+    group_colors = {
+        "<=50K": "black",  # black
+        ">50K": "orange",  # orange
+    }
+
+    conditional_histograms(
+        df=df,
+        features=features,
+        by="income",
+        bins=30,
+        colors=group_colors,
+        n_rows=1,
+        normalize="density",
+        alpha=0.6,
+        figsize=(14, 4),
+        plot_style="density",
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        image_filename="conditional_histograms_adult_income",
+        label_fontsize=16,
+        tick_fontsize=14,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/cond_hist_adult_income.svg
+   :alt: Conditional Histograms with Income Groups
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Conditional Histogram Plot Example
+--------------------------------------
+
+In this example, the ``conditional_histograms`` function is used to visualize
+**overlaid conditional histograms** for several numeric features, grouped by
+income category. As in the previous example, the grouping variable ``"income"``
+is binary (``"<=50K"`` vs ``">50K"``), enabling direct comparison between the two
+subpopulations.
+
+Unlike density-based plots, this example uses
+``plot_style="hist"``, which renders **binned histograms** rather than smoothed
+kernel density estimates. This representation emphasizes the **empirical mass
+and frequency structure** of each feature, making it easier to identify discrete
+concentration, skewness, and potential outliers.
+
+The histograms are normalized to probability density
+(``normalize="density"``), ensuring that the total area under each group’s
+histogram integrates to one. This allows meaningful comparison of distribution
+shapes even when the two income groups differ in sample size.
+
+A shared binning strategy is used by default, ensuring that both income groups
+are evaluated against identical bin edges for each feature. Custom group colors
+are applied consistently across all subplots to maintain interpretability.
+
+The resulting figure is saved in both PNG and SVG formats for downstream use in
+reports or publications.
+
+.. code-block:: python
+
+    from eda_toolkit.plots import conditional_histograms
+
+    features = [
+        "age",
+        "education-num",
+        "hours-per-week",
+    ]
+
+    group_colors = {
+        "<=50K": "black",  
+        ">50K": "orange",  
+    }
+
+    conditional_histograms(
+        df=df,
+        features=features,
+        by="income",
+        bins=30,
+        n_rows=1,
+        colors=group_colors,
+        normalize="density",
+        alpha=0.6,
+        figsize=(14, 4),
+        plot_style="hist",
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        image_filename="cond_histograms_adult_income_hist",
+        label_fontsize=16,
+        tick_fontsize=14,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/cond_hist_adult_income_hist.svg
+   :alt: Conditional Histograms with Income Groups
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Distribution Goodness-of-Fit Plots
+=======================================
+
+Generate goodness-of-fit (GOF) diagnostic plots to compare empirical data against 
+fitted theoretical distributions or an empirical reference sample.
+
+The ``distribution_gof_plots`` function provides distributional diagnostics to 
+evaluate how well one or more candidate probability distributions fit a variable 
+from a DataFrame. It supports both theoretical (parametric) comparisons, where 
+distribution parameters are estimated via Maximum Likelihood Estimation (MLE) or 
+Method of Moments (MM), and empirical QQ comparisons, where sample quantiles are 
+compared directly to a reference dataset.
+
+The function currently supports the following diagnostic visualizations:
+
+- Quantile-Quantile (QQ) plots for assessing agreement between quantiles
+
+- CDF-based plots, including optional exceedance (survival) curves via tail control
+
+.. note:: 
+
+    For a detailed mathematical discussion of kernel density estimation, parametric
+    density models, and parameter estimation via the **Method of Moments (MoM)** and
+    **Maximum Likelihood Estimation (MLE)**, see :ref:`density_parameter_estimation`.
+
+
+.. function:: distribution_gof_plots(df, var, dist="norm", fit_method="MLE", plot_types=("qq", "cdf"), qq_type="theoretical", reference_data=None, scale="linear", tail="both", figsize=(6, 5), xlim=None, ylim=None, show_reference=True, label_fontsize=10, tick_fontsize=10, legend_loc="best", text_wrap=50, palette=None, image_path_png=None, image_path_svg=None, image_filename=None)
+
+    Generate goodness-of-fit (GOF) diagnostic plots for comparing empirical data
+    to theoretical or empirical reference distributions.
+
+    :param df: Input DataFrame containing the data.
+    :type df: pandas.DataFrame
+
+    :param var: Column name in ``df`` to evaluate.
+    :type var: str
+
+    :param dist: Distribution name(s) to evaluate. Each entry must correspond to a valid continuous distribution in ``scipy.stats`` (e.g., ``"norm"``, ``"lognorm"``, ``"gamma"``).
+    :type dist: str or list of str, optional
+
+    :param fit_method: Parameter estimation method for theoretical distributions. Options are:
+        - ``"MLE"``: maximum likelihood estimation
+        - ``"MM"``: method of moments
+    :type fit_method: {"MLE", "MM"}, optional
+
+    :param plot_types: Diagnostic plot type(s) to generate. Options are:
+        - ``"qq"``: quantile-quantile plot
+        - ``"cdf"``: cumulative distribution function plot (with exceedance behavior controlled by ``tail``)
+    :type plot_types: str or list of {"qq", "cdf"}, optional
+
+    :param qq_type: Type of QQ plot to generate:
+        - ``"theoretical"``: sample quantiles vs fitted theoretical distribution
+        - ``"empirical"``: sample quantiles vs reference empirical distribution
+    :type qq_type: {"theoretical", "empirical"}, optional
+
+    :param reference_data: Reference empirical sample used when ``qq_type="empirical"``. Required for empirical QQ plots and ignored otherwise. Must contain at least two observations.
+    :type reference_data: numpy.ndarray, optional
+
+    :param scale: Scale applied to the y-axis of applicable plots.
+    :type scale: {"linear", "log"}, optional
+
+    :param tail: Tail behavior for CDF-based plots:
+        - ``"lower"``: plot CDF only
+        - ``"upper"``: plot exceedance probability (``1 - CDF``) only
+        - ``"both"``: plot both CDF and exceedance curves
+    :type tail: {"lower", "upper", "both"}, optional
+
+    :param figsize: Base figure size (width, height) for each diagnostic plot. When multiple plot types are requested, the total width scales by the number of plots.
+    :type figsize: tuple of int, optional
+
+    :param xlim: Limits for the x-axis as (min, max). Applied after all distributions are drawn to ensure consistent scaling.
+    :type xlim: tuple of (float, float), optional
+
+    :param ylim: Limits for the y-axis as (min, max). Applied after all distributions are drawn to ensure consistent scaling.
+    :type ylim: tuple of (float, float), optional
+
+    :param show_reference: Whether to draw a reference (identity) line on theoretical QQ plots. Ignored for empirical QQ plots.
+    :type show_reference: bool, optional
+
+    :param label_fontsize: Font size for axis labels and titles.
+    :type label_fontsize: int, optional
+
+    :param tick_fontsize: Font size for tick labels.
+    :type tick_fontsize: int, optional
+
+    :param legend_loc: Legend placement passed to Matplotlib (e.g., ``"best"``, ``"upper right"``, ``"lower left"``).
+    :type legend_loc: str, optional
+
+    :param text_wrap: Maximum character width for wrapping titles and labels.
+    :type text_wrap: int, optional
+
+    :param palette: Mapping from distribution name to color. Keys must match the entries in ``dist``.
+    :type palette: dict of {str: str}, optional
+
+    :param image_path_png: Directory path for saving PNG output.
+    :type image_path_png: str, optional
+
+    :param image_path_svg: Directory path for saving SVG output.
+    :type image_path_svg: str, optional
+
+    :param image_filename: Base filename used when saving plots (without extension).
+    :type image_filename: str, optional
+
+    :raises ValueError:
+        - If ``plot_types`` contains invalid values (valid: ``"qq"``, ``"cdf"``).
+        - If ``qq_type`` is not one of ``"theoretical"`` or ``"empirical"``.
+        - If ``scale`` is not one of ``"linear"`` or ``"log"``.
+        - If ``tail`` is not one of ``"lower"``, ``"upper"``, or ``"both"``.
+        - If ``palette`` is provided but does not define colors for every distribution in ``dist``.
+        - If ``qq_type="empirical"`` is used without valid ``reference_data`` (must be provided and contain at least two observations).
+        - If ``image_filename`` is provided but neither ``image_path_png`` nor ``image_path_svg`` is specified.
+
+    :returns: ``None``
+
+
+
+Theoretical QQ Plot Example
+----------------------------
+
+In the example below, the ``distribution_gof_plots`` function is used to generate
+**theoretical quantile–quantile (QQ) plots** for the variable ``"age"``. The goal
+is to assess how well several candidate parametric distributions fit the empirical
+data.
+
+Three commonly used continuous distributions are evaluated:
+
+- Normal distribution (``"norm"``)
+- Log-normal distribution (``"lognorm"``)
+- Gamma distribution (``"gamma"``)
+
+Each distribution is fit to the data using the default **maximum likelihood
+estimation (MLE)** procedure. The ``plot_types="qq"`` argument instructs the
+function to generate only QQ plots, while ``qq_type="theoretical"`` specifies that
+sample quantiles should be compared against quantiles derived from the fitted
+theoretical distributions.
+
+A reference identity line is included via ``show_reference=True``, allowing for
+direct visual assessment of deviations from the ideal 1:1 relationship. If the
+empirical data follow a given distribution closely, the corresponding points will
+align tightly along this reference line.
+
+Distinct colors are assigned to each fitted distribution using the ``palette``
+parameter, making it easy to visually compare goodness-of-fit across models. Axis
+limits are constrained using ``xlim`` and ``ylim`` to focus the comparison on a
+relevant range of values and ensure consistent scaling.
+
+The resulting figure is saved in both PNG and SVG formats using the provided output
+paths and filename.
+
+.. code-block:: python
+
+    from eda_toolkit import distribution_gof_plots
+
+    distribution_gof_plots(
+        df,
+        var="age",
+        dist=["norm", "lognorm", "gamma"],
+        plot_types="qq",
+        qq_type="theoretical",
+        show_reference=True,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        palette={
+            "norm": "tab:blue",
+            "lognorm": "tab:orange",
+            "gamma": "tab:green",
+        },
+        image_filename="gof_qq_age_adult_income",
+        xlim=(5, 100),
+        ylim=(5, 100),
+    )
+
+**Interpretation**
+
+- Points closely following the diagonal reference line indicate a strong agreement
+  between the empirical distribution and the theoretical model.
+- Systematic curvature suggests skewness or variance mismatches.
+- Deviations in the tails highlight poor tail behavior, which is often critical in
+  risk modeling, reliability analysis, and anomaly detection contexts.
+
+This diagnostic provides a fast, visual comparison of multiple candidate
+distributions and is typically used as a first-pass validation step before making
+distributional assumptions in downstream modeling.
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/gof_qq_age_adult_income.png
+   :alt: Conditional Histograms with Income Groups
+   :align: center
+   :width: 500px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Empirical QQ Plot Example (Sample vs Reference Data)
+-----------------------------------------------------
+
+In this example, the ``distribution_gof_plots`` function is used to generate an
+**empirical quantile–quantile (QQ) plot**, comparing the distribution of a target
+sample against a **reference empirical distribution**, rather than against a
+theoretical model.
+
+Unlike theoretical QQ plots, which compare sample quantiles to quantiles derived
+from a fitted parametric distribution, **empirical QQ plots compare quantiles
+between two observed samples directly**. This makes them particularly useful for
+distributional comparisons across subpopulations, cohorts, or time periods.
+
+Here, the variable ``"age"`` is analyzed for the full dataset and compared against
+a reference sample consisting only of observations where ``sex == "Male"``. The
+reference data are extracted explicitly and passed via the ``reference_data``
+parameter.
+
+Although a distribution name (``"norm"``) is still required for labeling purposes,
+**no theoretical distribution is involved in the QQ geometry** when
+``qq_type="empirical"``. Instead, matched empirical quantiles from the sample and
+reference data are plotted against one another.
+
+.. code-block:: python
+
+    reference_data = df.loc[df["sex"] == "Male", "age"].dropna().values
+
+    from eda_toolkit import distribution_gof_plots
+
+    distribution_gof_plots(
+        df,
+        var="age",
+        dist="norm",
+        plot_types="qq",
+        qq_type="empirical",
+        reference_data=reference_data,
+    )
+
+**Interpretation**
+
+- Points lying close to the diagonal indicate that the sample and reference
+  distributions are similar across quantiles.
+- Systematic deviations from the diagonal reveal distributional shifts, such as
+  differences in central tendency, spread, or tail behavior.
+- Curvature in the upper or lower quantiles highlights differences in tail
+  behavior between the two samples.
+
+Empirical QQ plots are especially valuable for **fairness analysis**, **cohort
+comparison**, and **data drift detection**, where direct comparison between groups
+is preferred over assumptions of parametric form.
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/gof_qq_age_adult_income_empirical_reference.svg
+   :alt: Goodness of Fit Empirical QQ Plot
+   :align: center
+   :width: 500px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+CDF Plot Example (Lower and Upper Tails)
+----------------------------------------
+
+In this example, the ``distribution_gof_plots`` function is used to generate
+**cumulative distribution function (CDF) plots** for the variable ``"age"``,
+including both the **lower tail (CDF)** and **upper tail (exceedance probability)**.
+
+Two candidate parametric distributions are evaluated:
+
+- Normal distribution (``"norm"``)
+- Log-normal distribution (``"lognorm"``)
+
+The ``plot_types="cdf"`` argument instructs the function to produce CDF-based
+diagnostics, while the default ``tail="both"`` setting ensures that **both the
+CDF and exceedance curves** are plotted simultaneously. This dual representation
+provides a complete view of the distribution’s behavior across the full range of
+values.
+
+The CDF curves illustrate the probability that the random variable takes on a
+value less than or equal to a given threshold, while the exceedance curves
+(``1 − CDF``) highlight the probability of observing values greater than that
+threshold. This is especially useful for understanding **upper-tail risk** and
+extreme-value behavior.
+
+All plots are rendered on a linear scale, making it easier to compare overall
+distributional shape and mid-range behavior between candidate models.
+
+.. code-block:: python
+
+    from eda_toolkit import distribution_gof_plots
+
+    distribution_gof_plots(
+        df,
+        var="age",
+        dist=["norm", "lognorm"],
+        plot_types="cdf",
+    )
+
+**Interpretation**
+
+- CDF curves that rise more quickly indicate distributions with greater mass at
+  lower values.
+- Exceedance curves that decay more slowly suggest heavier upper tails and higher
+  probability of extreme observations.
+- Differences between the normal and log-normal fits are most pronounced in the
+  tails, where modeling assumptions often matter most.
+
+CDF and exceedance plots are particularly valuable in **risk analysis**,
+**threshold-based decision-making**, and **model selection**, where understanding
+tail behavior is as important as central tendency.
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/gof_cdf_age_adult_income_empirical_reference.svg
+   :alt: Goodness of Fit Empirical QQ Plot
+   :align: center
+   :width: 500px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
 
 Feature Scaling and Outliers
 =============================
@@ -1690,7 +2412,7 @@ The following code demonstrates this configuration:
 
 \
 
-RobustScaler Outliers Examples
+RobustScaler Outliers Example
 --------------------------------
 
 In this example from the US Census dataset [1]_, we apply the :ref:`RobustScaler 
@@ -1772,6 +2494,103 @@ The following code demonstrates this transformation:
    <div style="height: 50px;"></div>
 
 
+ECDF Distribution Example
+-----------------------------
+
+In this example, we demonstrate the use of the Empirical Cumulative Distribution
+Function (ECDF) to visualize the distribution of the ``"age"`` variable from the
+US Census Adult Income dataset [1]_.
+
+ECDF plots provide a robust, non-parametric view of a variable’s distribution by
+showing the cumulative proportion of observations less than or equal to a given
+value. Unlike histograms or kernel density estimates, ECDFs do not rely on binning
+or smoothing parameters, making them especially useful for diagnostic analysis.
+
+For a formal mathematical definition and theoretical background of the ECDF,
+see the :ref:`Empirical Cumulative Distribution Function (ECDF) <ecdf_theory>`
+section in the theoretical overview.
+
+This example uses the ``data_doctor`` function to generate multiple complementary
+distribution views for the same feature:
+
+- Kernel Density Estimate (``"kde"``)
+
+- Empirical Cumulative Distribution Function (``"ecdf"``)
+
+- Box and violin plots (``"box_violin"``)
+
+In addition, a logarithmic scaling transformation is applied to the ``"age"``
+feature via ``scale_conversion="log"``, allowing the cumulative behavior of the
+distribution to be examined after compressing the right tail.
+
+The following code demonstrates this workflow:
+
+.. code-block:: python
+
+    from eda_toolkit import data_doctor
+
+    print("\nRunning data_doctor with plot_type=['kde', 'ecdf', 'box_violin'] ...\n")
+
+    data_doctor(
+        df=df,
+        feature_name="age",
+        plot_type=["kde", "ecdf", "box_violin"],
+        scale_conversion="log",
+    )
+
+.. code-block:: text
+
+    Running data_doctor with plot_type=['kde', 'ecdf', 'box_violin'] ...
+
+                DATA DOCTOR SUMMARY REPORT             
+    +------------------------------+--------------------+
+    | Feature                      | age                |
+    +------------------------------+--------------------+
+    | Statistic                    | Value              |
+    +------------------------------+--------------------+
+    | Min                          |             2.8332 |
+    | Max                          |             4.4998 |
+    | Mean                         |             3.5905 |
+    | Median                       |             3.6109 |
+    | Std Dev                      |             0.3617 |
+    +------------------------------+--------------------+
+    | Quartile                     | Value              |
+    +------------------------------+--------------------+
+    | Q1 (25%)                     |             3.3322 |
+    | Q2 (50% = Median)            |             3.6109 |
+    | Q3 (75%)                     |             3.8712 |
+    | IQR                          |             0.5390 |
+    +------------------------------+--------------------+
+    | Outlier Bound                | Value              |
+    +------------------------------+--------------------+
+    | Lower Bound                  |             2.5237 |
+    | Upper Bound                  |             4.6797 |
+    +------------------------------+--------------------+
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/age_log_ecdf_boxplot.png
+   :alt: Box-Cox Transformation W/ Data Doctor
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+
+
+
+
+
 Stacked Crosstab Plots
 =======================
 
@@ -1779,7 +2598,7 @@ Stacked Crosstab Plots
 
 The ``stacked_crosstab_plot`` function is a powerful tool for visualizing categorical data relationships through stacked bar plots and contingency tables (crosstabs). It supports extensive customization options, including plot appearance, color schemes, and saving output in multiple formats. Users can choose between regular or normalized plots and control whether the function returns the generated crosstabs as a dictionary.
 
-.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, label_fontsize=12, tick_fontsize=10, text_wrap=50, remove_stacks=False, xlim=None, ylim=None)
+.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, legend_loc="best", label_fontsize=12, tick_fontsize=10, text_wrap=50, remove_stacks=False, xlim=None, ylim=None)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -1825,6 +2644,11 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
     :type plot_type: str, optional
     :param show_legend: Show the legend on the plot. Default is ``True``.
     :type show_legend: bool, optional
+    :param legend_loc: Location of the legend on the plot. Passed directly to
+        ``matplotlib.axes.Axes.legend``. Common options include ``"best"``,
+        ``"upper right"``, ``"upper left"``, ``"lower left"``,
+        ``"lower right"``, and ``"center"``.
+    :type legend_loc: str, optional
     :param label_fontsize: Font size for axis labels. Default is ``12``.
     :type label_fontsize: int, optional
     :param tick_fontsize: Font size for tick labels. Default is ``10``.
@@ -1995,8 +2819,6 @@ crosstabs for further analysis or export.
 
     By adhering to these guidelines, you can ensure that the ``stacked_crosstab_plot`` 
     function produces accurate and meaningful visualizations that are easy to interpret and analyze.
-
-**Output**
 
 .. raw:: html
 
@@ -2500,7 +3322,7 @@ This function supports:
 - Saving plots in PNG and/or SVG format with customizable file paths.
 - Visualizing the distribution of metrics across categories, either individually, as subplots, or both.
 
-.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=False, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, label_names=None, **kwargs)
+.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=False, show_legend=True, legend_loc="best", plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, **kwargs)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -2520,6 +3342,11 @@ This function supports:
     :type save_plots: bool, optional
     :param show_legend: Whether to display the legend in the plots. Defaults to ``True``.
     :type show_legend: bool, optional
+    :param legend_loc: Location of the legend on the plot. Passed directly to
+        ``matplotlib.axes.Axes.legend``. Common options include ``"best"``,
+        ``"upper right"``, ``"upper left"``, ``"lower left"``,
+        ``"lower right"``, and ``"center"``.
+    :type legend_loc: str, optional
     :param plot_type: Type of plot to generate, either ``"boxplot"`` or ``"violinplot"``. Defaults to ``"boxplot"``.
     :type plot_type: str, optional
     :param xlabel_rot: Rotation angle for x-axis labels. Defaults to ``0``.
@@ -2542,8 +3369,6 @@ This function supports:
     :type xlim: tuple or list, optional
     :param ylim: Limits for the y-axis as a tuple or list (``min``, ``max``).
     :type ylim: tuple or list, optional
-    :param label_names: Dictionary mapping original column names to custom labels for display purposes.
-    :type label_names: dict, optional
     :param kwargs: Additional keyword arguments passed to the Seaborn plotting function.
     :type kwargs: additional keyword arguments
 
@@ -2770,7 +3595,7 @@ The function performs comprehensive input validation to prevent common errors, s
 - Invalid or missing column names in the DataFrame.
 - Incorrectly specified parameters like axis limits or figure sizes.
 
-.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, all_vars=None, exclude_combinations=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="subplots", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, label_names=None, **kwargs)
+.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, all_vars=None, exclude_combinations=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, legend_loc="best", xlabel_rot=0, show_plot="subplots", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, label_names=None, **kwargs)
 
     Generate scatter plots or subplots of scatter plots for the given ``x_vars`` and ``y_vars``, with optional best fit lines, correlation coefficients, and customizable aesthetics.
 
@@ -2810,12 +3635,17 @@ The function performs comprehensive input validation to prevent common errors, s
     :param show_legend: Toggle display of the plot legend. Default is ``True``.
     :type show_legend: bool, optional
 
+    :param legend_loc: Location of the legend on the plot. Passed directly to
+        ``matplotlib.axes.Axes.legend``. Common options include ``"best"``,
+        ``"upper right"``, ``"upper left"``, ``"lower left"``,
+        ``"lower right"``, and ``"center"``.
+    :type legend_loc: str, optional
+
     :param xlabel_rot: Angle to rotate ``x-axis`` labels. Default is ``0``.
     :type xlabel_rot: int, optional
 
     :param show_plot: Controls plot display: ``"individual"``, ``"subplots"``, ``"both"``, or ``"combinations"``. Default is ``"subplots"``. Use ``"combinations"`` to return all valid (``x, y``) variable pairs without generating plots.
     :type show_plot: str, optional
-
 
     :param rotate_plot: Rotate plots (swap ``x`` and ``y`` axes). Default is ``False``.
     :type rotate_plot: bool, optional
@@ -3462,8 +4292,6 @@ when you want a comprehensive view of all correlations in the dataset.
 
 
 
+
+
 .. [1] Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. `https://doi.org/10.24432/C5GP7S <https://doi.org/10.24432/C5GP7S>`_.
-
-.. [2] Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. `https://doi.org/10.21105/joss.03021 <https://doi.org/10.21105/joss.03021>`_.
-
-.. [3] Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science & Engineering*, 9(3), 90-95. `https://doi.org/10.1109/MCSE.2007.55 <https://doi.org/10.1109/MCSE.2007.55>`_.

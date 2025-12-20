@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gaussian Assumption for Normality &mdash; EDA Toolkit 0.0.19 documentation</title>
+  <title>Gaussian Assumption for Normality &mdash; EDA Toolkit 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=2fd7553c"></script>
+      <script src="_static/documentation_options.js?v=056c92e6"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,10 +60,12 @@
 <li class="toctree-l1"><a class="reference internal" href="data_management.html">Data Management Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_management.html#data-management-techniques">Data Management Techniques</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<p class="caption" role="heading"><span class="caption-text">Plotting Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#histogram-distribution-plots">Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#conditional-distributions">Conditional Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#distribution-goodness-of-fit-plots">Distribution Goodness-of-Fit Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#feature-scaling-and-outliers">Feature Scaling and Outliers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#outcome-crosstab-plots">Outcome Crosstab Plots</a></li>
@@ -97,6 +99,27 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#logit-transformation">Logit Transformation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#purpose-and-assumptions">Purpose and Assumptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#method-of-moments-mom">Method of Moments (MoM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maximum-likelihood-estimation-mle">Maximum Likelihood Estimation (MLE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relationship-to-density-overlays">Relationship to Density Overlays</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#statistical-properties">Statistical Properties</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#consistency">Consistency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unbiasedness">Unbiasedness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variance">Variance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relationship-to-order-statistics">Relationship to Order Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-with-histogram-and-kde">Comparison with Histogram and KDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tail-behavior-and-exceedance-functions">Tail Behavior and Exceedance Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">Practical Considerations</a></li>
 </ul>
 </li>
 </ul>
@@ -445,6 +468,231 @@ the data to the appropriate range.</p>
 <p>If <span class="math notranslate nohighlight">\(p = 0.5\)</span>, then:</p>
 <div class="math notranslate nohighlight">
 \[\text{logit}(0.5) = \ln\left(\frac{0.5}{1 - 0.5}\right) = \ln(1) = 0\]</div>
+</section>
+</section>
+<section id="parameter-estimation-for-density-models-and-distribution-gof-plots">
+<span id="density-parameter-estimation"></span><h1>Parameter Estimation for Density Models and Distribution GOF Plots<a class="headerlink" href="#parameter-estimation-for-density-models-and-distribution-gof-plots" title="Link to this heading"></a></h1>
+<p>When fitting parametric probability density functions to data, the key task is
+to estimate the unknown parameters of the assumed distribution. In
+<code class="docutils literal notranslate"><span class="pre">plot_distributions</span></code> and <code class="docutils literal notranslate"><span class="pre">distribution_gof_plots</span></code>, this estimation step is required whenever a parametric
+density (e.g., Normal, Lognormal, Gamma) is overlaid on the empirical
+distribution.</p>
+<p>Two classical estimation frameworks are commonly used for this purpose:</p>
+<ul class="simple">
+<li><p><strong>Method of Moments (MoM)</strong></p></li>
+<li><p><strong>Maximum Likelihood Estimation (MLE)</strong></p></li>
+</ul>
+<p>Both approaches seek to infer distributional parameters from observed data, but
+they do so using fundamentally different principles.</p>
+<section id="method-of-moments-mom">
+<h2>Method of Moments (MoM)<a class="headerlink" href="#method-of-moments-mom" title="Link to this heading"></a></h2>
+<p>The <strong>Method of Moments</strong> estimates distribution parameters by equating
+theoretical moments of a probability distribution to the corresponding sample
+moments computed from the data.</p>
+<p>Let <span class="math notranslate nohighlight">\(X_1, X_2, \dots, X_n\)</span> be a random sample drawn from a distribution
+with parameter vector <span class="math notranslate nohighlight">\(\theta\)</span>. The <span class="math notranslate nohighlight">\(k^{th}\)</span> theoretical moment is:</p>
+<div class="math notranslate nohighlight">
+\[\mu_k(\theta) = \mathbb{E}[X^k]\]</div>
+<p>The corresponding sample moment is:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mu}_k = \frac{1}{n} \sum_{i=1}^{n} X_i^k\]</div>
+<p>The Method of Moments estimator <span class="math notranslate nohighlight">\(\hat{\theta}_{\text{MoM}}\)</span> is obtained by
+solving the system:</p>
+<div class="math notranslate nohighlight">
+\[\mu_k(\theta) = \hat{\mu}_k \quad \text{for } k = 1, \dots, p\]</div>
+<p>where <span class="math notranslate nohighlight">\(p\)</span> is the number of parameters in the distribution.</p>
+<p><strong>Example: Normal Distribution</strong></p>
+<p>For a Normal distribution <span class="math notranslate nohighlight">\(\mathcal{N}(\mu, \sigma^2)\)</span>:</p>
+<ul class="simple">
+<li><p>First theoretical moment: <span class="math notranslate nohighlight">\(\mathbb{E}[X] = \mu\)</span></p></li>
+<li><p>Second central moment: <span class="math notranslate nohighlight">\(\mathbb{E}[(X - \mu)^2] = \sigma^2\)</span></p></li>
+</ul>
+<p>Equating moments yields:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mu}_{\text{MoM}} = \bar{X}, \quad
+\hat{\sigma}^2_{\text{MoM}} = \frac{1}{n} \sum_{i=1}^{n} (X_i - \bar{X})^2\]</div>
+<p><strong>Characteristics of MoM</strong></p>
+<ul class="simple">
+<li><p>Computationally simple and fast</p></li>
+<li><p>Closed-form solutions for many distributions</p></li>
+<li><p>Does not require specifying a likelihood function</p></li>
+<li><p>Can be inefficient or biased for small samples</p></li>
+<li><p>Does not optimize a global objective</p></li>
+</ul>
+<p>Method of Moments is often used as a baseline or initialization strategy,
+especially when likelihood optimization is unstable.</p>
+</section>
+<section id="maximum-likelihood-estimation-mle">
+<h2>Maximum Likelihood Estimation (MLE)<a class="headerlink" href="#maximum-likelihood-estimation-mle" title="Link to this heading"></a></h2>
+<p><strong>Maximum Likelihood Estimation</strong> estimates parameters by maximizing the
+probability of observing the given data under the assumed distribution.</p>
+<p>Let <span class="math notranslate nohighlight">\(f(x \mid \theta)\)</span> be the probability density function of a distribution
+with parameter vector <span class="math notranslate nohighlight">\(\theta\)</span>. The likelihood function for an i.i.d.
+sample is:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta \mid X)
+= \prod_{i=1}^{n} f(X_i \mid \theta)\]</div>
+<p>It is more convenient to work with the log-likelihood:</p>
+<div class="math notranslate nohighlight">
+\[\ell(\theta)
+= \sum_{i=1}^{n} \log f(X_i \mid \theta)\]</div>
+<p>The MLE estimator <span class="math notranslate nohighlight">\(\hat{\theta}_{\text{MLE}}\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\theta}_{\text{MLE}}
+= \arg\max_{\theta} \; \ell(\theta)\]</div>
+<p><strong>Example: Normal Distribution</strong></p>
+<p>For <span class="math notranslate nohighlight">\(X_i \sim \mathcal{N}(\mu, \sigma^2)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\ell(\mu, \sigma^2)
+= -\frac{n}{2} \log(2\pi\sigma^2)
+  - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (X_i - \mu)^2\]</div>
+<p>Maximizing this expression yields:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mu}_{\text{MLE}} = \bar{X}, \quad
+\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n} \sum_{i=1}^{n} (X_i - \bar{X})^2\]</div>
+<p>For the Normal distribution, MoM and MLE coincide. For many other distributions
+(e.g., Lognormal, Gamma), they differ substantially.</p>
+<p><strong>Characteristics of MLE</strong></p>
+<ul class="simple">
+<li><p>Statistically efficient under correct model specification</p></li>
+<li><p>Asymptotically unbiased and consistent</p></li>
+<li><p>Naturally supports hypothesis testing and confidence intervals</p></li>
+<li><p>Requires numerical optimization for many distributions</p></li>
+<li><p>Sensitive to model misspecification and outliers</p></li>
+</ul>
+<p>In practice, MLE is preferred when a well-justified parametric assumption is
+available and sample size is sufficient.</p>
+</section>
+<section id="relationship-to-density-overlays">
+<h2>Relationship to Density Overlays<a class="headerlink" href="#relationship-to-density-overlays" title="Link to this heading"></a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">plot_distributions</span></code> overlays parametric densities on histograms or KDE
+curves, the following workflow is implicitly assumed:</p>
+<ol class="arabic simple">
+<li><p>A parametric family is selected (e.g., Normal, Lognormal).</p></li>
+<li><p>Parameters are estimated using either:</p>
+<ul class="simple">
+<li><p>Method of Moments, or</p></li>
+<li><p>Maximum Likelihood Estimation.</p></li>
+</ul>
+</li>
+<li><p>The fitted probability density function is evaluated across the data range.</p></li>
+<li><p>The resulting curve is plotted alongside the empirical distribution.</p></li>
+</ol>
+<p>The choice between MoM and MLE affects the <strong>shape, scale, and tail behavior</strong>
+of the fitted density, and therefore influences how closely the parametric model
+aligns with the observed data.</p>
+<p>Using multiple density overlays simultaneously allows visual comparison of
+different modeling assumptions and estimation strategies.</p>
+</section>
+</section>
+<section id="empirical-cumulative-distribution-function-ecdf">
+<span id="ecdf-theory"></span><h1>Empirical Cumulative Distribution Function: ECDF<a class="headerlink" href="#empirical-cumulative-distribution-function-ecdf" title="Link to this heading"></a></h1>
+<p>The <strong>Empirical Cumulative Distribution Function (ECDF)</strong> provides a non-parametric
+estimate of the cumulative distribution function (CDF) of a random variable based
+directly on observed data. Unlike parametric approaches, the ECDF makes <strong>no
+assumptions about the underlying probability distribution</strong> and depends solely on
+the sample itself.</p>
+<section id="definition">
+<h2>Definition<a class="headerlink" href="#definition" title="Link to this heading"></a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X_1, X_2, \dots, X_n\)</span> be an independent and identically distributed sample
+drawn from an unknown distribution with true cumulative distribution function
+<span class="math notranslate nohighlight">\(F(x)\)</span>.</p>
+<p>The empirical cumulative distribution function <span class="math notranslate nohighlight">\(\hat{F}_n(x)\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\hat{F}_n(x) = \frac{1}{n} \sum_{i=1}^{n} \mathbf{1}\{X_i \le x\}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{1}\{\cdot\}\)</span> denotes the indicator function, which equals 1 if
+its argument is true and 0 otherwise.</p>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>For any real value <span class="math notranslate nohighlight">\(x\)</span>, the ECDF <span class="math notranslate nohighlight">\(\hat{F}_n(x)\)</span> represents the proportion
+of observed data points less than or equal to <span class="math notranslate nohighlight">\(x\)</span>. The ECDF is therefore a
+<strong>step function</strong> that:</p>
+<ul class="simple">
+<li><p>Starts at 0 and increases monotonically to 1</p></li>
+<li><p>Jumps upward by increments of <span class="math notranslate nohighlight">\(1/n\)</span> at each observed data point</p></li>
+<li><p>Is right-continuous with left limits</p></li>
+</ul>
+<p>Each jump corresponds exactly to an observed value in the sample.</p>
+</section>
+<section id="statistical-properties">
+<h2>Statistical Properties<a class="headerlink" href="#statistical-properties" title="Link to this heading"></a></h2>
+<p>The ECDF possesses several important theoretical properties.</p>
+<section id="consistency">
+<h3>Consistency<a class="headerlink" href="#consistency" title="Link to this heading"></a></h3>
+<p>By the <strong>Glivenko–Cantelli Theorem</strong>, the ECDF converges uniformly to the true CDF:</p>
+<div class="math notranslate nohighlight">
+\[\sup_x \left| \hat{F}_n(x) - F(x) \right|
+\xrightarrow{a.s.} 0
+\quad \text{as } n \to \infty\]</div>
+<p>This guarantees that the ECDF is a <strong>strongly consistent estimator</strong> of the true
+distribution function.</p>
+</section>
+<section id="unbiasedness">
+<h3>Unbiasedness<a class="headerlink" href="#unbiasedness" title="Link to this heading"></a></h3>
+<p>For any fixed <span class="math notranslate nohighlight">\(x\)</span>, the ECDF is an unbiased estimator of the true CDF:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}[\hat{F}_n(x)] = F(x)\]</div>
+</section>
+<section id="variance">
+<h3>Variance<a class="headerlink" href="#variance" title="Link to this heading"></a></h3>
+<p>The variance of the ECDF at a fixed point <span class="math notranslate nohighlight">\(x\)</span> is given by:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{Var}[\hat{F}_n(x)] = \frac{F(x)(1 - F(x))}{n}\]</div>
+<p>This shows that uncertainty decreases at the standard parametric rate
+<span class="math notranslate nohighlight">\(O(n^{-1})\)</span>.</p>
+</section>
+</section>
+<section id="relationship-to-order-statistics">
+<h2>Relationship to Order Statistics<a class="headerlink" href="#relationship-to-order-statistics" title="Link to this heading"></a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X_{(1)} \le X_{(2)} \le \dots \le X_{(n)}\)</span> denote the order statistics of the
+sample. The ECDF increases by exactly <span class="math notranslate nohighlight">\(1/n\)</span> at each order statistic:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{F}_n(x) =
+\begin{cases}
+    0, &amp; x &lt; X_{(1)} \\
+    k/n, &amp; X_{(k)} \le x &lt; X_{(k+1)} \\
+    1, &amp; x \ge X_{(n)}
+\end{cases}\end{split}\]</div>
+<p>This representation makes explicit the direct connection between the ECDF and the
+empirical quantile function.</p>
+</section>
+<section id="comparison-with-histogram-and-kde">
+<h2>Comparison with Histogram and KDE<a class="headerlink" href="#comparison-with-histogram-and-kde" title="Link to this heading"></a></h2>
+<p>The ECDF differs fundamentally from histogram- and kernel-based density estimates:</p>
+<ul class="simple">
+<li><p><strong>Histograms</strong> depend on bin width and bin placement</p></li>
+<li><p><strong>Kernel density estimates (KDEs)</strong> depend on bandwidth and kernel choice</p></li>
+<li><p><strong>ECDFs</strong> require no tuning parameters and introduce no smoothing bias</p></li>
+</ul>
+<p>As a result, ECDFs are particularly well suited for:</p>
+<ul class="simple">
+<li><p>Distributional diagnostics</p></li>
+<li><p>Model checking and goodness-of-fit assessment</p></li>
+<li><p>Comparing empirical and theoretical distributions</p></li>
+<li><p>Visualizing cumulative probability mass and tail behavior</p></li>
+</ul>
+</section>
+<section id="tail-behavior-and-exceedance-functions">
+<h2>Tail Behavior and Exceedance Functions<a class="headerlink" href="#tail-behavior-and-exceedance-functions" title="Link to this heading"></a></h2>
+<p>The ECDF naturally supports tail analysis through the <strong>empirical survival function</strong>
+(or exceedance function):</p>
+<div class="math notranslate nohighlight">
+\[\hat{S}_n(x) = 1 - \hat{F}_n(x)\]</div>
+<p>This representation is especially useful for analyzing upper-tail behavior,
+heavy-tailed distributions, and rare events, particularly when combined with
+logarithmic axis scaling.</p>
+</section>
+<section id="id3">
+<h2>Practical Considerations<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>ECDFs are invariant to monotone transformations of the data ordering</p></li>
+<li><p>They remain interpretable under log or power transformations</p></li>
+<li><p>They provide exact cumulative probabilities at observed values</p></li>
+<li><p>They scale well computationally for large datasets</p></li>
+</ul>
+<p>Because of these properties, ECDFs are a foundational tool in exploratory data
+analysis and serve as a robust complement to density-based visualizations.</p>
 </section>
 </section>
 

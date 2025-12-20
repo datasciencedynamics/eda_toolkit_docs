@@ -1,7 +1,5 @@
 .. _art:   
 
-.. _target-link:
-
 .. raw:: html
 
    <div class="no-click">

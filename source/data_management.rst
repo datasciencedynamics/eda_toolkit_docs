@@ -1232,10 +1232,10 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
    :param df: Input DataFrame containing the data to summarize.
    :type df: pandas.DataFrame
 
-   :param apply_bonferroni: Whether to apply Bonferroni correction to p-values.
+   :param apply_bonferroni: Whether to apply Bonferroni correction to *p*-values.
    :type apply_bonferroni: bool, optional
 
-   :param apply_bh_fdr: Whether to apply Benjamini-Hochberg FDR correction to p-values.
+   :param apply_bh_fdr: Whether to apply Benjamini-Hochberg FDR correction to *p*-values.
    :type apply_bh_fdr: bool, optional
 
    :param categorical_cols: List of categorical column names. If None, inferred automatically.
@@ -2384,6 +2384,628 @@ Below, we use the ``age`` column of the census data [1]_ from the UCI Machine Le
    The parameter ``right=False`` in ``pd.cut`` means that the bins are left-inclusive 
    and right-exclusive, except for the last bin, which is always right-inclusive 
    when the upper bound is infinity (``float("inf")``).
+
+Group-by Imputer
+-------------------
+
+**Impute missing values using group-level statistics with optional fallback logic**
+
+The ``groupby_imputer`` function provides a simple, transparent, and statistically
+grounded approach for imputing missing values in a DataFrame using **group-specific
+summary statistics**. Instead of applying a single global imputation value, this
+function computes statistics within meaningful subgroups, preserving structure
+and heterogeneity in the data.
+
+This approach is especially useful when missingness depends on categorical
+attributes such as demographic groups, job categories, or experimental conditions.
+
+**Key Features**
+
+- **Group-aware imputation** using one or more categorical variables
+- Supports common summary statistics: mean, median, min, max
+- **Fallback logic** for sparse or empty groups
+- Option to **preserve the original column** or overwrite in place
+- Fully vectorized and interpretable, no black-box modeling
+
+.. function:: groupby_imputer(df, impute_col, by, stat="mean", fallback="global", as_new_col=True, new_col_name=None)
+
+    :param df: Input DataFrame containing missing values to impute.
+    :type df: pandas.DataFrame
+
+    :param impute_col: Name of the column containing missing values.
+    :type impute_col: str
+
+    :param by: One or more categorical columns used to define groups.
+        Group-level statistics are computed within each unique combination
+        of these columns.
+    :type by: str or list of str
+
+    :param stat: Summary statistic used for imputation.
+        Supported values are ``"mean"``, ``"median"``, ``"min"``, and ``"max"``.
+    :type stat: str, optional
+
+    :param fallback: Value used when a group contains no non-null observations
+        for ``impute_col``.
+        - ``"global"`` uses the overall statistic computed across the entire column
+        - A numeric value (int or float) uses a fixed fallback
+    :type fallback: str or int or float, optional
+
+    :param as_new_col: If ``True``, a new imputed column is created and the original
+        column is left unchanged. If ``False``, imputation is performed in place.
+    :type as_new_col: bool, optional
+
+    :param new_col_name: Optional custom name for the imputed column.
+        Ignored if ``as_new_col=False``.
+    :type new_col_name: str, optional
+
+    :returns: A DataFrame with missing values imputed according to group-level
+        statistics and fallback logic.
+    :rtype: pandas.DataFrame
+
+    :raises ValueError:
+        - If ``stat`` is not one of ``"mean"``, ``"median"``, ``"min"``, or ``"max"``.
+
+.. admonition:: Notes
+
+    - Group statistics are computed using non-null values only.
+    - If a group contains only missing values, the fallback value is applied.
+    - Using ``as_new_col=True`` is recommended for exploratory workflows to
+      preserve the original data for comparison.
+    - This method is deterministic and fully interpretable, making it suitable
+      for regulated or audited modeling environments.
+
+\
+
+Group-wise Imputation Examples
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+In the example below, missing values are introduced artificially into the
+``"age"`` column of the Adult Income dataset. The goal is to impute these missing
+values using **group-level means**, defined by combinations of ``"workclass"``
+and ``"education"``.
+
+Two fallback strategies are demonstrated:
+
+1. **Global fallback**, where groups with insufficient data fall back to the
+   overall mean
+2. **Fixed-value fallback**, where a constant value is used instead
+
+.. code-block:: python
+
+    from eda_toolkit import groupby_imputer
+    import numpy as np
+
+    # Introduce missingness for demonstration
+    adult_df.loc[
+        adult_df.sample(frac=0.3, random_state=42).index, "age"
+    ] = np.nan
+
+    # 1. Group-wise mean imputation with global fallback
+    X_global = groupby_imputer(
+        df=adult_df,
+        impute_col="age",
+        by=["workclass", "education"],
+        stat="mean",
+        fallback="global",
+        as_new_col=True,
+    )
+
+    print("\n### Head with global fallback ###")
+    print(X_global[["age", "age_mean_imputed"]].head())
+
+    print("Means:")
+    print(f"Original adult_df['age'].mean(): {adult_df['age'].mean()}")
+    print(f"Imputed (global fallback) mean: {X_global['age_mean_imputed'].mean()}")
+
+
+**Output**
+
+.. code-block:: text
+
+
+    ### Head with global fallback ###
+        age  age_mean_imputed
+    0   NaN         38.495238
+    1   NaN         45.110837
+    2  38.0         38.000000
+    3  53.0         53.000000
+    4   NaN         37.249330
+  
+    Means:
+    Original adult_df['age'].mean(): 38.597911608997045
+    Imputed (global fallback) mean: 38.621605730469135
+
+
+.. code-block:: python
+
+    from eda_toolkit import groupby_imputer
+    import numpy as np
+
+    # Introduce missingness for demonstration
+    adult_df.loc[
+        adult_df.sample(frac=0.3, random_state=42).index, "age"
+    ] = np.nan
+
+    # 2. Group-wise mean imputation with fixed fallback
+        X_fixed = groupby_imputer(
+            df=adult_df,
+            impute_col="age",
+            by=["workclass", "education"],
+            stat="mean",
+            fallback=50,
+            as_new_col=True,
+        )
+
+    print("\n### Head with fixed fallback=50 ###")
+    print(X_fixed[["age", "age_mean_imputed"]].head())
+    print("Means:")
+    print(f"Original adult_df['age'].mean(): {adult_df['age'].mean()}")
+    print(f"Imputed (fixed fallback=50) mean: {X_fixed['age_mean_imputed'].mean()}")
+
+**Output**
+
+.. code-block:: text
+
+    ### Head with fixed fallback=50 ###
+        age  age_mean_imputed
+    0   NaN         38.495238
+    1   NaN         45.110837
+    2  38.0         38.000000
+    3  53.0         53.000000
+    4   NaN         37.249330
+
+    Means:
+    Original adult_df['age'].mean(): 38.597911608997045
+    Imputed (fixed fallback=50) mean: 38.6904730183637
+
+    ### Comparison summary ###
+    Missingness in original age: 0.30000818967282256
+    Global fallback mean: 38.621605730469135
+    Fixed fallback=50 mean: 38.6904730183637
+
+
+**Interpretation**
+
+- Group-level imputation preserves differences across workclass and education
+  categories that would be lost under global imputation.
+- The global fallback maintains consistency with the original distribution.
+- Fixed fallback values may be useful for domain-driven constraints but can
+  introduce bias if not chosen carefully.
+
+Group-aware imputation provides a strong baseline that often outperforms naive
+global strategies while remaining transparent and easy to audit.
+
+
+Delete Inactive DataFrames
+-----------------------------
+
+**Safely clean up unused pandas DataFrames from a namespace to reduce memory usage**
+
+The ``del_inactive_dataframes`` utility is designed to help manage memory in
+interactive environments such as Jupyter notebooks, scripts, and cloud runtimes.
+It inspects a namespace (for example, ``globals()`` or a custom dictionary),
+identifies pandas DataFrames, and optionally deletes those that are no longer
+needed.
+
+Unlike manual ``del`` calls, this function provides **visibility, safety, and
+auditability**:
+
+- Preview what would be deleted before committing
+- Preserve explicitly named DataFrames
+- Handle Jupyter output-cache variables that can silently retain memory
+- Optionally track memory usage before and after cleanup
+- Produce readable summaries using Rich tables when available
+
+This makes it particularly useful during exploratory analysis, large ETL
+pipelines, and long-running notebooks.
+
+**Key Capabilities**
+
+- **Selective deletion** based on an explicit keep list
+- **Dry-run mode** to preview deletions without modifying state
+- Optional inclusion of IPython cache variables (e.g. ``_14``, ``_27``)
+- Optional **garbage collection** after deletion
+- Optional **memory tracking** at the DataFrame and process level
+- Works with ``globals()``, ``locals()``, or any user-managed namespace dictionary
+
+.. function:: del_inactive_dataframes(dfs_to_keep, del_dataframes=False, namespace=None, include_ipython_cache=False, dry_run=False, run_gc=True, track_memory=False, memory_mode="dataframes", verbose=True)
+
+    :param dfs_to_keep: Name or names of DataFrame variables to preserve.
+        All other DataFrames may be deleted when ``del_dataframes=True``.
+    :type dfs_to_keep: str or iterable of str
+
+    :param del_dataframes: Whether to actually delete inactive DataFrames.
+        If ``False``, the function only reports what would be deleted.
+    :type del_dataframes: bool, optional
+
+    :param namespace: Namespace dictionary to inspect and optionally modify.
+        If ``None``, the function uses ``globals()`` of the calling scope.
+    :type namespace: dict, optional
+
+    :param include_ipython_cache: Whether to include IPython output-cache
+        variables (e.g. ``_14``) when searching for DataFrames.
+    :type include_ipython_cache: bool, optional
+
+    :param dry_run: If ``True``, show planned deletions without deleting anything.
+    :type dry_run: bool, optional
+
+    :param run_gc: Whether to call ``gc.collect()`` after deletions occur.
+    :type run_gc: bool, optional
+
+    :param track_memory: Whether to record memory usage before and after cleanup.
+    :type track_memory: bool, optional
+
+    :param memory_mode: Controls which memory metrics are reported:
+        - ``"dataframes"`` reports total pandas DataFrame memory
+        - ``"all"`` also reports process RSS (requires ``psutil``)
+    :type memory_mode: str, optional
+
+    :param verbose: Whether to print formatted output. If ``False``, the function
+        returns results silently.
+    :type verbose: bool, optional
+
+    :returns: Summary dictionary describing detected, deleted, and remaining
+        DataFrames, along with optional memory metrics.
+    :rtype: dict
+
+    :raises ValueError:
+        - If ``memory_mode`` is not one of ``"dataframes"`` or ``"all"``.
+
+.. admonition:: Notes
+
+    - A namespace is simply a dictionary mapping variable names to objects.
+    - Deletion is performed by removing keys from the namespace dictionary.
+    - Modifying ``locals()`` inside a function is not guaranteed to free memory.
+      For reliable cleanup inside functions, store DataFrames in a dict and
+      pass that dict as ``namespace``.
+    - Process RSS memory may not decrease immediately even after garbage collection.
+
+**Usage Examples**
+
+The following examples demonstrate common and advanced usage patterns for
+``del_inactive_dataframes``. Each example recreates its own DataFrames so behavior
+is isolated and easy to follow.
+
+Because ``del_inactive_dataframes`` inspects a namespace dictionary, these examples
+explicitly pass ``namespace=globals()`` so the function can see variables defined
+in this script or notebook.
+
+
+Example 1: List Active DataFrames (No Deletion)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Inspect which DataFrames are currently active without deleting anything.
+
+.. code-block:: python
+
+    import pandas as pd
+    from eda_toolkit.data_manager import del_inactive_dataframes
+
+    df_main = pd.DataFrame({"a": range(10)})
+    df_tmp = pd.DataFrame({"b": range(100)})
+
+    del_inactive_dataframes(
+        ["df_main"],
+        del_dataframes=False,
+        namespace=globals(),
+    )
+
+
+**Output**
+
+.. code-block:: text
+
+    =================
+    Active DataFrames
+    =================
+    Current Active DataFrames:
+    - df_main
+    - df_tmp
+
+
+Example 2: Delete Everything Except a Single DataFrame
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Remove all DataFrames except the one explicitly listed.
+
+.. code-block:: python
+
+    df_main = pd.DataFrame({"a": range(10)})
+    df_tmp = pd.DataFrame({"b": range(100)})
+
+    del_inactive_dataframes(
+        ["df_main"],
+        del_dataframes=True,
+        namespace=globals(),
+    )
+
+
+**Output**
+
+.. code-block:: text
+
+    =================
+    Active DataFrames
+    =================
+    Current Active DataFrames:
+    - df_main
+    - df_tmp
+
+    =================
+    Planned Deletions
+    =================
+    DataFrames Marked for Deletion:
+    - df_tmp
+
+    ==================
+    Deleted DataFrames
+    ==================
+    Deleted DataFrames:
+    - df_tmp
+
+    ====================
+    Remaining DataFrames
+    ====================
+    Remaining Active DataFrames:
+    - df_main
+
+
+Example 3: Dry Run (Preview Deletions)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Preview which DataFrames *would* be deleted without actually removing them.
+
+.. code-block:: python
+
+    df_main = pd.DataFrame({"a": range(10)})
+    df_tmp = pd.DataFrame({"b": range(100)})
+
+    del_inactive_dataframes(
+        ["df_main"],
+        del_dataframes=True,
+        dry_run=True,
+        namespace=globals(),
+    )
+
+
+**Output**
+
+.. code-block:: text
+
+    =================
+    Active DataFrames
+    =================
+    Current Active DataFrames:
+    - df_main
+    - df_tmp
+
+    =================
+    Planned Deletions
+    =================
+    DataFrames Marked for Deletion:
+    - df_tmp
+    Dry run enabled. No DataFrames were deleted.
+
+    ====================
+    Remaining DataFrames
+    ====================
+    Remaining Active DataFrames:
+    - df_main
+    - df_tmp
+
+This mode is recommended before running destructive cleanup steps.
+
+
+Example 4: Include IPython Output Cache Variables
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+In Jupyter notebooks, output cache variables such as ``_14`` may reference large
+DataFrames. These are ignored by default but can be included explicitly.
+
+.. code-block:: python
+
+    df_main = pd.DataFrame({"a": range(10)})
+    df_tmp = pd.DataFrame({"b": range(100)})
+
+    _ = df_tmp  # simulates an IPython output cache reference
+
+    del_inactive_dataframes(
+        ["df_main"],
+        del_dataframes=True,
+        include_ipython_cache=True,
+        namespace=globals(),
+    )
+
+**Output**
+
+.. code-block:: text
+
+    =================
+    Active DataFrames
+    =================
+    Current Active DataFrames:
+    - _
+    - df_main
+    - df_tmp
+
+    =================
+    Planned Deletions
+    =================
+    DataFrames Marked for Deletion:
+    - _
+    - df_tmp
+
+    ==================
+    Deleted DataFrames
+    ==================
+    Deleted DataFrames:
+    - _
+    - df_tmp
+
+    ====================
+    Remaining DataFrames
+    ====================
+    Remaining Active DataFrames:
+    - df_main
+
+Example 5: Track DataFrame Memory Usage
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Report total DataFrame memory usage before and after cleanup.
+
+.. code-block:: python
+
+    df_main = pd.DataFrame({"a": range(10)})
+    df_tmp = pd.DataFrame({"b": range(100)})
+
+    del_inactive_dataframes(
+        ["df_main"],
+        del_dataframes=True,
+        track_memory=True,
+        namespace=globals(),
+    )
+
+
+**Output**
+
+.. code-block:: text
+
+    =================
+    Active DataFrames
+    =================
+    Current Active DataFrames:
+    - df_main
+    - df_tmp
+
+    =================
+    Planned Deletions
+    =================
+    DataFrames Marked for Deletion:
+    - df_tmp
+
+    ==================
+    Deleted DataFrames
+    ==================
+    Deleted DataFrames:
+    - df_tmp
+
+    ====================
+    Remaining DataFrames
+    ====================
+    Remaining Active DataFrames:
+    - df_main
+
+    =================
+    Memory Usage (MB)
+    =================
+    DataFrames total: 0.0 -> 0.0 (-0.0)
+
+This mode uses ``pandas.DataFrame.memory_usage(deep=True)`` for reporting.
+
+
+Example 6: Track DataFrame Memory and Process RSS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Enable power-user memory tracking, including process-level RSS when available.
+
+.. code-block:: python
+
+    df_main = pd.DataFrame({"a": range(10)})
+    df_tmp = pd.DataFrame({"b": range(100)})
+
+    del_inactive_dataframes(
+        ["df_main"],
+        del_dataframes=True,
+        track_memory=True,
+        memory_mode="all",
+        namespace=globals(),
+    )
+
+
+**Output**
+
+.. code-block:: text
+
+    =================
+    Active DataFrames
+    =================
+    Current Active DataFrames:
+    - df_main
+    - df_tmp
+
+    =================
+    Planned Deletions
+    =================
+    DataFrames Marked for Deletion:
+    - df_tmp
+
+    ==================
+    Deleted DataFrames
+    ==================
+    Deleted DataFrames:
+    - df_tmp
+
+    ====================
+    Remaining DataFrames
+    ====================
+    Remaining Active DataFrames:
+    - df_main
+
+    =================
+    Memory Usage (MB)
+    =================
+    Process RSS: 189.0 -> 189.0 (+0.0)
+    DataFrames total: 0.0 -> 0.0 (-0.0)
+
+Process RSS reporting requires ``psutil`` and may not immediately decrease
+after garbage collection.
+
+
+Example 7: Programmatic Usage (No Console Output)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Suppress console output and consume the returned summary dictionary directly.
+
+.. code-block:: python
+
+    df_main = pd.DataFrame({"a": range(10)})
+    df_tmp = pd.DataFrame({"b": range(100)})
+
+    summary = del_inactive_dataframes(
+        ["df_main"],
+        del_dataframes=True,
+        verbose=False,
+        track_memory=True,
+        namespace=globals(),
+    )
+
+    print(summary)
+
+
+**Output**
+
+.. code-block:: text
+
+    Returned summary dict:
+    {'active': ['df_main', 'df_tmp'], 'to_delete': ['df_tmp'], 'deleted': ['df_tmp'], 
+    'remaining': ['df_main'], 'used_rich': False, 'memory': {'dataframes_mb': 
+    {'before': 0.00109100341796875, 'after': 0.000202178955078125, 
+    'delta': -0.000888824462890625}, 'mode': 'dataframes'}}
+
+This pattern is useful in pipelines, automated scripts, and testing workflows.
+
+
+**When to Use This Utility**
+
+- Long-lived Jupyter notebooks with many intermediate DataFrames
+- Cloud notebooks with limited RAM
+- ETL pipelines with staged intermediate results
+- Teaching environments where reproducibility and clarity matter
+- Any workflow where memory pressure needs to be controlled explicitly
+
+This function is intentionally conservative, explicit, and observable, favoring
+safe cleanup over implicit or destructive behavior.
+
 
 
 .. [1] Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. `https://doi.org/10.24432/C5GP7S <https://doi.org/10.24432/C5GP7S>`_.

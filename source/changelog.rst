@@ -24,6 +24,26 @@
 Changelog
 ==========
 
+`Version 0.0.20`_
+----------------------
+
+.. _Version 0.0.20: https://lshpaner.github.io/eda_toolkit_docs/v0.0.20/index.html
+
+What's Changed
+^^^^^^^^^^^^^^^^^^^^
+
+* flexible summarize_combinations sans excel by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/104
+* Groupby imputer by @Oscar-Gil-Data in https://github.com/lshpaner/eda_toolkit/pull/109
+* Refactor ``kde_distributions`` and extract density overlay logic into plot utilities by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/110
+* Introduce Enhanced Q-Q Plot Support for Distribution GOF Diagnostics by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/111
+* Add ECDF plot type to data_doctor; add SciPy to requirements by @Oscar-Gil-Data in https://github.com/lshpaner/eda_toolkit/pull/112
+* Add conditional histograms and unify figure-saving utilities by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/114
+* DataFrame memory management utility, del_inactive_dataframes by @Oscar-Gil-Data in https://github.com/lshpaner/eda_toolkit/pull/115
+
+
+**Full Changelog**: https://github.com/lshpaner/eda_toolkit/compare/0.0.19...0.0.20
+
+
 `Version 0.0.19`_
 ----------------------
 
