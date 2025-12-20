@@ -31,7 +31,7 @@ Changelog
 
 - Fixed dependency resolution for Python 3.11+ by updating SciPy version constraints.
 - Improved compatibility with Google Colab and Python 3.12 environments.
-- Updated package acknowledgements and metadata in` __init__.py`.
+- Updated package acknowledgements and metadata in ``__init__.py``.
 - No API changes.
 
 
