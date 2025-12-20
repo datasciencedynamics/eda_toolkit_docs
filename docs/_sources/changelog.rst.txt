@@ -24,6 +24,15 @@
 Changelog
 ==========
 
+`Version 0.0.22`_
+----------------------
+
+.. _Version 0.0.22: https://lshpaner.github.io/eda_toolkit_docs/v0.0.22/index.html
+
+- Renamed ``conditional_histograms`` to ``grouped_distributions``
+- Updated SciPy version requirement in ``README``
+
+
 `Version 0.0.21`_
 ----------------------
 
@@ -108,13 +117,12 @@ and production pipelines.
 - Confirmed correct full-DataFrame column creation behavior.
 
 
-
 `Version 0.0.18`_
 ----------------------
 
 .. _Version 0.0.18: https://lshpaner.github.io/eda_toolkit_docs/v0.0.18/index.html
 
-**What’s changed**
+**What's changed**
 
 1. Thousand-separator support for dynamic group columns
 We now include the two group-by columns (e.g. ``<=50K (n = 37,155)`` and ``>50K (n = 11,687)``) in our integer-formatting step. That means any time you run:
@@ -138,8 +146,7 @@ At the end of ``generate_table1()``, we wrap any returned DataFrame(s) in your e
 - We want *p*-values and group counts to respect the same ``decimal_places`` and thousands-separator rules.
 - Wrapping in ``TableWrapper`` means users get pretty output by default when they do ``print()`` or interactive display; no need to remember a ``pretty=True`` flag or manually call ``table1_to_str()``.
 
-Major Changes
-~~~~~~~~~~~~~~~~~~~~
+**Major Changes**
 
 **Typing and Codebase-Wide Updates**
 
@@ -150,8 +157,7 @@ Major Changes
 - Improved parameter validation and error messages for invalid input types.
 
 
-Enhancements to ``generate_table1``
-+++++++++++++++++++++++++++++++++++++
+**Enhancements to ``generate_table1``**
 
 - **New Parameter**: ``use_welch`` (default ``True``)
 
@@ -178,8 +184,7 @@ Enhancements to ``generate_table1``
 
     Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame], str, Dict[str, str], Tuple[str, str]]
 
-Tests and Coverage 
-+++++++++++++++++++++++++++++
+**Tests and Coverage**
 
 - Updated unit tests to reflect all refactored logic.
 
