@@ -2476,13 +2476,13 @@ Two fallback strategies are demonstrated:
     import numpy as np
 
     # Introduce missingness for demonstration
-    adult_df.loc[
-        adult_df.sample(frac=0.3, random_state=42).index, "age"
+    df.loc[
+        df.sample(frac=0.3, random_state=42).index, "age"
     ] = np.nan
 
     # 1. Group-wise mean imputation with global fallback
     X_global = groupby_imputer(
-        df=adult_df,
+        df=df,
         impute_col="age",
         by=["workclass", "education"],
         stat="mean",
@@ -2494,7 +2494,7 @@ Two fallback strategies are demonstrated:
     print(X_global[["age", "age_mean_imputed"]].head())
 
     print("Means:")
-    print(f"Original adult_df['age'].mean(): {adult_df['age'].mean()}")
+    print(f"Original df['age'].mean(): {df['age'].mean()}")
     print(f"Imputed (global fallback) mean: {X_global['age_mean_imputed'].mean()}")
 
 
@@ -2502,19 +2502,17 @@ Two fallback strategies are demonstrated:
 
 .. code-block:: text
 
-
     ### Head with global fallback ###
-        age  age_mean_imputed
-    0   NaN         38.495238
-    1   NaN         45.110837
-    2  38.0         38.000000
-    3  53.0         53.000000
-    4   NaN         37.249330
-  
+                age  age_mean_imputed
+    census_id                        
+    582248222   NaN         38.495238
+    561810758   NaN         45.110837
+    598098459  38.0         38.000000
+    776705221  53.0         53.000000
+    479262902   NaN         37.249330
     Means:
-    Original adult_df['age'].mean(): 38.597911608997045
+    Original df['age'].mean(): 38.597911608997045
     Imputed (global fallback) mean: 38.621605730469135
-
 
 .. code-block:: python
 
@@ -2522,13 +2520,13 @@ Two fallback strategies are demonstrated:
     import numpy as np
 
     # Introduce missingness for demonstration
-    adult_df.loc[
-        adult_df.sample(frac=0.3, random_state=42).index, "age"
+    df.loc[
+        df.sample(frac=0.3, random_state=42).index, "age"
     ] = np.nan
 
     # 2. Group-wise mean imputation with fixed fallback
         X_fixed = groupby_imputer(
-            df=adult_df,
+            df=df,
             impute_col="age",
             by=["workclass", "education"],
             stat="mean",
@@ -2539,7 +2537,7 @@ Two fallback strategies are demonstrated:
     print("\n### Head with fixed fallback=50 ###")
     print(X_fixed[["age", "age_mean_imputed"]].head())
     print("Means:")
-    print(f"Original adult_df['age'].mean(): {adult_df['age'].mean()}")
+    print(f"Original df['age'].mean(): {df['age'].mean()}")
     print(f"Imputed (fixed fallback=50) mean: {X_fixed['age_mean_imputed'].mean()}")
 
 **Output**
@@ -2555,7 +2553,7 @@ Two fallback strategies are demonstrated:
     4   NaN         37.249330
 
     Means:
-    Original adult_df['age'].mean(): 38.597911608997045
+    Original df['age'].mean(): 38.597911608997045
     Imputed (fixed fallback=50) mean: 38.6904730183637
 
     ### Comparison summary ###

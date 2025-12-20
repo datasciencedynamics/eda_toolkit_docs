@@ -76,10 +76,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#kde-and-parametric-density-fit-example">KDE and Parametric Density Fit Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#conditional-distributions">Conditional Distributions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#conditional_histograms"><code class="docutils literal notranslate"><span class="pre">conditional_histograms()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#conditional-density-plot-example">Conditional Density Plot Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#conditional-histogram-plot-example">Conditional Histogram Plot Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#grouped-distributions">Grouped Distributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#grouped_distributions"><code class="docutils literal notranslate"><span class="pre">grouped_distributions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#grouped-density-plot-example">Grouped Density Plot Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#grouped-histogram-plot-example">Grouped Histogram Plot Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#distribution-goodness-of-fit-plots">Distribution Goodness-of-Fit Plots</a><ul>
@@ -662,11 +662,11 @@ parametric density models, and parameter estimation via the
 </a>
 </div><div style="height: 50px;"></div></section>
 </section>
-<section id="conditional-distributions">
-<h1>Conditional Distributions<a class="headerlink" href="#conditional-distributions" title="Link to this heading"></a></h1>
-<a id="conditional_histograms"></a><p><strong>Plot conditional distributions of numeric features given a binary variable.</strong></p>
-<p>The <code class="docutils literal notranslate"><span class="pre">conditional_histograms</span></code> function visualizes how selected numeric features
-are distributed conditional on a binary grouping variable (for example, an
+<section id="grouped-distributions">
+<h1>Grouped Distributions<a class="headerlink" href="#grouped-distributions" title="Link to this heading"></a></h1>
+<a id="grouped_distributions"></a><p><strong>Plot grouped distributions of numeric features given a binary variable.</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code> function visualizes how selected numeric features
+are distributed grouped by a binary grouping variable (for example, an
 outcome label or class membership). For each feature, the distributions of the
 two groups are overlaid on the same axis, either as histograms or as filled
 kernel density curves.</p>
@@ -684,8 +684,8 @@ groups is critical.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">normalize=&quot;density&quot;</span></code>: Probability density (histograms or density plots)</p></li>
 </ul>
 <dl class="py function">
-<dt class="sig sig-object py" id="conditional_histograms">
-<span class="sig-name descname"><span class="pre">conditional_histograms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'density'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hist'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_wrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#conditional_histograms" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="grouped_distributions">
+<span class="sig-name descname"><span class="pre">grouped_distributions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'density'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hist'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_wrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grouped_distributions" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -744,7 +744,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">(10,</sp
 <div class="admonition-notes admonition">
 <p class="admonition-title">Notes</p>
 <ul class="simple">
-<li><p>All conditional distributions are plotted as overlays on a single axis
+<li><p>All grouped distributions are plotted as overlays on a single axis
 per feature.</p></li>
 <li><p>Density plots always represent probability density and do not support
 count-based normalization.</p></li>
@@ -754,12 +754,12 @@ both groups to enable direct shape comparison.</p></li>
 figures or dense subplot grids.</p></li>
 </ul>
 </div>
-<section id="conditional-density-plot-example">
-<h2>Conditional Density Plot Example<a class="headerlink" href="#conditional-density-plot-example" title="Link to this heading"></a></h2>
-<p>In the example below, the <code class="docutils literal notranslate"><span class="pre">conditional_histograms</span></code> function is used to compare
+<section id="grouped-density-plot-example">
+<h2>Grouped Density Plot Example<a class="headerlink" href="#grouped-density-plot-example" title="Link to this heading"></a></h2>
+<p>In the example below, the <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code> function is used to compare
 the distributions of several numeric features conditioned on income category.
 The grouping variable <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code> is binary (<code class="docutils literal notranslate"><span class="pre">&quot;&lt;=50K&quot;</span></code> vs <code class="docutils literal notranslate"><span class="pre">&quot;&gt;50K&quot;</span></code>), making
-it suitable for conditional overlay plots.</p>
+it suitable for grouped overlay plots.</p>
 <p>The selected features include demographic and financial attributes:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code></p></li>
@@ -776,7 +776,7 @@ consistent visual identification of income groups across all features. The
 regions easier to interpret.</p>
 <p>The resulting figure is saved in both PNG and SVG formats using a shared base
 filename.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">conditional_histograms</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">grouped_distributions</span>
 
 <span class="n">features</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -789,7 +789,7 @@ filename.</p>
     <span class="s2">&quot;&gt;50K&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>  <span class="c1"># orange</span>
 <span class="p">}</span>
 
-<span class="n">conditional_histograms</span><span class="p">(</span>
+<span class="n">grouped_distributions</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
     <span class="n">by</span><span class="o">=</span><span class="s2">&quot;income&quot;</span><span class="p">,</span>
@@ -802,19 +802,19 @@ filename.</p>
     <span class="n">plot_style</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span>
     <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
     <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
-    <span class="n">image_filename</span><span class="o">=</span><span class="s2">&quot;conditional_histograms_adult_income&quot;</span><span class="p">,</span>
+    <span class="n">image_filename</span><span class="o">=</span><span class="s2">&quot;grouped_distributions_adult_income&quot;</span><span class="p">,</span>
     <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
     <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="no-click"><a class="reference internal image-reference" href="_images/cond_hist_adult_income.svg"><img alt="Conditional Histograms with Income Groups" class="align-center" src="_images/cond_hist_adult_income.svg" style="width: 900px;" />
+<div class="no-click"><a class="reference internal image-reference" href="_images/grouped_dist_adult_income.svg"><img alt="Grouped Histograms with Income Groups" class="align-center" src="_images/grouped_dist_adult_income.svg" style="width: 900px;" />
 </a>
 </div><div style="height: 50px;"></div></section>
-<section id="conditional-histogram-plot-example">
-<h2>Conditional Histogram Plot Example<a class="headerlink" href="#conditional-histogram-plot-example" title="Link to this heading"></a></h2>
-<p>In this example, the <code class="docutils literal notranslate"><span class="pre">conditional_histograms</span></code> function is used to visualize
-<strong>overlaid conditional histograms</strong> for several numeric features, grouped by
+<section id="grouped-histogram-plot-example">
+<h2>Grouped Histogram Plot Example<a class="headerlink" href="#grouped-histogram-plot-example" title="Link to this heading"></a></h2>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code> function is used to visualize
+<strong>overlaid grouped histograms</strong> for several numeric features, grouped by
 income category. As in the previous example, the grouping variable <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code>
 is binary (<code class="docutils literal notranslate"><span class="pre">&quot;&lt;=50K&quot;</span></code> vs <code class="docutils literal notranslate"><span class="pre">&quot;&gt;50K&quot;</span></code>), enabling direct comparison between the two
 subpopulations.</p>
@@ -832,7 +832,7 @@ are evaluated against identical bin edges for each feature. Custom group colors
 are applied consistently across all subplots to maintain interpretability.</p>
 <p>The resulting figure is saved in both PNG and SVG formats for downstream use in
 reports or publications.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">conditional_histograms</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">grouped_distributions</span>
 
 <span class="n">features</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -845,7 +845,7 @@ reports or publications.</p>
     <span class="s2">&quot;&gt;50K&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">conditional_histograms</span><span class="p">(</span>
+<span class="n">grouped_distributions</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
     <span class="n">by</span><span class="o">=</span><span class="s2">&quot;income&quot;</span><span class="p">,</span>
@@ -864,7 +864,7 @@ reports or publications.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="no-click"><a class="reference internal image-reference" href="_images/cond_hist_adult_income_hist.svg"><img alt="Conditional Histograms with Income Groups" class="align-center" src="_images/cond_hist_adult_income_hist.svg" style="width: 900px;" />
+<div class="no-click"><a class="reference internal image-reference" href="_images/grouped_dist_adult_income_hist.svg"><img alt="Grouped Histograms with Income Groups" class="align-center" src="_images/grouped_dist_adult_income_hist.svg" style="width: 900px;" />
 </a>
 </div><div style="height: 50px;"></div></section>
 </section>
@@ -1007,7 +1007,7 @@ risk modeling, reliability analysis, and anomaly detection contexts.</p></li>
 <p>This diagnostic provides a fast, visual comparison of multiple candidate
 distributions and is typically used as a first-pass validation step before making
 distributional assumptions in downstream modeling.</p>
-<div class="no-click"><a class="reference internal image-reference" href="_images/gof_qq_age_adult_income.png"><img alt="Conditional Histograms with Income Groups" class="align-center" src="_images/gof_qq_age_adult_income.png" style="width: 500px;" />
+<div class="no-click"><a class="reference internal image-reference" href="_images/gof_qq_age_adult_income.png"><img alt="Grouped Histograms with Income Groups" class="align-center" src="_images/gof_qq_age_adult_income.png" style="width: 500px;" />
 </a>
 </div><div style="height: 50px;"></div></section>
 <section id="empirical-qq-plot-example-sample-vs-reference-data">

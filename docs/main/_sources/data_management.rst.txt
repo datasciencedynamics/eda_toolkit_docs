@@ -2388,7 +2388,7 @@ Below, we use the ``age`` column of the census data [1]_ from the UCI Machine Le
 Group-by Imputer
 -------------------
 
-**Impute missing values using group-level statistics with optional fallback logic**
+**Impute missing values using group-level statistics with optional fallback logic.**
 
 The ``groupby_imputer`` function provides a simple, transparent, and statistically
 grounded approach for imputing missing values in a DataFrame using **group-specific
