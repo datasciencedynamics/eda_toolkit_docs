@@ -2540,6 +2540,11 @@ Two fallback strategies are demonstrated:
     print(f"Original df['age'].mean(): {df['age'].mean()}")
     print(f"Imputed (fixed fallback=50) mean: {X_fixed['age_mean_imputed'].mean()}")
 
+    print("\n### Comparison summary ###")
+    print(f"Missingness in original age: {df['age'].isna().mean()}")
+    print(f"Global fallback mean: {X_global['age_mean_imputed'].mean()}")
+    print(f"Fixed fallback=50 mean: {X_fixed['age_mean_imputed'].mean()}")
+
 **Output**
 
 .. code-block:: text

@@ -2682,7 +2682,7 @@ Inspect which DataFrames are currently active without deleting anything.
 .. code-block:: python
 
     import pandas as pd
-    from eda_toolkit.data_manager import del_inactive_dataframes
+    from eda_toolkit import del_inactive_dataframes
 
     df_main = pd.DataFrame({"a": range(10)})
     df_tmp = pd.DataFrame({"b": range(100)})

@@ -2672,7 +2672,7 @@ in this script or notebook.</p>
 <h3>Example 1: List Active DataFrames (No Deletion)<a class="headerlink" href="#example-1-list-active-dataframes-no-deletion" title="Link to this heading"></a></h3>
 <p>Inspect which DataFrames are currently active without deleting anything.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit.data_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
 
 <span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
