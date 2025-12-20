@@ -18,8 +18,6 @@
    <div style="height: 100px;"></div>
 
 
-.. _getting_started:   
-
 
 .. EDA Toolkit Python Library Documentation documentation master file, created by
    sphinx-quickstart on Thu May 2 15:44:56 2024.
@@ -29,7 +27,7 @@
 Welcome to the EDA Toolkit Python Library Documentation!
 ========================================================
 .. note::
-   This documentation is for ``eda_toolkit`` version ``0.0.20``.
+   This documentation is for ``eda_toolkit`` version ``0.0.21``.
 
 
 The ``eda_toolkit`` is a comprehensive library designed to streamline and 

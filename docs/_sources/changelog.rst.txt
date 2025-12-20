@@ -24,6 +24,17 @@
 Changelog
 ==========
 
+`Version 0.0.21`_
+----------------------
+
+.. _Version 0.0.21: https://lshpaner.github.io/eda_toolkit_docs/v0.0.21/index.html
+
+- Fixed dependency resolution for Python 3.11+ by updating SciPy version constraints.
+- Improved compatibility with Google Colab and Python 3.12 environments.
+- Updated package acknowledgements and metadata in` __init__.py`.
+- No API changes.
+
+
 `Version 0.0.20`_
 ----------------------
 

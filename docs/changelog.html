@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.20 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.21 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=056c92e6"></script>
+      <script src="_static/documentation_options.js?v=a11416ff"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-21">Version 0.0.21</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-20">Version 0.0.20</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-s-changed">What’s Changed</a></li>
 </ul>
@@ -143,9 +144,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id18">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id19">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id20">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id21">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -179,6 +180,15 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-21">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.21/index.html">Version 0.0.21</a><a class="headerlink" href="#version-0-0-21" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed dependency resolution for Python 3.11+ by updating SciPy version constraints.</p></li>
+<li><p>Improved compatibility with Google Colab and Python 3.12 environments.</p></li>
+<li><p>Updated package acknowledgements and metadata in` __init__.py`.</p></li>
+<li><p>No API changes.</p></li>
+</ul>
+</section>
 <section id="version-0-0-20">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.20/index.html">Version 0.0.20</a><a class="headerlink" href="#version-0-0-20" title="Link to this heading"></a></h2>
 <section id="what-s-changed">
@@ -1120,8 +1130,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id18">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
+<section id="id19">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1139,8 +1149,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id19">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<section id="id20">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1222,8 +1232,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id20">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<section id="id21">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
