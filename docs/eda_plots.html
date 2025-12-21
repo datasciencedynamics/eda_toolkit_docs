@@ -68,6 +68,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#histogram-distribution-plots">Histogram Distribution Plots</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#plot_distributions"><code class="docutils literal notranslate"><span class="pre">plot_distributions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deprecation-notice">Deprecation Notice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#kde-and-histograms-example">KDE and Histograms Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#histogram-example-density">Histogram Example (Density)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#histogram-example-count">Histogram Example (Count)</a></li>
@@ -348,7 +349,44 @@ be specified. Saving is triggered by providing <code class="docutils literal not
 <code class="docutils literal notranslate"><span class="pre">single_var_image_filename</span></code>.</p>
 </div>
 <p></p>
-<br><section id="kde-and-histograms-example">
+<section id="deprecation-notice">
+<h2>Deprecation Notice<a class="headerlink" href="#deprecation-notice" title="Link to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> is deprecated and will be removed in a future release.
+Please use <code class="docutils literal notranslate"><span class="pre">plot_distributions</span></code> instead. The deprecated function is
+retained only as a thin wrapper for backward compatibility.</p>
+<p>If you continue to use <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code>, you will receive a
+<code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> indicating that the function is deprecated.</p>
+</div>
+<p>The following summarizes the key changes from <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> to
+<code class="docutils literal notranslate"><span class="pre">plot_distributions</span></code>:</p>
+<div class="admonition-updates admonition">
+<p class="admonition-title">Updates</p>
+<ul>
+<li><p><strong>Function rename and deprecation</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> is now deprecated and serves only as a wrapper.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_distributions</span></code> is the new canonical API.</p></li>
+<li><p>Density plotting is no longer limited to KDE.</p></li>
+<li><p>Added support for <strong>parametric density overlays</strong> using distributions from <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code>.</p></li>
+<li><p>New parameters introduced:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">density_function</span></code> to specify KDE and/or parametric distributions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">density_fit</span></code> to control the fitting method (<code class="docutils literal notranslate"><span class="pre">'MLE'</span></code> or <code class="docutils literal notranslate"><span class="pre">'MM'</span></code>).</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kde_color</span></code> has been replaced by <code class="docutils literal notranslate"><span class="pre">density_color</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">density_color=None</span></code>, density overlays use <strong>Matplotlib’s default line color</strong> (typically the standard Python blue, <code class="docutils literal notranslate"><span class="pre">C0</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_type</span></code> now supports <code class="docutils literal notranslate"><span class="pre">'hist'</span></code>, <code class="docutils literal notranslate"><span class="pre">'density'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'both'</span></code>.</p></li>
+<li><p>Density plots may consist of KDE, parametric fits, or a combination.</p></li>
+<li><p>Parameter ordering, naming conventions, and documentation style closely follow the original <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> API.</p></li>
+<li><p>Existing user code calling <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> continues to work without modification.</p></li>
+</ul>
+</div>
+<br></section>
+<section id="kde-and-histograms-example">
 <h2>KDE and Histograms Example<a class="headerlink" href="#kde-and-histograms-example" title="Link to this heading"></a></h2>
 <p>In the example below, the <code class="docutils literal notranslate"><span class="pre">plot_distributions</span></code> function is used to generate
 histograms for several variables of interest: <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;education-num&quot;</span></code>,

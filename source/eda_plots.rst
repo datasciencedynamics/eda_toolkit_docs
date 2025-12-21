@@ -220,6 +220,45 @@ shape, spread, and modality of numeric variables is critical.
 
 \
 
+Deprecation Notice
+--------------------------
+
+.. warning::
+
+    ``kde_distributions`` is deprecated and will be removed in a future release.
+    Please use ``plot_distributions`` instead. The deprecated function is
+    retained only as a thin wrapper for backward compatibility.
+
+    If you continue to use ``kde_distributions``, you will receive a
+    ``DeprecationWarning`` indicating that the function is deprecated.
+
+
+The following summarizes the key changes from ``kde_distributions`` to
+``plot_distributions``:
+
+.. admonition:: Updates
+
+    - **Function rename and deprecation**
+    
+    - ``kde_distributions`` is now deprecated and serves only as a wrapper.
+    - ``plot_distributions`` is the new canonical API.
+   
+    - Density plotting is no longer limited to KDE.
+    - Added support for **parametric density overlays** using distributions from ``scipy.stats``.
+    - New parameters introduced:
+        
+        - ``density_function`` to specify KDE and/or parametric distributions.
+        - ``density_fit`` to control the fitting method (``'MLE'`` or ``'MM'``).
+    
+    - ``kde_color`` has been replaced by ``density_color``.
+    - If ``density_color=None``, density overlays use **Matplotlib’s default line color** (typically the standard Python blue, ``C0``).
+   
+    - ``plot_type`` now supports ``'hist'``, ``'density'``, or ``'both'``.
+    - Density plots may consist of KDE, parametric fits, or a combination.   
+    - Parameter ordering, naming conventions, and documentation style closely follow the original ``kde_distributions`` API.
+    - Existing user code calling ``kde_distributions`` continues to work without modification.
+
+
 .. raw:: html
 
     <br>

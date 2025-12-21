@@ -2677,19 +2677,41 @@ in this script or notebook.</p>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">dfs_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span>
     <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
-Active DataFrames
-=================
-Current Active DataFrames:
-- df_main
-- df_tmp
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>──────────────────────────────────────── Active DataFrames ────────────────────────────────────────
+Current Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ _              │
+│ __             │
+│ ___            │
+│ df             │
+│ df_copy        │
+│ df_main        │
+│ df_tmp         │
+│ sampled_df     │
+└────────────────┘
+{&#39;active&#39;: [&#39;_&#39;,
+&#39;__&#39;,
+&#39;___&#39;,
+&#39;df&#39;,
+&#39;df_copy&#39;,
+&#39;df_main&#39;,
+&#39;df_tmp&#39;,
+&#39;sampled_df&#39;],
+&#39;to_delete&#39;: [],
+&#39;deleted&#39;: [],
+&#39;remaining&#39;: [],
+&#39;used_rich&#39;: True,
+&#39;memory&#39;: None}
 </pre></div>
 </div>
 </section>
@@ -2702,37 +2724,112 @@ Current Active DataFrames:
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">dfs_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span>
     <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
-Active DataFrames
-=================
-Current Active DataFrames:
-- df_main
-- df_tmp
-
-=================
-Planned Deletions
-=================
-DataFrames Marked for Deletion:
-- df_tmp
-
-==================
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>──────────────────────────────────────── Active DataFrames ────────────────────────────────────────
+Current Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ X              │
+│ X_fixed        │
+│ X_global       │
+│ data           │
+│ df             │
+│ df_impute      │
+│ df_main        │
+│ df_strip       │
+│ df_table1_cat  │
+│ df_tmp         │
+│ filtered_df    │
+│ y              │
+└────────────────┘
+──────────────────────────────────────── Planned Deletions ────────────────────────────────────────
+DataFrames Marked
+for Deletion
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ X              │
+│ X_fixed        │
+│ X_global       │
+│ data           │
+│ df_impute      │
+│ df_main        │
+│ df_strip       │
+│ df_table1_cat  │
+│ df_tmp         │
+│ filtered_df    │
+│ y              │
+└────────────────┘
+──────────────────────────────────────── Deleted DataFrames ────────────────────────────────────────
 Deleted DataFrames
-==================
-Deleted DataFrames:
-- df_tmp
-
-====================
-Remaining DataFrames
-====================
-Remaining Active DataFrames:
-- df_main
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ X              │
+│ X_fixed        │
+│ X_global       │
+│ data           │
+│ df_impute      │
+│ df_main        │
+│ df_strip       │
+│ df_table1_cat  │
+│ df_tmp         │
+│ filtered_df    │
+│ y              │
+└────────────────┘
+─────────────────────────────────────── Remaining DataFrames ───────────────────────────────────────
+Remaining Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df             │
+└────────────────┘
+{&#39;active&#39;: [&#39;X&#39;,
+&#39;X_fixed&#39;,
+&#39;X_global&#39;,
+&#39;data&#39;,
+&#39;df&#39;,
+&#39;df_impute&#39;,
+&#39;df_main&#39;,
+&#39;df_strip&#39;,
+&#39;df_table1_cat&#39;,
+&#39;df_tmp&#39;,
+&#39;filtered_df&#39;,
+&#39;y&#39;],
+&#39;to_delete&#39;: [&#39;X&#39;,
+&#39;X_fixed&#39;,
+&#39;X_global&#39;,
+&#39;data&#39;,
+&#39;df_impute&#39;,
+&#39;df_main&#39;,
+&#39;df_strip&#39;,
+&#39;df_table1_cat&#39;,
+&#39;df_tmp&#39;,
+&#39;filtered_df&#39;,
+&#39;y&#39;],
+&#39;deleted&#39;: [&#39;X&#39;,
+&#39;X_fixed&#39;,
+&#39;X_global&#39;,
+&#39;data&#39;,
+&#39;df_impute&#39;,
+&#39;df_main&#39;,
+&#39;df_strip&#39;,
+&#39;df_table1_cat&#39;,
+&#39;df_tmp&#39;,
+&#39;filtered_df&#39;,
+&#39;y&#39;],
+&#39;remaining&#39;: [&#39;df&#39;],
+&#39;used_rich&#39;: True,
+&#39;memory&#39;: None}
 </pre></div>
 </div>
 </section>
@@ -2745,7 +2842,7 @@ Remaining Active DataFrames:
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">dfs_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span>
     <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
@@ -2753,26 +2850,60 @@ Remaining Active DataFrames:
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
-Active DataFrames
-=================
-Current Active DataFrames:
-- df_main
-- df_tmp
-
-=================
-Planned Deletions
-=================
-DataFrames Marked for Deletion:
-- df_tmp
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>──────────────────────────────────────── Active DataFrames ────────────────────────────────────────
+Current Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ __             │
+│ ___            │
+│ df             │
+│ df_copy        │
+│ df_main        │
+│ df_tmp         │
+│ sampled_df     │
+└────────────────┘
+──────────────────────────────────────── Planned Deletions ────────────────────────────────────────
+DataFrames Marked
+for Deletion
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ __             │
+│ ___            │
+│ df_copy        │
+│ df_main        │
+│ df_tmp         │
+│ sampled_df     │
+└────────────────┘
 Dry run enabled. No DataFrames were deleted.
-
-====================
-Remaining DataFrames
-====================
-Remaining Active DataFrames:
-- df_main
-- df_tmp
+─────────────────────────────────────── Remaining DataFrames ───────────────────────────────────────
+Remaining Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ __             │
+│ ___            │
+│ df             │
+│ df_copy        │
+│ df_main        │
+│ df_tmp         │
+│ sampled_df     │
+└────────────────┘
+{&#39;active&#39;: [&#39;__&#39;, &#39;___&#39;, &#39;df&#39;, &#39;df_copy&#39;, &#39;df_main&#39;, &#39;df_tmp&#39;, &#39;sampled_df&#39;],
+&#39;to_delete&#39;: [&#39;__&#39;, &#39;___&#39;, &#39;df_copy&#39;, &#39;df_main&#39;, &#39;df_tmp&#39;, &#39;sampled_df&#39;],
+&#39;deleted&#39;: [],
+&#39;remaining&#39;: [&#39;__&#39;,
+&#39;___&#39;,
+&#39;df&#39;,
+&#39;df_copy&#39;,
+&#39;df_main&#39;,
+&#39;df_tmp&#39;,
+&#39;sampled_df&#39;],
+&#39;used_rich&#39;: True,
+&#39;memory&#39;: None}
 </pre></div>
 </div>
 <p>This mode is recommended before running destructive cleanup steps.</p>
@@ -2789,7 +2920,7 @@ DataFrames. These are ignored by default but can be included explicitly.</p>
 <span class="n">_</span> <span class="o">=</span> <span class="n">df_tmp</span>  <span class="c1"># simulates an IPython output cache reference</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">dfs_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span>
     <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">include_ipython_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
@@ -2797,33 +2928,59 @@ DataFrames. These are ignored by default but can be included explicitly.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
-Active DataFrames
-=================
-Current Active DataFrames:
-- _
-- df_main
-- df_tmp
-
-=================
-Planned Deletions
-=================
-DataFrames Marked for Deletion:
-- _
-- df_tmp
-
-==================
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>──────────────────────────────────────── Active DataFrames ────────────────────────────────────────
+Current Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ _              │
+│ _10            │
+│ _19            │
+│ _8             │
+│ df             │
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+──────────────────────────────────────── Planned Deletions ────────────────────────────────────────
+DataFrames Marked
+for Deletion
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ _              │
+│ _10            │
+│ _19            │
+│ _8             │
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+──────────────────────────────────────── Deleted DataFrames ────────────────────────────────────────
 Deleted DataFrames
-==================
-Deleted DataFrames:
-- _
-- df_tmp
-
-====================
-Remaining DataFrames
-====================
-Remaining Active DataFrames:
-- df_main
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ _              │
+│ _10            │
+│ _19            │
+│ _8             │
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+─────────────────────────────────────── Remaining DataFrames ───────────────────────────────────────
+Remaining Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df             │
+└────────────────┘
+{&#39;active&#39;: [&#39;_&#39;, &#39;_10&#39;, &#39;_19&#39;, &#39;_8&#39;, &#39;df&#39;, &#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;to_delete&#39;: [&#39;_&#39;, &#39;_10&#39;, &#39;_19&#39;, &#39;_8&#39;, &#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;deleted&#39;: [&#39;_&#39;, &#39;_10&#39;, &#39;_19&#39;, &#39;_8&#39;, &#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;remaining&#39;: [&#39;df&#39;],
+&#39;used_rich&#39;: True,
+&#39;memory&#39;: None}
 </pre></div>
 </div>
 </section>
@@ -2836,7 +2993,7 @@ Remaining Active DataFrames:
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">dfs_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span>
     <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">track_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">namespace</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span>
@@ -2844,49 +3001,70 @@ Remaining Active DataFrames:
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
-Active DataFrames
-=================
-Current Active DataFrames:
-- df_main
-- df_tmp
-
-=================
-Planned Deletions
-=================
-DataFrames Marked for Deletion:
-- df_tmp
-
-==================
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>──────────────────────────────────────── Active DataFrames ────────────────────────────────────────
+Current Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df             │
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+──────────────────────────────────────── Planned Deletions ────────────────────────────────────────
+DataFrames Marked
+for Deletion
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+──────────────────────────────────────── Deleted DataFrames ────────────────────────────────────────
 Deleted DataFrames
-==================
-Deleted DataFrames:
-- df_tmp
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+─────────────────────────────────────── Remaining DataFrames ───────────────────────────────────────
+Remaining Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df             │
+└────────────────┘
+────────────────────────────────────────────── Memory ──────────────────────────────────────────────
+            Memory Usage (MB)
+┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃ Metric           ┃ Before ┃ After ┃ Delta ┃
+┡━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ DataFrames total │   30.2 │  30.2 │  -0.0 │
+└──────────────────┴────────┴───────┴───────┘
+{&#39;active&#39;: [&#39;df&#39;, &#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;to_delete&#39;: [&#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;deleted&#39;: [&#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;remaining&#39;: [&#39;df&#39;],
+&#39;used_rich&#39;: True,
+&#39;memory&#39;: {&#39;dataframes_mb&#39;: {&#39;before&#39;: 30.237445831298828,
+&#39;after&#39;: 30.23635482788086,
+&#39;delta&#39;: -0.00109100341796875},
+&#39;mode&#39;: &#39;dataframes&#39;}}
 
-====================
-Remaining DataFrames
-====================
-Remaining Active DataFrames:
-- df_main
-
-=================
-Memory Usage (MB)
-=================
-DataFrames total: 0.0 -&gt; 0.0 (-0.0)
+This mode uses ``pandas.DataFrame.memory_usage(deep=True)`` for reporting.
 </pre></div>
 </div>
-<p>This mode uses <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame.memory_usage(deep=True)</span></code> for reporting.</p>
 </section>
 <section id="example-6-track-dataframe-memory-and-process-rss">
 <h3>Example 6: Track DataFrame Memory and Process RSS<a class="headerlink" href="#example-6-track-dataframe-memory-and-process-rss" title="Link to this heading"></a></h3>
 <p>Enable power-user memory tracking, including process-level RSS when available.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
-
-<span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
 
 <span class="n">del_inactive_dataframes</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;df_main&quot;</span><span class="p">],</span>
+    <span class="n">dfs_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span>
     <span class="n">del_dataframes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">track_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">memory_mode</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
@@ -2895,36 +3073,59 @@ DataFrames total: 0.0 -&gt; 0.0 (-0.0)
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=================
-Active DataFrames
-=================
-Current Active DataFrames:
-- df_main
-- df_tmp
-
-=================
-Planned Deletions
-=================
-DataFrames Marked for Deletion:
-- df_tmp
-
-==================
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>──────────────────────────────────────── Active DataFrames ────────────────────────────────────────
+Current Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df             │
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+──────────────────────────────────────── Planned Deletions ────────────────────────────────────────
+DataFrames Marked
+for Deletion
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+──────────────────────────────────────── Deleted DataFrames ────────────────────────────────────────
 Deleted DataFrames
-==================
-Deleted DataFrames:
-- df_tmp
-
-====================
-Remaining DataFrames
-====================
-Remaining Active DataFrames:
-- df_main
-
-=================
-Memory Usage (MB)
-=================
-Process RSS: 189.0 -&gt; 189.0 (+0.0)
-DataFrames total: 0.0 -&gt; 0.0 (-0.0)
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df_main        │
+│ df_tmp         │
+└────────────────┘
+─────────────────────────────────────── Remaining DataFrames ───────────────────────────────────────
+Remaining Active
+    DataFrames
+┏━━━━━━━━━━━━━━━━┓
+┃ DataFrame Name ┃
+┡━━━━━━━━━━━━━━━━┩
+│ df             │
+└────────────────┘
+────────────────────────────────────────────── Memory ──────────────────────────────────────────────
+            Memory Usage (MB)
+┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃ Metric           ┃ Before ┃ After ┃ Delta ┃
+┡━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ Process RSS      │  403.6 │ 403.6 │  +0.0 │
+│ DataFrames total │   30.2 │  30.2 │  -0.0 │
+└──────────────────┴────────┴───────┴───────┘
+{&#39;active&#39;: [&#39;df&#39;, &#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;to_delete&#39;: [&#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;deleted&#39;: [&#39;df_main&#39;, &#39;df_tmp&#39;],
+&#39;remaining&#39;: [&#39;df&#39;],
+&#39;used_rich&#39;: True,
+&#39;memory&#39;: {&#39;dataframes_mb&#39;: {&#39;before&#39;: 30.237445831298828,
+&#39;after&#39;: 30.23635482788086,
+&#39;delta&#39;: -0.00109100341796875},
+&#39;mode&#39;: &#39;all&#39;,
+&#39;process_mb&#39;: {&#39;before&#39;: 403.5546875, &#39;after&#39;: 403.5546875, &#39;delta&#39;: 0.0}}}
 </pre></div>
 </div>
 <p>Process RSS reporting requires <code class="docutils literal notranslate"><span class="pre">psutil</span></code> and may not immediately decrease
