@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.23 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.24 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=4ab1abf8"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=81383b35"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -92,6 +92,14 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-24">Version 0.0.24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enhancements">Enhancements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dependency-updates">Dependency Updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#infrastructure">Infrastructure</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-23">Version 0.0.23</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-22">Version 0.0.22</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-21">Version 0.0.21</a></li>
@@ -127,9 +135,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id21">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id22">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id23">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id24">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -162,6 +170,49 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-24">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.24/index.html">Version 0.0.24</a><a class="headerlink" href="#version-0-0-24" title="Permalink to this heading"></a></h2>
+<section id="new-features">
+<h3>New Features<a class="headerlink" href="#new-features" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">detect_outliers()</span></code>: New batch outlier detection function supporting
+IQR, Z-score, and Isolation Forest methods with <code class="docutils literal notranslate"><span class="pre">groupby</span></code>, <code class="docutils literal notranslate"><span class="pre">flag_col</span></code>,
+<code class="docutils literal notranslate"><span class="pre">return_mask</span></code>, <code class="docutils literal notranslate"><span class="pre">return_bounds</span></code>, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> parameters</p></li>
+</ul>
+</section>
+<section id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">read_csv_with_progress()</span></code>: Added <code class="docutils literal notranslate"><span class="pre">chunksize</span></code>, <code class="docutils literal notranslate"><span class="pre">low_memory</span></code>, and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>
+passthrough to <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code></p></li>
+</ul>
+</section>
+<section id="bug-fixes">
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code>: Fixed title misalignment, <code class="docutils literal notranslate"><span class="pre">-0.00</span></code> display artifact,
+diagonal now shows <code class="docutils literal notranslate"><span class="pre">1.00</span></code> in both stars and mask modes; fixed <code class="docutils literal notranslate"><span class="pre">abs()</span></code> stripping
+negative signs from significance annotations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">detect_outliers()</span></code>: Added <code class="docutils literal notranslate"><span class="pre">observed=True</span></code> to <code class="docutils literal notranslate"><span class="pre">groupby</span></code> calls to silence
+pandas <code class="docutils literal notranslate"><span class="pre">FutureWarning</span></code></p></li>
+</ul>
+</section>
+<section id="dependency-updates">
+<h3>Dependency Updates<a class="headerlink" href="#dependency-updates" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Removed upper caps on <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>, and <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> to prevent
+Colab downgrades</p></li>
+</ul>
+</section>
+<section id="infrastructure">
+<h3>Infrastructure<a class="headerlink" href="#infrastructure" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_data_manager_utils.py</span></code>: Extracted <code class="docutils literal notranslate"><span class="pre">_flag_iqr</span></code> and <code class="docutils literal notranslate"><span class="pre">_flag_zscore</span></code> helpers</p></li>
+<li><p>new pytest tests added across <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code>, <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code>, and <code class="docutils literal notranslate"><span class="pre">read_csv_with_progress</span></code></p></li>
+<li><p>README stripped to lean landing page</p></li>
+</ul>
+</section>
+</section>
 <section id="version-0-0-23">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.23/index.html">Version 0.0.23</a><a class="headerlink" href="#version-0-0-23" title="Permalink to this heading"></a></h2>
 <ul class="simple">
@@ -173,7 +224,7 @@
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> ls by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/124">https://github.com/datasciencedynamics/eda_toolkit/pull/124</a></p></li>
 <li><p>add <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code> with iqr/zscore/isoforest by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/125">https://github.com/datasciencedynamics/eda_toolkit/pull/125</a></p></li>
 </ul>
-<p><strong>Full Changelog</strong>: <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22...0.0.23">https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22…0.0.23</a></p>
+<p><strong>Full Changelog</strong>: <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22...0.0.24">https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22…0.0.24</a></p>
 </section>
 <section id="version-0-0-22">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.22/index.html">Version 0.0.22</a><a class="headerlink" href="#version-0-0-22" title="Permalink to this heading"></a></h2>
@@ -1111,8 +1162,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id21">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h2>
+<section id="id22">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1130,8 +1181,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id22">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h2>
+<section id="id23">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1213,8 +1264,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id23">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h2>
+<section id="id24">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
