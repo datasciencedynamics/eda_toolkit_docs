@@ -99,22 +99,21 @@ Prerequisites
 
 Before you install ``eda_toolkit``, ensure your system meets the following requirements:
 
-- **Python**: version ``3.7.4`` or higher is required to run ``eda_toolkit``.
+- **Python**: Version ``3.8`` or higher.
 
 Additionally, ``eda_toolkit`` depends on the following packages, which will be automatically installed when you install ``eda_toolkit``:
 
-- ``jinja2``: version ``3.1.4`` (exact version required)
-- ``matplotlib``: version ``3.5.3`` or higher, capped at ``3.9.2``
-- ``nbformat``: version ``4.2.0`` or higher, capped at ``5.10.4``
-- ``numpy``: version ``1.21.6`` or higher, capped at ``2.1.0``
-- ``pandas``: version ``1.3.5`` or higher, capped at ``2.2.3``
-- ``plotly``: version ``5.18.0`` or higher, capped at ``5.24.0``
-- ``scikit-learn``: version ``1.0.2`` or higher, capped at ``1.5.2``
-- ``scipy``: version ``1.5.4`` or higher, capped at ``1.7.3``
-- ``seaborn``: version ``0.12.2`` or higher, capped below ``0.13.2``
-- ``tqdm``: version ``4.66.4`` or higher, capped below ``4.67.1``
-- ``xlsxwriter``: version ``3.2.0`` (exact version required)
-
+- **jinja2**: version ``3.0.0`` or higher
+- **matplotlib**: version ``3.5.3`` or higher, but capped at ``3.9.2``
+- **nbformat**: version ``4.2.0`` or higher, but capped at ``5.10.4``
+- **numpy**: version ``1.21.6`` or higher, but capped at ``2.1.2``
+- **pandas**: version ``1.3.5`` or higher, but capped at ``2.2.3``
+- **plotly**: version ``5.18.0`` or higher, but capped at ``5.24.1``
+- **scikit-learn**: version ``1.0.2`` or higher, but capped at ``1.5.2``
+- **scipy**: version ``1.7.3`` or higher
+- **seaborn**: version ``0.12.2`` or higher, but capped at ``0.13.2``
+- **tqdm**: version ``4.66.4`` or higher, but capped at ``4.67.1``
+- **xlsxwriter**: version ``3.2.0`` (Exact version required)
 
 Installation
 --------------
