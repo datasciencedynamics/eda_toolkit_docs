@@ -24,47 +24,6 @@
 Changelog
 ==========
 
-`Version 0.0.24`_
-----------------------
-
-.. _Version 0.0.24: https://lshpaner.github.io/eda_toolkit_docs/v0.0.24/index.html
-
-New Features
-^^^^^^^^^^^^^^^^^
-
-- ``detect_outliers()``: New batch outlier detection function supporting
-  IQR, Z-score, and Isolation Forest methods with ``groupby``, ``flag_col``,
-  ``return_mask``, ``return_bounds``, and ``verbose`` parameters
-
-Enhancements
-^^^^^^^^^^^^^^^^^
-
-- ``read_csv_with_progress()``: Added ``chunksize``, ``low_memory``, and ``**kwargs``
-  passthrough to ``pd.read_csv``
-
-Bug Fixes
-^^^^^^^^^^^^^^^^^
-
-- ``flex_corr_matrix()``: Fixed title misalignment, ``-0.00`` display artifact,
-  diagonal now shows ``1.00`` in both stars and mask modes; fixed ``abs()`` stripping
-  negative signs from significance annotations
-- ``detect_outliers()``: Added ``observed=True`` to ``groupby`` calls to silence
-  pandas ``FutureWarning``
-
-Dependency Updates
-^^^^^^^^^^^^^^^^^^^
-
-- Removed upper caps on ``matplotlib``, ``scikit-learn``, and ``tqdm`` to prevent
-  Colab downgrades
-
-Infrastructure
-^^^^^^^^^^^^^^^^^
-
-- ``_data_manager_utils.py``: Extracted ``_flag_iqr`` and ``_flag_zscore`` helpers
--  new pytest tests added across ``detect_outliers``, ``flex_corr_matrix``, and ``read_csv_with_progress``
-- README stripped to lean landing page
-
-
 `Version 0.0.23`_
 ----------------------
 
@@ -79,7 +38,7 @@ Infrastructure
 * add ``detect_outliers`` with iqr/zscore/isoforest by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/125
 
 
-**Full Changelog**: https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22...0.0.24
+**Full Changelog**: https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22...0.0.23
 
 
 `Version 0.0.22`_
