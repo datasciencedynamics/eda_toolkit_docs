@@ -716,3 +716,132 @@ Practical Considerations
 
 Because of these properties, ECDFs are a foundational tool in exploratory data
 analysis and serve as a robust complement to density-based visualizations.
+
+.. _outlier_detection_theory:
+
+Outlier Detection Methods
+--------------------------
+
+The :func:`detect_outliers` function supports three classical methods for
+identifying anomalous observations in numeric data. Each method operates
+on a different statistical principle and is suited to different data
+characteristics.
+
+Interquartile Range (IQR)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The **IQR method** flags values that fall beyond a fixed multiple of the
+interquartile range from the first and third quartiles. For a feature
+:math:`X` with quartiles :math:`Q_1` and :math:`Q_3`, the IQR is defined
+as:
+
+.. math::
+
+    \text{IQR} = Q_3 - Q_1
+
+The lower and upper outlier bounds are:
+
+.. math::
+
+    L = Q_1 - k \cdot \text{IQR}, \qquad U = Q_3 + k \cdot \text{IQR}
+
+where :math:`k` is the threshold multiplier (default :math:`k = 1.5`,
+known as Tukey's fences). A value :math:`x` is flagged as an outlier if:
+
+.. math::
+
+    x < L \quad \text{or} \quad x > U
+
+Setting :math:`k = 3.0` identifies only extreme outliers. The IQR method
+is non-parametric and robust to non-normal distributions since it depends
+only on order statistics rather than the mean or variance.
+
+Z-Score
+^^^^^^^
+
+The **Z-score method** measures how many standard deviations an observation
+lies from the mean. For a feature :math:`X` with mean :math:`\mu` and
+standard deviation :math:`\sigma`, the Z-score of an observation :math:`x`
+is:
+
+.. math::
+
+    z = \frac{x - \mu}{\sigma}
+
+An observation is flagged as an outlier if:
+
+.. math::
+
+    |z| > t
+
+where :math:`t` is the threshold (commonly :math:`t = 3.0`). The
+corresponding lower and upper bounds are:
+
+.. math::
+
+    L = \mu - t \cdot \sigma, \qquad U = \mu + t \cdot \sigma
+
+The Z-score method assumes the data is approximately normally distributed.
+It is sensitive to extreme values since both :math:`\mu` and :math:`\sigma`
+are themselves influenced by outliers. For this reason, the IQR method is
+often preferred for skewed or heavy-tailed distributions.
+
+Isolation Forest
+^^^^^^^^^^^^^^^^^
+
+**Isolation Forest** [1]_ is a tree-based anomaly
+detection algorithm that exploits the observation that outliers are few and
+different; they are easier to isolate than normal observations. The
+algorithm builds an ensemble of isolation trees by recursively partitioning
+the feature space using random splits.
+
+For an observation :math:`x`, the anomaly score is defined as:
+
+.. math::
+
+    s(x, n) = 2^{-\dfrac{\mathbb{E}[h(x)]}{c(n)}}
+
+where :math:`h(x)` is the path length of :math:`x` in an isolation tree,
+:math:`\mathbb{E}[h(x)]` is the average path length across all trees in the
+ensemble, and :math:`c(n)` is the average path length of an unsuccessful
+search in a Binary Search Tree of :math:`n` samples:
+
+.. math::
+
+    c(n) = 2H(n - 1) - \frac{2(n - 1)}{n}
+
+where :math:`H(i)` is the harmonic number. Scores close to 1 indicate
+anomalies; scores near 0.5 indicate normal observations. The
+``contamination`` parameter sets the proportion of observations expected
+to have scores above the decision threshold.
+
+Unlike IQR and Z-score, Isolation Forest is **multivariate**; it evaluates
+all features simultaneously and flags rows rather than individual feature
+values. As a result, every flagged row receives the same outlier flag across
+all features, and no explicit lower or upper bounds are computed (reported
+as ``"N/A"`` in the summary output).
+
+.. list-table:: Comparison of Outlier Detection Methods
+   :widths: 20 25 25 30
+   :header-rows: 1
+
+   * - Method
+     - Approach
+     - Bounds
+     - Best suited for
+   * - IQR
+     - Univariate, order-based
+     - Explicit
+     - Skewed or non-normal data
+   * - Z-score
+     - Univariate, parametric
+     - Explicit
+     - Approximately normal data
+   * - Isolation Forest
+     - Multivariate, tree-based
+     - N/A
+     - High-dimensional, complex patterns
+
+.. [1] Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). Isolation Forest.
+   *2008 Eighth IEEE International Conference on Data Mining*, 413–422.
+   https://doi.org/10.1109/ICDM.2008.17

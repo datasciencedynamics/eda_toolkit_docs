@@ -6,9 +6,9 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to the EDA Toolkit Python Library Documentation! &mdash; EDA Toolkit 0.0.22 documentation</title>
+  <title>Welcome to the EDA Toolkit Python Library Documentation! &mdash; EDA Toolkit 0.0.23 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -17,9 +17,9 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/documentation_options.js?v=3294188c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="_static/copybutton.js?v=a0ccc04e"></script>
       <script src="_static/custom.js?v=fecc5f50"></script>
@@ -81,6 +81,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#outlier-detection-methods">Outlier Detection Methods</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul>
@@ -121,7 +122,7 @@
 <h1>Welcome to the EDA Toolkit Python Library Documentation!<a class="headerlink" href="#welcome-to-the-eda-toolkit-python-library-documentation" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This documentation is for <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> version <code class="docutils literal notranslate"><span class="pre">0.0.22</span></code>.</p>
+<p>This documentation is for <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> version <code class="docutils literal notranslate"><span class="pre">0.0.23</span></code>.</p>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> is a comprehensive library designed to streamline and
 enhance the process of Exploratory Data Analysis (EDA) for data scientists,
@@ -264,7 +265,12 @@ information for demonstrating the functionalities of the <code class="docutils l
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#ensure_directory"><code class="docutils literal notranslate"><span class="pre">ensure_directory()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="data_management.html#adding-unique-identifiers">Adding Unique Identifiers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_management.html#reading-csv-files-with-progress-bar">Reading CSV Files with Progress Bar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#read_csv_with_progress"><code class="docutils literal notranslate"><span class="pre">read_csv_with_progress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_management.html#id1">Adding Unique Identifiers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#add_ids"><code class="docutils literal notranslate"><span class="pre">add_ids()</span></code></a></li>
 </ul>
 </li>
@@ -276,11 +282,16 @@ information for demonstrating the functionalities of the <code class="docutils l
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#parse_date_with_rule"><code class="docutils literal notranslate"><span class="pre">parse_date_with_rule()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="data_management.html#outlier-detection">Outlier Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#detect_outliers"><code class="docutils literal notranslate"><span class="pre">detect_outliers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-1-basic-iqr-outlier-detection">Example 1: Basic IQR outlier detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-2-within-group-detection-using-groupby">Example 2: Within-group detection using <code class="docutils literal notranslate"><span class="pre">groupby</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-3-z-score-outlier-detection">Example 3: Z-Score Outlier Detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-4-isolation-forest-outlier-detection">Example 4: Isolation Forest Outlier Detection</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#dataframe-analysis">DataFrame Analysis</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#dataframe_profiler"><code class="docutils literal notranslate"><span class="pre">dataframe_profiler()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#census-income-example">Census Income Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#dataframe-column-names">DataFrame Column Names</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#calculation-details">Calculation Details</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#generating-summary-tables-for-variable-combinations">Generating Summary Tables for Variable Combinations</a><ul>
@@ -297,9 +308,6 @@ information for demonstrating the functionalities of the <code class="docutils l
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#generating-summaries-table-1">Generating Summaries (Table 1)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#generate_table1"><code class="docutils literal notranslate"><span class="pre">generate_table1()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-1-mixed-summary-table-value-counts-false">Example 1: Mixed Summary Table <code class="docutils literal notranslate"><span class="pre">(value_counts=False)</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-2-mixed-summary-table-value-counts-true">Example 2: Mixed Summary Table <code class="docutils literal notranslate"><span class="pre">(value_counts=True)</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-3-group-comparisons-p-values">Example 3: Group Comparisons (<em>P</em>-Values)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#highlighting-specific-columns-in-a-dataframe">Highlighting Specific Columns in a DataFrame</a><ul>
@@ -309,18 +317,10 @@ information for demonstrating the functionalities of the <code class="docutils l
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#binning-numerical-columns">Binning Numerical Columns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#group-by-imputer">Group-by Imputer</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#groupby_imputer"><code class="docutils literal notranslate"><span class="pre">groupby_imputer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#group-wise-imputation-examples">Group-wise Imputation Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#delete-inactive-dataframes">Delete Inactive DataFrames</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#del_inactive_dataframes"><code class="docutils literal notranslate"><span class="pre">del_inactive_dataframes()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-1-list-active-dataframes-no-deletion">Example 1: List Active DataFrames (No Deletion)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-2-delete-everything-except-a-single-dataframe">Example 2: Delete Everything Except a Single DataFrame</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-3-dry-run-preview-deletions">Example 3: Dry Run (Preview Deletions)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-4-include-ipython-output-cache-variables">Example 4: Include IPython Output Cache Variables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-5-track-dataframe-memory-usage">Example 5: Track DataFrame Memory Usage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-6-track-dataframe-memory-and-process-rss">Example 6: Track DataFrame Memory and Process RSS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_management.html#example-7-programmatic-usage-no-console-output">Example 7: Programmatic Usage (No Console Output)</a></li>
 </ul>
 </li>
 </ul>
@@ -416,6 +416,7 @@ information for demonstrating the functionalities of the <code class="docutils l
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#flex_corr_matrix"><code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#triangular-correlation-matrix-example">Triangular Correlation Matrix Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#correlation-matrix-with-significance-overlay">Correlation Matrix with Significance Overlay</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#full-correlation-matrix-example">Full Correlation Matrix Example</a></li>
 </ul>
 </li>
@@ -471,6 +472,12 @@ information for demonstrating the functionalities of the <code class="docutils l
 <li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#id3">Practical Considerations</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#outlier-detection-methods">Outlier Detection Methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#interquartile-range-iqr">Interquartile Range (IQR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#z-score">Z-Score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#isolation-forest">Isolation Forest</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -490,6 +497,7 @@ information for demonstrating the functionalities of the <code class="docutils l
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-23">Version 0.0.23</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-22">Version 0.0.22</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-21">Version 0.0.21</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-20">Version 0.0.20</a><ul>
@@ -564,7 +572,7 @@ information for demonstrating the functionalities of the <code class="docutils l
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Leonid Shpaner, Oscar Gil.</p>
+    <p>&#169; Copyright 2024, Leon Shpaner, Oscar Gil.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

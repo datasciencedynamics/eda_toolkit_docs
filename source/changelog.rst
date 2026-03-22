@@ -24,6 +24,21 @@
 Changelog
 ==========
 
+`Version 0.0.23`_
+----------------------
+
+* enhance ``stacked_crosstab_plot`` params & visuals by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/119
+* fix deps, bump python floor to 3.8 by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/120
+* fix: patch ``box_violin_plot`` bugs and add features by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/121
+* (+) ``read_csv_with_progress`` by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/122
+* enhance ``flex_corr_matrix`` with sig & filters by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/123
+* Fix ``generate_table1`` ls by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/124
+* add ``detect_outliers`` with iqr/zscore/isoforest by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/125
+
+
+**Full Changelog**: https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22...0.0.23
+
+
 `Version 0.0.22`_
 ----------------------
 

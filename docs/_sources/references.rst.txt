@@ -27,3 +27,5 @@ References
 2. Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. `https://doi.org/10.24432/C5GP7S <https://doi.org/10.24432/C5GP7S>`_.
 
 3. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. `https://doi.org/10.21105/joss.03021 <https://doi.org/10.21105/joss.03021>`_.
+
+4. Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). *Isolation Forest*. *2008 Eighth IEEE International Conference on Data Mining*, 413–422. `https://doi.org/10.1109/ICDM.2008.17 <https://doi.org/10.1109/ICDM.2008.17>`_.

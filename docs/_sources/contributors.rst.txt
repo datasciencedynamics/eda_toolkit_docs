@@ -37,7 +37,7 @@ Contributors/Maintainers
 
    </div>
 
-`Leon Shpaner <https://github.com/lshpaner>`_ (publishes academically as Leonid Shpaner) is a Data Scientist at UCLA Health. With over 15 years of experience in analytics and teaching, he has worked across healthcare, financial services, education, and personal development. He serves as an adjunct professor at various institutions, including the University of San Diego, where he teaches statistics and machine learning using Python in the M.S. in Applied Artificial Intelligence program.
+`Leon Shpaner <https://github.com/lshpaner>`_ (publishes academically as Leonid Shpaner) is a Data Scientist at UCLA Health. With over 15 years of experience in analytics and teaching, he has worked across healthcare, financial services, education, and personal development. He serves as an adjunct professor at various institutions, including the University of San Diego, where he teaches statistics and machine learning using Python in the M.S. in Applied Artificial Intelligence program. Leon holds a Master of Science in Applied Data Science from the University of San Diego.
 
 .. raw:: html
 

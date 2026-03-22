@@ -6,9 +6,9 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.22 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.23 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -17,13 +17,13 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/documentation_options.js?v=3294188c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="_static/copybutton.js?v=a0ccc04e"></script>
       <script src="_static/custom.js?v=fecc5f50"></script>
-      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -83,6 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#outlier-detection-methods">Outlier Detection Methods</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul class="current">
@@ -91,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-23">Version 0.0.23</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-22">Version 0.0.22</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-21">Version 0.0.21</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-20">Version 0.0.20</a><ul>
@@ -181,6 +183,19 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-23">
+<h2><a class="reference internal" href="#version-0-0-23">Version 0.0.23</a><a class="headerlink" href="#version-0-0-23" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>enhance <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> params &amp; visuals by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/119">https://github.com/datasciencedynamics/eda_toolkit/pull/119</a></p></li>
+<li><p>fix deps, bump python floor to 3.8 by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/120">https://github.com/datasciencedynamics/eda_toolkit/pull/120</a></p></li>
+<li><p>fix: patch <code class="docutils literal notranslate"><span class="pre">box_violin_plot</span></code> bugs and add features by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/121">https://github.com/datasciencedynamics/eda_toolkit/pull/121</a></p></li>
+<li><p>(+) <code class="docutils literal notranslate"><span class="pre">read_csv_with_progress</span></code> by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/122">https://github.com/datasciencedynamics/eda_toolkit/pull/122</a></p></li>
+<li><p>enhance <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code> with sig &amp; filters by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/123">https://github.com/datasciencedynamics/eda_toolkit/pull/123</a></p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> ls by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/124">https://github.com/datasciencedynamics/eda_toolkit/pull/124</a></p></li>
+<li><p>add <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code> with iqr/zscore/isoforest by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/125">https://github.com/datasciencedynamics/eda_toolkit/pull/125</a></p></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22...0.0.23">https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22…0.0.23</a></p>
+</section>
 <section id="version-0-0-22">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.22/index.html">Version 0.0.22</a><a class="headerlink" href="#version-0-0-22" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -1277,7 +1292,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Leonid Shpaner, Oscar Gil.</p>
+    <p>&#169; Copyright 2024, Leon Shpaner, Oscar Gil.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

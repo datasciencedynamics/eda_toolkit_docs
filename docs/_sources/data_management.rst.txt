@@ -107,6 +107,74 @@ directories do not exist, the function creates them.
 
 .. _Adding_Unique_Identifiers:
 
+Reading CSV Files with Progress Bar
+------------------------------------
+
+.. function:: read_csv_with_progress(file_path, nrows=None, chunksize=10000, low_memory=False, **kwargs)
+
+   Read a CSV file in chunks with a ``tqdm`` progress bar. Optionally
+   limit the number of rows read and pass any additional keyword arguments
+   directly to ``pandas.read_csv``.
+
+   :param file_path: Path to the CSV file.
+   :type file_path: str
+
+   :param nrows: If specified, limits the number of rows read.
+   :type nrows: int, optional
+
+   :param chunksize: Number of rows per chunk. Default is ``10,000``.
+   :type chunksize: int, optional
+
+   :param low_memory: If ``False``, disables mixed-type inference for
+      better dtype consistency at the cost of higher memory usage.
+      Default is ``False``.
+   :type low_memory: bool, optional
+
+   :param kwargs: Additional keyword arguments passed to
+      ``pandas.read_csv`` (e.g. ``sep``, ``encoding``, ``usecols``,
+      ``dtype``, ``skiprows``). Note that ``chunksize`` cannot be passed
+      via ``kwargs``; use the explicit parameter instead.
+
+   :returns: DataFrame containing the read data.
+   :rtype: pandas.DataFrame
+
+   :raises ValueError: If ``chunksize`` is passed via ``kwargs``.
+
+Example
+^^^^^^^
+
+.. code-block:: python
+
+   from eda_toolkit import read_csv_with_progress
+
+   # Basic read
+   df = read_csv_with_progress("data/adult_income.csv")
+
+   # Limit rows and pass kwargs
+   df = read_csv_with_progress(
+       "data/adult_income.csv",
+       nrows=10000,
+       chunksize=2000,
+       usecols=["age", "education", "income"],
+       dtype={"age": float},
+   )
+
+**Output**
+
+.. code-block:: text
+
+    Reading ../data/adult_income.csv: 100%|██████████| 48842/48842 [00:00<00:00, 922518.72line/s]
+    Reading ../data/adult_income.csv: 100%|██████████| 10000/10000 [00:00<00:00, 948594.17line/s]
+
+.. note::
+
+      This function is particularly useful when working with large CSV files
+      where a standard ``pandas.read_csv`` call gives no feedback on progress.
+      The ``tqdm`` progress bar updates in real time as each chunk is read,
+      giving a clear indication of how much of the file has been processed
+      and how long remains, especially valuable in notebook environments
+      where long-running cells provide no visual feedback by default.
+      
 Adding Unique Identifiers
 --------------------------
 
@@ -133,7 +201,7 @@ Adding Unique Identifiers
 .. admonition:: Notes
 
     - The function ensures all IDs are unique by resolving potential collisions during generation, even for large datasets.
-    - The total pool size of unique IDs is determined by :math:`9 \times 10^{(\text{num_digits} - 1)}`, since the first digit must be non-zero.
+    - The total pool size of unique IDs is determined by :math:`9 \times 10^{(\text{num\_digits} - 1)}`, since the first digit must be non-zero.
     - Warnings are printed if the number of rows in the DataFrame approaches the pool size of possible unique IDs, recommending increasing ``num_digits``.
     - If ``set_as_index`` is ``False``, the ID column will be added as the first column in the DataFrame.
     - Setting a random seed ensures reproducibility of the generated IDs.
@@ -522,6 +590,201 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
     2   12/31/2021  Charlie  200.75        2021-12-31
     3   13/02/2022    David  250.25        2022-02-13
     4   07/04/2022      Eve  300.00        2022-04-07
+
+Outlier Detection
+-------------------
+
+For a theoretical treatment of the Z-score, IQR, and Isolation Forest methods, 
+including the underlying formulas and a side-by-side comparison see
+:ref:`outlier_detection_theory`.
+ 
+.. function:: detect_outliers(df, features=None, method="iqr", threshold=1.5, contamination=0.05, return_mask=False, return_bounds=False, flag_col=None, groupby=None, verbose=False)
+ 
+   Detect outliers in numeric columns of a DataFrame using IQR, Z-score,
+   or Isolation Forest methods. Returns a summary DataFrame with outlier
+   counts, percentages, and bounds per feature.
+ 
+   :param df: Input DataFrame to analyze for outliers.
+   :type df: pandas.DataFrame
+ 
+   :param features: List of numeric column names to check. If ``None``,
+      all numeric columns are used.
+   :type features: list of str, optional
+ 
+   :param method: Outlier detection method. Options are ``"iqr"``,
+      ``"zscore"``, or ``"isoforest"``.
+   :type method: str, optional
+ 
+   :param threshold: IQR multiplier (e.g. ``1.5`` for Tukey fences,
+      ``3.0`` for extreme outliers) or absolute Z-score cutoff.
+      Ignored when ``method="isoforest"``.
+   :type threshold: float, optional
+ 
+   :param contamination: Expected proportion of outliers. Only used when
+      ``method="isoforest"``. Must be between 0 and 0.5.
+   :type contamination: float, optional
+ 
+   :param return_mask: If ``True``, also returns a boolean DataFrame
+      aligned to the input where ``True`` indicates an outlier.
+   :type return_mask: bool, optional
+ 
+   :param return_bounds: If ``True``, also returns a dictionary mapping
+      each feature to a ``(lower_bound, upper_bound)`` tuple. Bounds are
+      ``"N/A"`` when ``method="isoforest"``. Values can be passed directly
+      to :func:`data_doctor` as ``lower_cutoff`` / ``upper_cutoff``.
+   :type return_bounds: bool, optional
+ 
+   :param flag_col: If provided, adds a boolean column with this name to
+      ``df`` (in place) that is ``True`` for any row where at least one
+      feature is flagged as an outlier.
+   :type flag_col: str, optional
+ 
+   :param groupby: If provided, outlier detection is performed within each
+      group of this column rather than across the full dataset.
+   :type groupby: str, optional
+ 
+   :param verbose: If ``True``, prints a formatted ASCII summary report
+      to the console. When no structured returns are requested, the
+      function returns ``None`` to suppress Jupyter auto-display.
+   :type verbose: bool, optional
+ 
+   :returns:
+      - Default: summary ``DataFrame`` with columns ``Variable``,
+        ``Outlier (n)``, ``Outlier (%)``, ``Lower Bound``, ``Upper Bound``
+      - ``return_mask=True``: ``(summary, mask)``
+      - ``return_bounds=True``: ``(summary, bounds)``
+      - ``return_mask=True, return_bounds=True``: ``(summary, mask, bounds)``
+      - ``verbose=True`` with no other return flags: ``None``
+ 
+   :rtype: pandas.DataFrame or tuple or None
+ 
+   :raises ValueError: If ``method`` is not one of ``"iqr"``,
+      ``"zscore"``, or ``"isoforest"``.
+   :raises ValueError: If ``threshold`` is not a positive number.
+   :raises ValueError: If ``contamination`` is not between 0 and 0.5.
+   :raises ValueError: If ``groupby`` column is not found in the DataFrame.
+   :raises ValueError: If no numeric features are found.
+ 
+   .. note::
+ 
+      - Rows with ``NaN`` in a feature are excluded from detection and
+        never flagged as outliers.
+      - When ``groupby`` is specified, bounds are computed per group.
+        This is particularly useful for clinical datasets where
+        distributions differ meaningfully by cohort or age group.
+      - Use ``Lower Bound`` and ``Upper Bound`` from the summary or the
+        ``bounds`` dict directly as inputs to :func:`data_doctor` for
+        feature-level transformation and treatment.
+
+
+Implementation Examples
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Example 1: Basic IQR outlier detection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+ 
+   from eda_toolkit import detect_outliers
+ 
+   summary = detect_outliers(
+       df,
+       features=["age", "capital-gain", "hours-per-week"],
+       method="iqr",
+       threshold=1.5,
+   )
+   print(summary)
+ 
+
+**Output**
+
+.. code-block:: text
+
+            Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
+    0  hours-per-week        13496        27.63         32.5         52.5
+    1    capital-gain         4035         8.26          0.0          0.0
+    2             age          216         0.44         -2.0         78.0
+
+ 
+Example 2: Within-group detection using ``groupby``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+ 
+   summary = detect_outliers(
+       df,
+       features=["age", "hours-per-week"],
+       method="iqr",
+       groupby="education",
+   )
+   print(summary)
+
+**Output**
+
+.. code-block:: text
+
+            Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
+    0  hours-per-week        11282        23.10        -10.0         77.5
+    1             age          239         0.49        -23.0        101.0
+
+Example 3: Z-Score Outlier Detection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Z-score method flags observations that deviate from the mean by more
+than a specified number of standard deviations. 
+
+.. code-block:: python
+
+    print("Z-score: threshold=3.0")
+    summary_z = detect_outliers(
+        df,
+        features=numeric_features,
+        method="zscore",
+        threshold=3.0,
+    )
+    print(summary_z.to_string(index=False))
+
+
+**Output**
+
+.. code-block:: text
+
+    Z-score: threshold=3.0
+          Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
+      capital-loss         2216         4.54   -1121.5113    1296.5160
+    hours-per-week          681         1.39       3.2481      77.5967
+            fnlwgt          506         1.04 -127147.9417  506476.2109
+      capital-gain          331         0.68  -21276.9895   23435.1248
+     education-num          330         0.68       2.3652      17.7910
+               age          186         0.38      -2.4879      79.7751
+
+
+Example 4: Isolation Forest Outlier Detection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    print("Isolation Forest: contamination=0.05")
+    summary_iso = detect_outliers(
+        df,
+        features=numeric_features,
+        method="isoforest",
+        contamination=0.05,
+    )
+    print(summary_iso.to_string(index=False))
+
+**Output**
+
+.. code-block:: text   
+
+    Isolation Forest: contamination=0.05
+         Variable  Outlier (n)  Outlier (%) Lower Bound Upper Bound
+              age         2443          5.0         N/A         N/A
+           fnlwgt         2443          5.0         N/A         N/A
+    education-num         2443          5.0         N/A         N/A
+     capital-gain         2443          5.0         N/A         N/A
+     capital-loss         2443          5.0         N/A         N/A
+   hours-per-week         2443          5.0         N/A         N/A
 
 
 DataFrame Analysis
@@ -1291,9 +1554,25 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
       - If ``include_types="both"`` and ``combine=True``: single combined DataFrame
       - If ``include_types="continuous"`` or ``"categorical"``: single DataFrame
       - If ``export_markdown=True`` and ``return_markdown_only=True``: returns Markdown string or dict of strings
+      - Grouped continuous variables display ``mean (SD)`` per group (e.g. ``3.45 (1.23)``)
+      - Grouped categorical variables display ``n (%)`` per group
 
    :rtype: pandas.DataFrame or tuple or str or dict
 
+.. note::
+
+   - Bonferroni and Benjamini-Hochberg FDR corrections are mutually exclusive;
+     passing both raises a ``ValueError``.
+   - When ``apply_bh_fdr=True``, the BH correction is applied globally across
+     all p-values (both continuous and categorical) simultaneously.
+   - When ``groupby_col`` is set and a categorical variable produces a crosstab
+     with fewer or more than two group columns, that variable is skipped with a
+     ``UserWarning`` rather than silently dropped.
+   - ``drop_columns`` and ``drop_variables`` are applied to the returned
+     DataFrames unconditionally, regardless of whether ``export_markdown``
+     is set.
+   - Value counts rows are only generated when ``include_types`` is
+     ``"categorical"`` or ``"both"``, never when ``"continuous"``.
 
 .. important::
 
@@ -1313,7 +1592,7 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
 
 .. important::
 
-   When using ``combine=False``, the function returns a **tuple of two** ``TableWrapper`` objects — one for continuous variables and one for categorical variables.
+   When using ``combine=False``, the function returns a **tuple of two** ``TableWrapper`` objects: one for continuous variables and one for categorical variables.
 
    The ``TableWrapper`` class is a lightweight wrapper designed to override the string representation of a DataFrame, enabling pretty-print formatting (e.g., tables) when the result is printed in a Jupyter cell. The wrapper preserves full access to the underlying DataFrame through attribute forwarding.
 
@@ -1362,7 +1641,7 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
           table1_cont
           table1_cat
 
-   2. **Don’t assign the result at all** when calling from a notebook or REPL cell — this will trigger automatic pretty-printing of both tables, with a blank line in between::
+   2. **Don’t assign the result at all** when calling from a notebook or REPL cell; this will trigger automatic pretty-printing of both tables, with a blank line in between::
 
           generate_table1(df, combine=False)
 
@@ -1375,7 +1654,7 @@ Example 1: Mixed Summary Table ``(value_counts=False)``
 
 In the example below, we generate a summary table from a dataset containing both 
 categorical and continuous variables. We explicitly define which columns fall into 
-each category—although the ``generate_table1`` function also supports automatic 
+each category,although the ``generate_table1`` function also supports automatic 
 detection of variable types if desired.
 
 The summary output is automatically pretty-printed in the console using the 
@@ -1455,7 +1734,7 @@ While you can specify a custom markdown_path, if none is provided, the output fi
 are saved to the current working directory.
 
 Since ``include_types="both"`` is the default and ``combine=True`` by default as well, 
-the underlying summaries are merged into a single DataFrame for display—but two 
+the underlying summaries are merged into a single DataFrame for display, but two 
 separate Markdown files are still generated with suffixes that reflect the type of 
 summary:
 
@@ -2332,7 +2611,7 @@ Below, we use the ``age`` column of the census data [1]_ from the UCI Machine Le
 \
 
 2. **Labels for Bins**:
-   The `label_ages` list provides labels corresponding to each bin:
+   The ``label_ages`` list provides labels corresponding to each bin:
 
    .. code-block:: python
 
@@ -2373,7 +2652,7 @@ Below, we use the ``age`` column of the census data [1]_ from the UCI Machine Le
 
    .. math::
 
-       \text{age_group} = 
+       \text{age\_group} = 
        \begin{cases} 
         < 18 & \text{if } 0 \leq x < 18 \\
         18-29 & \text{if } 18 \leq x < 30 \\
