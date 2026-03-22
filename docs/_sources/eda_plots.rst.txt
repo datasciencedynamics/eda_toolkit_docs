@@ -4567,7 +4567,7 @@ reducing visual clutter in wide feature sets.
 
    <div class="no-click">
 
-.. image:: ../assets/corr_matrix_stat_sig.svg
+.. image:: ../assets/corr_matrix_statistical_significance.svg
    :alt: Correlation Matrix with Significance Overlay
    :align: center
    :width: 900px

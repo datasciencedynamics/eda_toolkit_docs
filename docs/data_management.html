@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -17,9 +17,9 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=4ab1abf8"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=3294188c"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="_static/copybutton.js?v=a0ccc04e"></script>
       <script src="_static/custom.js?v=fecc5f50"></script>
@@ -195,9 +195,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" width="300px" /></a>
+  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" />
+</a>
 </div><div style="height: 100px;"></div><section id="data-management-overview">
-<h1>Data Management Overview<a class="headerlink" href="#data-management-overview" title="Permalink to this heading"></a></h1>
+<h1>Data Management Overview<a class="headerlink" href="#data-management-overview" title="Link to this heading"></a></h1>
 <p>In any data-driven project, effective management of data is crucial. This
 section provides essential techniques for handling and preparing data to ensure
 consistency, accuracy, and ease of analysis. From directory setup and data
@@ -206,13 +207,13 @@ data management. Dive into the following topics to enhance your data handling
 capabilities and streamline your workflow.</p>
 </section>
 <section id="data-management-techniques">
-<h1>Data Management Techniques<a class="headerlink" href="#data-management-techniques" title="Permalink to this heading"></a></h1>
+<h1>Data Management Techniques<a class="headerlink" href="#data-management-techniques" title="Link to this heading"></a></h1>
 <section id="path-directories">
-<h2>Path directories<a class="headerlink" href="#path-directories" title="Permalink to this heading"></a></h2>
+<h2>Path directories<a class="headerlink" href="#path-directories" title="Link to this heading"></a></h2>
 <p><strong>Ensure that the directory exists. If not, create it.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ensure_directory">
-<span class="sig-name descname"><span class="pre">ensure_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ensure_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ensure_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ensure_directory" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path to the directory that needs to be ensured.</p>
@@ -274,10 +275,10 @@ directories do not exist, the function creates them.</p>
 </div>
 </section>
 <section id="reading-csv-files-with-progress-bar">
-<span id="adding-unique-identifiers"></span><h2>Reading CSV Files with Progress Bar<a class="headerlink" href="#reading-csv-files-with-progress-bar" title="Permalink to this heading"></a></h2>
+<span id="adding-unique-identifiers"></span><h2>Reading CSV Files with Progress Bar<a class="headerlink" href="#reading-csv-files-with-progress-bar" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="read_csv_with_progress">
-<span class="sig-name descname"><span class="pre">read_csv_with_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_csv_with_progress" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">read_csv_with_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_csv_with_progress" title="Link to this definition"></a></dt>
 <dd><p>Read a CSV file in chunks with a <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar. Optionally
 limit the number of rows read and pass any additional keyword arguments
 directly to <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.</p>
@@ -309,7 +310,7 @@ via <code class="docutils literal notranslate"><span class="pre">kwargs</span></
 </dd></dl>
 
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_csv_with_progress</span>
 
 <span class="c1"># Basic read</span>
@@ -342,11 +343,11 @@ where long-running cells provide no visual feedback by default.</p>
 </section>
 </section>
 <section id="id1">
-<h2>Adding Unique Identifiers<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h2>Adding Unique Identifiers<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p><strong>Add a column of unique IDs with a specified number of digits to the DataFrame.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="add_ids">
-<span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_as_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_as_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -516,11 +517,11 @@ column in the dataframe.</p>
 </div><p></p>
 </section>
 <section id="trailing-period-removal">
-<h2>Trailing Period Removal<a class="headerlink" href="#trailing-period-removal" title="Permalink to this heading"></a></h2>
+<h2>Trailing Period Removal<a class="headerlink" href="#trailing-period-removal" title="Link to this heading"></a></h2>
 <p><strong>Strip the trailing period from values in a specified column of a DataFrame, if present.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="strip_trailing_period">
-<span class="sig-name descname"><span class="pre">strip_trailing_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#strip_trailing_period" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">strip_trailing_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#strip_trailing_period" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -654,11 +655,11 @@ We then use the <code class="docutils literal notranslate"><span class="pre">str
 <p></p>
 </section>
 <section id="standardized-dates">
-<h2>Standardized Dates<a class="headerlink" href="#standardized-dates" title="Permalink to this heading"></a></h2>
+<h2>Standardized Dates<a class="headerlink" href="#standardized-dates" title="Link to this heading"></a></h2>
 <p><strong>Parse and standardize date strings based on the provided rule.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="parse_date_with_rule">
-<span class="sig-name descname"><span class="pre">parse_date_with_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse_date_with_rule" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">parse_date_with_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse_date_with_rule" title="Link to this definition"></a></dt>
 <dd><p>This function takes a date string and standardizes it to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format
 (<code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>). It assumes dates are provided in either <strong>day/month/year</strong> or
 <strong>month/day/year</strong> format. The function first checks if the first part of the
@@ -741,13 +742,13 @@ entire column in a DataFrame.</p>
 </div>
 </section>
 <section id="outlier-detection">
-<h2>Outlier Detection<a class="headerlink" href="#outlier-detection" title="Permalink to this heading"></a></h2>
+<h2>Outlier Detection<a class="headerlink" href="#outlier-detection" title="Link to this heading"></a></h2>
 <p>For a theoretical treatment of the Z-score, IQR, and Isolation Forest methods,
 including the underlying formulas and a side-by-side comparison see
 <a class="reference internal" href="theoretical_overview.html#outlier-detection-theory"><span class="std std-ref">Outlier Detection Methods</span></a>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="detect_outliers">
-<span class="sig-name descname"><span class="pre">detect_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'iqr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contamination</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#detect_outliers" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">detect_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'iqr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contamination</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#detect_outliers" title="Link to this definition"></a></dt>
 <dd><p>Detect outliers in numeric columns of a DataFrame using IQR, Z-score,
 or Isolation Forest methods. Returns a summary DataFrame with outlier
 counts, percentages, and bounds per feature.</p>
@@ -822,7 +823,7 @@ feature-level transformation and treatment.</p></li>
 
 <p class="rubric-large rubric">Implementation Examples</p>
 <section id="example-1-basic-iqr-outlier-detection">
-<h3>Example 1: Basic IQR outlier detection<a class="headerlink" href="#example-1-basic-iqr-outlier-detection" title="Permalink to this heading"></a></h3>
+<h3>Example 1: Basic IQR outlier detection<a class="headerlink" href="#example-1-basic-iqr-outlier-detection" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_outliers</span>
 
 <span class="n">summary</span> <span class="o">=</span> <span class="n">detect_outliers</span><span class="p">(</span>
@@ -843,7 +844,7 @@ feature-level transformation and treatment.</p></li>
 </div>
 </section>
 <section id="example-2-within-group-detection-using-groupby">
-<h3>Example 2: Within-group detection using <code class="docutils literal notranslate"><span class="pre">groupby</span></code><a class="headerlink" href="#example-2-within-group-detection-using-groupby" title="Permalink to this heading"></a></h3>
+<h3>Example 2: Within-group detection using <code class="docutils literal notranslate"><span class="pre">groupby</span></code><a class="headerlink" href="#example-2-within-group-detection-using-groupby" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">detect_outliers</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span>
     <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;hours-per-week&quot;</span><span class="p">],</span>
@@ -861,7 +862,7 @@ feature-level transformation and treatment.</p></li>
 </div>
 </section>
 <section id="example-3-z-score-outlier-detection">
-<h3>Example 3: Z-Score Outlier Detection<a class="headerlink" href="#example-3-z-score-outlier-detection" title="Permalink to this heading"></a></h3>
+<h3>Example 3: Z-Score Outlier Detection<a class="headerlink" href="#example-3-z-score-outlier-detection" title="Link to this heading"></a></h3>
 <p>The Z-score method flags observations that deviate from the mean by more
 than a specified number of standard deviations.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Z-score: threshold=3.0&quot;</span><span class="p">)</span>
@@ -887,7 +888,7 @@ hours-per-week          681         1.39       3.2481      77.5967
 </div>
 </section>
 <section id="example-4-isolation-forest-outlier-detection">
-<h3>Example 4: Isolation Forest Outlier Detection<a class="headerlink" href="#example-4-isolation-forest-outlier-detection" title="Permalink to this heading"></a></h3>
+<h3>Example 4: Isolation Forest Outlier Detection<a class="headerlink" href="#example-4-isolation-forest-outlier-detection" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Isolation Forest: contamination=0.05&quot;</span><span class="p">)</span>
 <span class="n">summary_iso</span> <span class="o">=</span> <span class="n">detect_outliers</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span>
@@ -912,12 +913,12 @@ hours-per-week         2443          5.0         N/A         N/A
 </section>
 </section>
 <section id="dataframe-analysis">
-<h2>DataFrame Analysis<a class="headerlink" href="#dataframe-analysis" title="Permalink to this heading"></a></h2>
+<h2>DataFrame Analysis<a class="headerlink" href="#dataframe-analysis" title="Link to this heading"></a></h2>
 <p><strong>Analyze DataFrame columns, including data type, null values, and unique value counts.</strong></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">dataframe_profiler</span></code> function provides a comprehensive summary of a DataFrame’s columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="dataframe_profiler">
-<span class="sig-name descname"><span class="pre">dataframe_profiler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_cols_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataframe_profiler" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dataframe_profiler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_cols_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataframe_profiler" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -960,7 +961,7 @@ DataFrame with optional background styling.</p></li>
 </div>
 <p class="rubric-large rubric">Implementation Examples</p>
 <section id="census-income-example">
-<h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Permalink to this heading"></a></h3>
+<h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Link to this heading"></a></h3>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_profiler</span></code>
 function to analyze a DataFrame’s columns.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataframe_profiler</span>
@@ -1178,7 +1179,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
 </div><p></p>
 </section>
 <section id="dataframe-column-names">
-<h3>DataFrame Column Names<a class="headerlink" href="#dataframe-column-names" title="Permalink to this heading"></a></h3>
+<h3>DataFrame Column Names<a class="headerlink" href="#dataframe-column-names" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">unique_values_total</span></code></dt><dd><p>This column indicates the total number of unique values present in each column of the DataFrame. It measures the distinct values that a column holds. For example, in the <code class="docutils literal notranslate"><span class="pre">age</span></code> column, there are 74 unique values, meaning the ages vary across 74 distinct entries.</p>
 </dd>
@@ -1191,7 +1192,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
 </dl>
 </section>
 <section id="calculation-details">
-<h3>Calculation Details<a class="headerlink" href="#calculation-details" title="Permalink to this heading"></a></h3>
+<h3>Calculation Details<a class="headerlink" href="#calculation-details" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unique_values_total</span></code> is calculated using the <code class="docutils literal notranslate"><span class="pre">nunique()</span></code> function, which counts the number of unique values in a column.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">max_unique_value</span></code> is determined by finding the value with the highest frequency using <code class="docutils literal notranslate"><span class="pre">value_counts()</span></code>. For string columns, any missing values (if present) are replaced with the string <code class="docutils literal notranslate"><span class="pre">&quot;null&quot;</span></code> before computing the frequency.</p></li>
@@ -1202,11 +1203,11 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
 </section>
 </section>
 <section id="generating-summary-tables-for-variable-combinations">
-<h2>Generating Summary Tables for Variable Combinations<a class="headerlink" href="#generating-summary-tables-for-variable-combinations" title="Permalink to this heading"></a></h2>
+<h2>Generating Summary Tables for Variable Combinations<a class="headerlink" href="#generating-summary-tables-for-variable-combinations" title="Link to this heading"></a></h2>
 <p><strong>Generate and save summary tables for all possible combinations of specified variables in a DataFrame to an Excel file, complete with formatting and progress tracking.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="summarize_all_combinations">
-<span class="sig-name descname"><span class="pre">summarize_all_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#summarize_all_combinations" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">summarize_all_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#summarize_all_combinations" title="Link to this definition"></a></dt>
 <dd><p>Generate summary tables for all possible combinations of the specified variables in the DataFrame and save them to an Excel file with a Table of Contents.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1439,16 +1440,17 @@ Data saved to ../data_output/census_summary_tables.xlsx
 </div>
 <p>When applied to the US Census data, the output Excel file will contain summary tables for all possible combinations of the specified variables.
 The first sheet will be a Table of Contents with hyperlinks to each summary table.</p>
-<div class="no-click"><a class="reference internal image-reference" href="_images/summarize_combos.gif"><img alt="EDA Toolkit Logo" class="align-left" src="_images/summarize_combos.gif" style="width: 900px;" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/summarize_combos.gif"><img alt="EDA Toolkit Logo" class="align-left" src="_images/summarize_combos.gif" style="width: 900px;" />
+</a>
 </div><div style="height: 106px;"></div></section>
 <section id="saving-dataframes-to-excel-with-customized-formatting">
-<h2>Saving DataFrames to Excel with Customized Formatting<a class="headerlink" href="#saving-dataframes-to-excel-with-customized-formatting" title="Permalink to this heading"></a></h2>
+<h2>Saving DataFrames to Excel with Customized Formatting<a class="headerlink" href="#saving-dataframes-to-excel-with-customized-formatting" title="Link to this heading"></a></h2>
 <p><strong>Save multiple DataFrames to separate sheets in an Excel file with progress tracking and formatting.</strong></p>
 <p>This section explains how to save multiple DataFrames to separate sheets in an
 Excel file with customized formatting using the <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> function.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="save_dataframes_to_excel">
-<span class="sig-name descname"><span class="pre">save_dataframes_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#save_dataframes_to_excel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save_dataframes_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#save_dataframes_to_excel" title="Link to this definition"></a></dt>
 <dd><p>Save DataFrames to an Excel file, applying formatting and autofitting columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1524,12 +1526,12 @@ DataFrames saved to ../data/df_census.xlsx
 between <cite>18</cite> and <cite>40</cite>, each on separate sheets with customized formatting.</p>
 </section>
 <section id="creating-contingency-tables">
-<h2>Creating Contingency Tables<a class="headerlink" href="#creating-contingency-tables" title="Permalink to this heading"></a></h2>
+<h2>Creating Contingency Tables<a class="headerlink" href="#creating-contingency-tables" title="Link to this heading"></a></h2>
 <p><strong>Create a contingency table from one or more columns in a DataFrame, with sorting options.</strong></p>
 <p>This section explains how to create contingency tables from one or more columns in a DataFrame, with options to sort the results using the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="contingency_table">
-<span class="sig-name descname"><span class="pre">contingency_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#contingency_table" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">contingency_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#contingency_table" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1596,14 +1598,14 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 <p></p>
 </section>
 <section id="generating-summaries-table-1">
-<h2>Generating Summaries (Table 1)<a class="headerlink" href="#generating-summaries-table-1" title="Permalink to this heading"></a></h2>
+<h2>Generating Summaries (Table 1)<a class="headerlink" href="#generating-summaries-table-1" title="Link to this heading"></a></h2>
 <p>Create a summary statistics table for both categorical and continuous variables
 in a DataFrame. This section describes how to generate a summary “Table 1” from
 a given dataset using the <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> function. It supports automatic detection
 of variable types, pretty-printing, optional export to Markdown, and <em>p</em>-value adjustments.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="generate_table1">
-<span class="sig-name descname"><span class="pre">generate_table1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_bonferroni</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_bh_fdr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_markdown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markdown_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_binary_numeric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_markdown_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fisher_exact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_welch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generate_table1" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_table1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_bonferroni</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_bh_fdr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_markdown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markdown_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_binary_numeric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_markdown_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fisher_exact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_welch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generate_table1" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1734,7 +1736,7 @@ and unpack the result into two distinct objects:</p>
 </div>
 <p class="rubric-large rubric">Implementation Examples</p>
 <section id="example-1-mixed-summary-table-value-counts-false">
-<h3>Example 1: Mixed Summary Table <code class="docutils literal notranslate"><span class="pre">(value_counts=False)</span></code><a class="headerlink" href="#example-1-mixed-summary-table-value-counts-false" title="Permalink to this heading"></a></h3>
+<h3>Example 1: Mixed Summary Table <code class="docutils literal notranslate"><span class="pre">(value_counts=False)</span></code><a class="headerlink" href="#example-1-mixed-summary-table-value-counts-false" title="Link to this heading"></a></h3>
 <p>In the example below, we generate a summary table from a dataset containing both
 categorical and continuous variables. We explicitly define which columns fall into
 each category,although the <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> function also supports automatic
@@ -1789,7 +1791,7 @@ rather than for the variable as a whole.</p>
 </div>
 </section>
 <section id="example-2-mixed-summary-table-value-counts-true">
-<h3>Example 2: Mixed Summary Table <code class="docutils literal notranslate"><span class="pre">(value_counts=True)</span></code><a class="headerlink" href="#example-2-mixed-summary-table-value-counts-true" title="Permalink to this heading"></a></h3>
+<h3>Example 2: Mixed Summary Table <code class="docutils literal notranslate"><span class="pre">(value_counts=True)</span></code><a class="headerlink" href="#example-2-mixed-summary-table-value-counts-true" title="Link to this heading"></a></h3>
 <p>In this example, we call <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> without manually specifying which
 columns are categorical or continuous. Instead, the function automatically detects
 variable types based on data types. Numeric columns with two or fewer unique values
@@ -2207,7 +2209,7 @@ font-weight:normal;overflow:hidden;padding:0px 0px;word-break:normal;}
 </tr>
 </tbody></table></div><div style="height: 50px;"></div></section>
 <section id="example-3-group-comparisons-p-values">
-<h3>Example 3: Group Comparisons (<em>P</em>-Values)<a class="headerlink" href="#example-3-group-comparisons-p-values" title="Permalink to this heading"></a></h3>
+<h3>Example 3: Group Comparisons (<em>P</em>-Values)<a class="headerlink" href="#example-3-group-comparisons-p-values" title="Link to this heading"></a></h3>
 <p>In this example we first turn the continuous <cite>fnlwgt</cite> variable into two new categorical factors:</p>
 <ol class="arabic simple">
 <li><p><strong>Equal-width bins</strong> (<code class="docutils literal notranslate"><span class="pre">fnlwgt_bin</span></code>), so each interval spans the same numeric range.</p></li>
@@ -2442,12 +2444,12 @@ font-weight:normal;overflow:hidden;padding:0px 0px;word-break:normal;}
 <div style="height: 50px;"></div></section>
 </section>
 <section id="highlighting-specific-columns-in-a-dataframe">
-<h2>Highlighting Specific Columns in a DataFrame<a class="headerlink" href="#highlighting-specific-columns-in-a-dataframe" title="Permalink to this heading"></a></h2>
+<h2>Highlighting Specific Columns in a DataFrame<a class="headerlink" href="#highlighting-specific-columns-in-a-dataframe" title="Link to this heading"></a></h2>
 <p>This section explains how to highlight specific columns in a DataFrame using the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function.</p>
 <p><strong>Highlight specific columns in a DataFrame with a specified background color.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="highlight_columns">
-<span class="sig-name descname"><span class="pre">highlight_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yellow'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#highlight_columns" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">highlight_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yellow'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#highlight_columns" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2578,7 +2580,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
 </tbody></table></div><p></p>
 </section>
 <section id="binning-numerical-columns">
-<span id="id7"></span><h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
+<span id="id7"></span><h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Link to this heading"></a></h2>
 <p>Binning numerical columns is a technique used to convert continuous numerical
 data into discrete categories or “bins.” This is especially useful for simplifying
 analysis, creating categorical features from numerical data, or visualizing the
@@ -2672,7 +2674,7 @@ when the upper bound is infinity (<code class="docutils literal notranslate"><sp
 </ol>
 </section>
 <section id="group-by-imputer">
-<h2>Group-by Imputer<a class="headerlink" href="#group-by-imputer" title="Permalink to this heading"></a></h2>
+<h2>Group-by Imputer<a class="headerlink" href="#group-by-imputer" title="Link to this heading"></a></h2>
 <p><strong>Impute missing values using group-level statistics with optional fallback logic.</strong></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">groupby_imputer</span></code> function provides a simple, transparent, and statistically
 grounded approach for imputing missing values in a DataFrame using <strong>group-specific
@@ -2691,7 +2693,7 @@ attributes such as demographic groups, job categories, or experimental condition
 </ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="groupby_imputer">
-<span class="sig-name descname"><span class="pre">groupby_imputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impute_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_new_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#groupby_imputer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">groupby_imputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impute_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_new_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#groupby_imputer" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2852,7 +2854,7 @@ introduce bias if not chosen carefully.</p></li>
 global strategies while remaining transparent and easy to audit.</p>
 </section>
 <section id="delete-inactive-dataframes">
-<h2>Delete Inactive DataFrames<a class="headerlink" href="#delete-inactive-dataframes" title="Permalink to this heading"></a></h2>
+<h2>Delete Inactive DataFrames<a class="headerlink" href="#delete-inactive-dataframes" title="Link to this heading"></a></h2>
 <p><strong>Safely clean up unused pandas DataFrames from a namespace to reduce memory usage</strong></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">del_inactive_dataframes</span></code> utility is designed to help manage memory in
 interactive environments such as Jupyter notebooks, scripts, and cloud runtimes.
@@ -2881,7 +2883,7 @@ pipelines, and long-running notebooks.</p>
 </ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="del_inactive_dataframes">
-<span class="sig-name descname"><span class="pre">del_inactive_dataframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfs_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">del_dataframes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_ipython_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_gc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dataframes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#del_inactive_dataframes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">del_inactive_dataframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfs_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">del_dataframes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_ipython_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_gc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dataframes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#del_inactive_dataframes" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2938,7 +2940,7 @@ is isolated and easy to follow.</p>
 explicitly pass <code class="docutils literal notranslate"><span class="pre">namespace=globals()</span></code> so the function can see variables defined
 in this script or notebook.</p>
 <section id="example-1-list-active-dataframes-no-deletion">
-<h3>Example 1: List Active DataFrames (No Deletion)<a class="headerlink" href="#example-1-list-active-dataframes-no-deletion" title="Permalink to this heading"></a></h3>
+<h3>Example 1: List Active DataFrames (No Deletion)<a class="headerlink" href="#example-1-list-active-dataframes-no-deletion" title="Link to this heading"></a></h3>
 <p>Inspect which DataFrames are currently active without deleting anything.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
 
@@ -2985,7 +2987,7 @@ Current Active
 </div>
 </section>
 <section id="example-2-delete-everything-except-a-single-dataframe">
-<h3>Example 2: Delete Everything Except a Single DataFrame<a class="headerlink" href="#example-2-delete-everything-except-a-single-dataframe" title="Permalink to this heading"></a></h3>
+<h3>Example 2: Delete Everything Except a Single DataFrame<a class="headerlink" href="#example-2-delete-everything-except-a-single-dataframe" title="Link to this heading"></a></h3>
 <p>Remove all DataFrames except the one explicitly listed.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
 
@@ -3103,7 +3105,7 @@ Remaining Active
 </div>
 </section>
 <section id="example-3-dry-run-preview-deletions">
-<h3>Example 3: Dry Run (Preview Deletions)<a class="headerlink" href="#example-3-dry-run-preview-deletions" title="Permalink to this heading"></a></h3>
+<h3>Example 3: Dry Run (Preview Deletions)<a class="headerlink" href="#example-3-dry-run-preview-deletions" title="Link to this heading"></a></h3>
 <p>Preview which DataFrames <em>would</em> be deleted without actually removing them.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
 
@@ -3178,7 +3180,7 @@ Remaining Active
 <p>This mode is recommended before running destructive cleanup steps.</p>
 </section>
 <section id="example-4-include-ipython-output-cache-variables">
-<h3>Example 4: Include IPython Output Cache Variables<a class="headerlink" href="#example-4-include-ipython-output-cache-variables" title="Permalink to this heading"></a></h3>
+<h3>Example 4: Include IPython Output Cache Variables<a class="headerlink" href="#example-4-include-ipython-output-cache-variables" title="Link to this heading"></a></h3>
 <p>In Jupyter notebooks, output cache variables such as <code class="docutils literal notranslate"><span class="pre">_14</span></code> may reference large
 DataFrames. These are ignored by default but can be included explicitly.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
@@ -3254,7 +3256,7 @@ Remaining Active
 </div>
 </section>
 <section id="example-5-track-dataframe-memory-usage">
-<h3>Example 5: Track DataFrame Memory Usage<a class="headerlink" href="#example-5-track-dataframe-memory-usage" title="Permalink to this heading"></a></h3>
+<h3>Example 5: Track DataFrame Memory Usage<a class="headerlink" href="#example-5-track-dataframe-memory-usage" title="Link to this heading"></a></h3>
 <p>Report total DataFrame memory usage before and after cleanup.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
 
@@ -3327,7 +3329,7 @@ This mode uses ``pandas.DataFrame.memory_usage(deep=True)`` for reporting.
 </div>
 </section>
 <section id="example-6-track-dataframe-memory-and-process-rss">
-<h3>Example 6: Track DataFrame Memory and Process RSS<a class="headerlink" href="#example-6-track-dataframe-memory-and-process-rss" title="Permalink to this heading"></a></h3>
+<h3>Example 6: Track DataFrame Memory and Process RSS<a class="headerlink" href="#example-6-track-dataframe-memory-and-process-rss" title="Link to this heading"></a></h3>
 <p>Enable power-user memory tracking, including process-level RSS when available.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_main</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
 <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)})</span>
@@ -3401,7 +3403,7 @@ Remaining Active
 after garbage collection.</p>
 </section>
 <section id="example-7-programmatic-usage-no-console-output">
-<h3>Example 7: Programmatic Usage (No Console Output)<a class="headerlink" href="#example-7-programmatic-usage-no-console-output" title="Permalink to this heading"></a></h3>
+<h3>Example 7: Programmatic Usage (No Console Output)<a class="headerlink" href="#example-7-programmatic-usage-no-console-output" title="Link to this heading"></a></h3>
 <p>Suppress console output and consume the returned summary dictionary directly.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">del_inactive_dataframes</span>
 
