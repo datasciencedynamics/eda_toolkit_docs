@@ -271,11 +271,11 @@ At the end of ``generate_table1()``, we wrap any returned DataFrame(s) in your e
 
 .. _Version 0.0.15: https://lshpaner.github.io/eda_toolkit_docs/v0.0.15/index.html
 
-Scatter Plot Function Updates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Scatter Plot Function Updates
+  :class: rubric-large
 
 Avoid In-Place Modification of ``exclude_combinations``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This addresses an issue where the ``scatter_fit_plot`` function modifies the ``exclude_combinations`` parameter in-place, causing errors when reused in subsequent calls.
 
@@ -286,7 +286,7 @@ This addresses an issue where the ``scatter_fit_plot`` function modifies the ``e
      exclude_combinations_normalized = {tuple(sorted(pair)) for pair in exclude_combinations}
 
 Improve Progress Tracking and Resolve Last Plot Saving Issue
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. Separate Progress Bars for Grid Plot:
 
@@ -303,7 +303,7 @@ Improve Progress Tracking and Resolve Last Plot Saving Issue
    - Progress bars now provide clear updates for rendering and saving stages, avoiding any hanging or delays.
 
 Updated ``tqdm`` Saving Logic in ``scatter_fit_plot``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Refactored ``tqdm`` progress bar in ``scatter_fit_plot`` to track the overall plot-saving process, covering both individual and grid plots.
 - Updated ``tqdm`` progress bar description in ``scatter_fit_plot`` to use universal phrasing: "Saving scatter plot(s)."
@@ -316,8 +316,8 @@ Updated ``tqdm`` Saving Logic in ``scatter_fit_plot``
 
 .. _Version 0.0.14: https://lshpaner.github.io/eda_toolkit_docs/v0.0.14/index.html
 
-Ensure Crosstabs Dictionary is Populated with ``return_dict=True``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Ensure Crosstabs Dictionary is Populated with ``return_dict=True``
+  :class: rubric-large
 
 This resolves the issue where the ``stacked_crosstab_plot`` function fails to 
 populate and return the crosstabs dictionary (``crosstabs_dict``) when 
@@ -333,8 +333,8 @@ are always generated when ``return_dict=True``, regardless of the output paramet
   - The generation of crosstabs is now independent of the output parameter.
   - Crosstabs display (``print``) occurs only when output includes ``"both"`` or ``"crosstabs_only"``.
 
-Enhancements and Fixes for ``scatter_fit_plot`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Enhancements and Fixes for ``scatter_fit_plot`` Function
+  :class: rubric-large
 
 This addresses critical issues and introduces key enhancements for the ``scatter_fit_plot`` function. 
 These changes aim to improve usability, flexibility, and robustness of the function.
@@ -350,8 +350,8 @@ These changes aim to improve usability, flexibility, and robustness of the funct
 5. Fixed Issues with Legend, ``xlim``, and ``ylim``; inputs were not being used; these have been corrected.
 
 
-Fix Default Title and Filename Handling in ``flex_corr_matrix``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Fix Default Title and Filename Handling in ``flex_corr_matrix``
+  :class: rubric-large
 
 This resolves issues in the ``flex_corr_matrix`` function where:
 
@@ -375,8 +375,8 @@ but the saved filename will still use ``"correlation_matrix"``.
 
 This version introduces a series of updates and fixes across multiple functions to enhance error handling, improve cross-environment compatibility, streamline usability, and optimize performance. These changes address critical issues, add new features, and ensure consistent behavior in both terminal and notebook environments.
 
-Add ``ValueError`` for Insufficient Pool Size in ``add_ids`` and Enhance ID Deduplication
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Add ``ValueError`` for Insufficient Pool Size in ``add_ids`` and Enhance ID Deduplication
+  :class: rubric-large
 
 This update enhances the ``add_ids`` function by adding explicit error handling and improving the uniqueness guarantee for generated IDs.
 
@@ -397,8 +397,8 @@ This update enhances the ``add_ids`` function by adding explicit error handling 
   - Prevents collisions by regenerating IDs only for duplicates, minimizing retries and improving performance.
 
 
-Enhance ``strip_trailing_period`` to Support Strings and Mixed Data Types
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Enhance ``strip_trailing_period`` to Support Strings and Mixed Data Types
+  :class: rubric-large
 
 This update enhances the ``strip_trailing_period`` function to handle trailing periods in both numeric and string values. The updated implementation ensures robustness for columns with mixed data types and gracefully handles special cases like ``NaN``.
 
@@ -421,8 +421,8 @@ This update enhances the ``strip_trailing_period`` function to handle trailing p
   - Converts numeric strings (e.g., ``"123."``) back to float where applicable.
   - Retains strings if conversion to float is not possible.
 
-Changes in ``stacked_crosstab_plot``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Changes in ``stacked_crosstab_plot``
+  :class: rubric-large
 
 Remove ``IPython`` Dependency by Replacing ``display`` with ``print``
 
@@ -450,8 +450,8 @@ The issue arose from reliance on ``IPython.display.display`` for rendering cross
 - **Jupyter Notebook**: Crosstabs are displayed as plain text via ``print()``, rendered neatly in notebook outputs.
 - **Terminal Session**: Crosstabs are printed as expected, ensuring seamless use in terminal-based workflows.
 
-Add Environment Detection to ``dataframe_columns`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Add Environment Detection to ``dataframe_columns`` Function
+  :class: rubric-large
 
 This enhances the ``dataframe_columns`` function to dynamically adjust its output based on the runtime environment (Jupyter Notebook or terminal).
 
@@ -479,8 +479,8 @@ This enhances the ``dataframe_columns`` function to dynamically adjust its outpu
 
    - The function now works seamlessly in both terminal and notebook environments without requiring additional dependencies.
 
-Add ``tqdm`` Progress Bar to ``dataframe_columns`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Add ``tqdm`` Progress Bar to ``dataframe_columns`` Function
+  :class: rubric-large
 
 This enhances the ``dataframe_columns`` function by incorporating a ``tqdm`` progress bar to track column processing. This is particularly useful for analyzing large DataFrames, providing real-time feedback.
 
@@ -494,8 +494,8 @@ This enhances the ``dataframe_columns`` function by incorporating a ``tqdm`` pro
     ...
 
   
-Other Enhancements and Fixes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Other Enhancements and Fixes
+  :class: rubric-large
 
 - Improved ``save_dataframes_to_excel`` with ``tqdm`` integration.
 - Fixed ``plot_2d_pdp`` plot display logic to adhere strictly to the ``plot_type`` parameter.
@@ -509,8 +509,8 @@ Other Enhancements and Fixes
 
 .. _Version 0.0.12: https://lshpaner.github.io/eda_toolkit_docs/v0.0.12/index.html
 
-New Features
-^^^^^^^^^^^^^^^^^^
+.. rubric:: New Features
+  :class: rubric-large
 
 - Added ``data_doctor`` function:
   
@@ -541,8 +541,8 @@ New Features
     
     - Offers options to save plots directly to PNG or SVG formats, with file names reflecting key transformations and cutoff information for easy identification.
 
-Improvements
-^^^^^^^^^^^^^^^^^^
+.. rubric:: Improvements
+  :class: rubric-large
 
 - **Enhanced** ``add_ids`` **function**:
    

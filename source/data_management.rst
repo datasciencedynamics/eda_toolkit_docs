@@ -826,7 +826,7 @@ The ``dataframe_profiler`` function provides a comprehensive summary of a DataFr
 
 .. rubric:: Implementation Examples
     :class: rubric-large
-    
+
 Census Income Example
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2738,8 +2738,8 @@ attributes such as demographic groups, job categories, or experimental condition
 
 \
 
-Group-wise Imputation Examples
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+.. rubric:: Group-wise Imputation Examples
+    :class: rubric-large
 
 In the example below, missing values are introduced artificially into the
 ``"age"`` column of the Adult Income dataset. The goal is to impute these missing
