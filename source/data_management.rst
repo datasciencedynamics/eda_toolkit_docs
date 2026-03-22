@@ -3032,7 +3032,7 @@ pipelines, and long-running notebooks.
     - Process RSS memory may not decrease immediately even after garbage collection.
 
 .. rubric:: Implementation Examples
-   :class: rubric-large
+    :class: rubric-large
 
 The following examples demonstrate common and advanced usage patterns for
 ``del_inactive_dataframes``. Each example recreates its own DataFrames so behavior
