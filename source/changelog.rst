@@ -27,6 +27,8 @@ Changelog
 `Version 0.0.23`_
 ----------------------
 
+.. _Version 0.0.23: https://lshpaner.github.io/eda_toolkit_docs/v0.0.23/index.html
+
 * enhance ``stacked_crosstab_plot`` params & visuals by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/119
 * fix deps, bump python floor to 3.8 by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/120
 * fix: patch ``box_violin_plot`` bugs and add features by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/121
