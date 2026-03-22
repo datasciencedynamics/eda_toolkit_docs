@@ -86,6 +86,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#example-2-within-group-detection-using-groupby">Example 2: Within-group detection using <code class="docutils literal notranslate"><span class="pre">groupby</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-3-z-score-outlier-detection">Example 3: Z-Score Outlier Detection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-4-isolation-forest-outlier-detection">Example 4: Isolation Forest Outlier Detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-5-verbose-ascii-summary-report">Example 5: Verbose ASCII Summary Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-6-return-bounds-for-downstream-use-in-data-doctor">Example 6: Return Bounds for Downstream Use in <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#dataframe-analysis">DataFrame Analysis</a><ul>
@@ -907,6 +909,81 @@ hours-per-week          681         1.39       3.2481      77.5967
   capital-gain         2443          5.0         N/A         N/A
   capital-loss         2443          5.0         N/A         N/A
 hours-per-week         2443          5.0         N/A         N/A
+</pre></div>
+</div>
+</section>
+<section id="example-5-verbose-ascii-summary-report">
+<h3>Example 5: Verbose ASCII Summary Report<a class="headerlink" href="#example-5-verbose-ascii-summary-report" title="Permalink to this heading"></a></h3>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">verbose=True</span></code> prints a formatted ASCII summary report directly
+to the console, showing the detection method, total rows, and per-feature
+outlier counts, percentages, and bounds. When no structured return flags
+are set, the function returns <code class="docutils literal notranslate"><span class="pre">None</span></code> to suppress Jupyter auto-display —
+the ASCII report is the sole output.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">detect_outliers</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">features</span><span class="o">=</span><span class="n">numeric_features</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;iqr&quot;</span><span class="p">,</span>
+    <span class="n">threshold</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>               OUTLIER DETECTION SUMMARY REPORT
++------------------------+------------------------------------------+
+| Method                 | IQR (threshold=1.5)                      |
+| Total rows             | 48,842                                   |
++------------------------+--------------+--------------+----------------+----------------+
+| Variable               |  Outlier (n) |  Outlier (%) |    Lower Bound |    Upper Bound |
++------------------------+--------------+--------------+----------------+----------------+
+| hours-per-week         |       13,496 |        27.63 |        32.5000 |        52.5000 |
+| capital-gain           |        4,035 |         8.26 |         0.0000 |         0.0000 |
+| capital-loss           |        2,282 |         4.67 |         0.0000 |         0.0000 |
+| education-num          |        1,794 |         3.67 |         4.5000 |        16.5000 |
+| fnlwgt                 |        1,453 |         2.97 |   -62,586.7500 |   417,779.2500 |
+| age                    |          216 |         0.44 |        -2.0000 |        78.0000 |
++------------------------+--------------+--------------+----------------+----------------+
+
+Total flagged rows (any feature): 20,284 (41.53%)
+</pre></div>
+</div>
+</section>
+<section id="example-6-return-bounds-for-downstream-use-in-data-doctor">
+<h3>Example 6: Return Bounds for Downstream Use in <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code><a class="headerlink" href="#example-6-return-bounds-for-downstream-use-in-data-doctor" title="Permalink to this heading"></a></h3>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">return_bounds=True</span></code> returns a dictionary mapping each feature
+to a <code class="docutils literal notranslate"><span class="pre">(lower_bound,</span> <span class="pre">upper_bound)</span></code> tuple alongside the summary DataFrame.
+The bounds can be passed directly to <a class="reference internal" href="eda_plots.html#data_doctor" title="data_doctor"><code class="xref py py-func docutils literal notranslate"><span class="pre">data_doctor()</span></code></a> as
+<code class="docutils literal notranslate"><span class="pre">lower_cutoff</span></code> and <code class="docutils literal notranslate"><span class="pre">upper_cutoff</span></code>, creating a seamless workflow from
+outlier detection to feature-level treatment.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary_b</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">detect_outliers</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">features</span><span class="o">=</span><span class="n">numeric_features</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;iqr&quot;</span><span class="p">,</span>
+    <span class="n">return_bounds</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Bounds per feature:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">feat</span><span class="p">,</span> <span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">)</span> <span class="ow">in</span> <span class="n">bounds</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">feat</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> lower=</span><span class="si">{</span><span class="n">lower</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">  upper=</span><span class="si">{</span><span class="n">upper</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Example: pass capital-gain bounds directly to data_doctor:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    lower_cutoff=</span><span class="si">{</span><span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;capital-gain&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    upper_cutoff=</span><span class="si">{</span><span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;capital-gain&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[12] return_bounds=True — bounds dict for downstream data_doctor use
+  Bounds per feature:
+    age                  lower=      -2.0  upper=      78.0
+    fnlwgt               lower=  -62586.75  upper=  417779.25
+    education-num        lower=       4.5  upper=      16.5
+    capital-gain         lower=       0.0  upper=       0.0
+    capital-loss         lower=       0.0  upper=       0.0
+    hours-per-week       lower=      32.5  upper=      52.5
+
+  Example: pass capital-gain bounds directly to data_doctor:
+    lower_cutoff=0.0
+    upper_cutoff=0.0
 </pre></div>
 </div>
 </section>
