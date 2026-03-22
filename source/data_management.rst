@@ -598,69 +598,83 @@ For a theoretical treatment of the Z-score, IQR, and Isolation Forest methods,
 including the underlying formulas and a side-by-side comparison see
 :ref:`outlier_detection_theory`.
  
-.. function:: detect_outliers(df, features=None, method="iqr", threshold=1.5, contamination=0.05, return_mask=False, flag_col=None, groupby=None)
-
+.. function:: detect_outliers(df, features=None, method="iqr", threshold=1.5, contamination=0.05, return_mask=False, return_bounds=False, flag_col=None, groupby=None, verbose=False)
+ 
    Detect outliers in numeric columns of a DataFrame using IQR, Z-score,
    or Isolation Forest methods. Returns a summary DataFrame with outlier
    counts, percentages, and bounds per feature.
-
+ 
    :param df: Input DataFrame to analyze for outliers.
    :type df: pandas.DataFrame
-
+ 
    :param features: List of numeric column names to check. If ``None``,
       all numeric columns are used.
    :type features: list of str, optional
-
+ 
    :param method: Outlier detection method. Options are ``"iqr"``,
       ``"zscore"``, or ``"isoforest"``.
    :type method: str, optional
-
+ 
    :param threshold: IQR multiplier (e.g. ``1.5`` for Tukey fences,
       ``3.0`` for extreme outliers) or absolute Z-score cutoff.
       Ignored when ``method="isoforest"``.
    :type threshold: float, optional
-
+ 
    :param contamination: Expected proportion of outliers. Only used when
       ``method="isoforest"``. Must be between 0 and 0.5.
    :type contamination: float, optional
-
+ 
    :param return_mask: If ``True``, also returns a boolean DataFrame
       aligned to the input where ``True`` indicates an outlier.
    :type return_mask: bool, optional
-
+ 
+   :param return_bounds: If ``True``, also returns a dictionary mapping
+      each feature to a ``(lower_bound, upper_bound)`` tuple. Bounds are
+      ``"N/A"`` when ``method="isoforest"``. Values can be passed directly
+      to :func:`data_doctor` as ``lower_cutoff`` / ``upper_cutoff``.
+   :type return_bounds: bool, optional
+ 
    :param flag_col: If provided, adds a boolean column with this name to
       ``df`` (in place) that is ``True`` for any row where at least one
       feature is flagged as an outlier.
    :type flag_col: str, optional
-
+ 
    :param groupby: If provided, outlier detection is performed within each
       group of this column rather than across the full dataset.
    :type groupby: str, optional
-
+ 
+   :param verbose: If ``True``, prints a formatted ASCII summary report
+      to the console. When no structured returns are requested, the
+      function returns ``None`` to suppress Jupyter auto-display.
+   :type verbose: bool, optional
+ 
    :returns:
       - Default: summary ``DataFrame`` with columns ``Variable``,
         ``Outlier (n)``, ``Outlier (%)``, ``Lower Bound``, ``Upper Bound``
       - ``return_mask=True``: ``(summary, mask)``
-
-   :rtype: pandas.DataFrame or tuple
-
+      - ``return_bounds=True``: ``(summary, bounds)``
+      - ``return_mask=True, return_bounds=True``: ``(summary, mask, bounds)``
+      - ``verbose=True`` with no other return flags: ``None``
+ 
+   :rtype: pandas.DataFrame or tuple or None
+ 
    :raises ValueError: If ``method`` is not one of ``"iqr"``,
       ``"zscore"``, or ``"isoforest"``.
    :raises ValueError: If ``threshold`` is not a positive number.
    :raises ValueError: If ``contamination`` is not between 0 and 0.5.
    :raises ValueError: If ``groupby`` column is not found in the DataFrame.
    :raises ValueError: If no numeric features are found.
-
+ 
    .. note::
-
+ 
       - Rows with ``NaN`` in a feature are excluded from detection and
         never flagged as outliers.
       - When ``groupby`` is specified, bounds are computed per group.
         This is particularly useful for clinical datasets where
         distributions differ meaningfully by cohort or age group.
-      - ``flag_col`` marks a row as an outlier if *any* feature is
-        flagged, making it easy to filter the full outlier set with
-        ``df[df[flag_col]]``.
+      - Use ``Lower Bound`` and ``Upper Bound`` from the summary or the
+        ``bounds`` dict directly as inputs to :func:`data_doctor` for
+        feature-level transformation and treatment.
 
 .. rubric:: Implementation Examples
     :class: rubric-large
@@ -770,6 +784,91 @@ Example 4: Isolation Forest Outlier Detection
      capital-gain         2443          5.0         N/A         N/A
      capital-loss         2443          5.0         N/A         N/A
    hours-per-week         2443          5.0         N/A         N/A
+
+
+Example 5: Verbose ASCII Summary Report
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Setting ``verbose=True`` prints a formatted ASCII summary report directly
+to the console, showing the detection method, total rows, and per-feature
+outlier counts, percentages, and bounds. When no structured return flags
+are set, the function returns ``None`` to suppress Jupyter auto-display —
+the ASCII report is the sole output.
+
+.. code-block:: python
+
+   detect_outliers(
+       df,
+       features=numeric_features,
+       method="iqr",
+       threshold=1.5,
+       verbose=True,
+   )
+
+**Output**
+
+.. code-block:: text
+
+                  OUTLIER DETECTION SUMMARY REPORT
+   +------------------------+------------------------------------------+
+   | Method                 | IQR (threshold=1.5)                      |
+   | Total rows             | 48,842                                   |
+   +------------------------+--------------+--------------+----------------+----------------+
+   | Variable               |  Outlier (n) |  Outlier (%) |    Lower Bound |    Upper Bound |
+   +------------------------+--------------+--------------+----------------+----------------+
+   | hours-per-week         |       13,496 |        27.63 |        32.5000 |        52.5000 |
+   | capital-gain           |        4,035 |         8.26 |         0.0000 |         0.0000 |
+   | capital-loss           |        2,282 |         4.67 |         0.0000 |         0.0000 |
+   | education-num          |        1,794 |         3.67 |         4.5000 |        16.5000 |
+   | fnlwgt                 |        1,453 |         2.97 |   -62,586.7500 |   417,779.2500 |
+   | age                    |          216 |         0.44 |        -2.0000 |        78.0000 |
+   +------------------------+--------------+--------------+----------------+----------------+
+
+   Total flagged rows (any feature): 20,284 (41.53%)
+
+
+Example 6: Return Bounds for Downstream Use in ``data_doctor``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Setting ``return_bounds=True`` returns a dictionary mapping each feature
+to a ``(lower_bound, upper_bound)`` tuple alongside the summary DataFrame.
+The bounds can be passed directly to :func:`data_doctor` as
+``lower_cutoff`` and ``upper_cutoff``, creating a seamless workflow from
+outlier detection to feature-level treatment.
+
+.. code-block:: python
+
+   summary_b, bounds = detect_outliers(
+       df,
+       features=numeric_features,
+       method="iqr",
+       return_bounds=True,
+   )
+
+   print("  Bounds per feature:")
+   for feat, (lower, upper) in bounds.items():
+       print(f"    {feat:<20} lower={lower:>10}  upper={upper:>10}")
+
+   print("\n  Example: pass capital-gain bounds directly to data_doctor:")
+   print(f"    lower_cutoff={bounds['capital-gain'][0]}")
+   print(f"    upper_cutoff={bounds['capital-gain'][1]}")
+
+**Output**
+
+.. code-block:: text
+
+   [12] return_bounds=True — bounds dict for downstream data_doctor use
+     Bounds per feature:
+       age                  lower=      -2.0  upper=      78.0
+       fnlwgt               lower=  -62586.75  upper=  417779.25
+       education-num        lower=       4.5  upper=      16.5
+       capital-gain         lower=       0.0  upper=       0.0
+       capital-loss         lower=       0.0  upper=       0.0
+       hours-per-week       lower=      32.5  upper=      52.5
+
+     Example: pass capital-gain bounds directly to data_doctor:
+       lower_cutoff=0.0
+       upper_cutoff=0.0
 
 
 DataFrame Analysis
