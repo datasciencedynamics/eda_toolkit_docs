@@ -2626,10 +2626,6 @@ The following code demonstrates this workflow:
 
 
 
-
-
-
-
 Stacked Crosstab Plots
 =======================
 
@@ -2637,87 +2633,177 @@ Stacked Crosstab Plots
 
 The ``stacked_crosstab_plot`` function is a powerful tool for visualizing categorical data relationships through stacked bar plots and contingency tables (crosstabs). It supports extensive customization options, including plot appearance, color schemes, and saving output in multiple formats. Users can choose between regular or normalized plots and control whether the function returns the generated crosstabs as a dictionary.
 
-.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, legend_loc="best", label_fontsize=12, tick_fontsize=10, text_wrap=50, remove_stacks=False, xlim=None, ylim=None)
+.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, figsize=None, outer_pad=10.0, h_pad=5.0, file_prefix=None, logscale=False, plot_type="both", show_legend=True, legend_loc="best", reverse_legend=True, label_fontsize=12, tick_fontsize=10, title_wrap=50, tick_wrap=20, thousands_sep=True, pct_format=True, show_values=False, subtitle=None, remove_stacks=False, xlim=None, ylim=None)
 
-    :param df: The DataFrame containing the data to plot.
-    :type df: pandas.DataFrame
-    :param col: The name of the column in the DataFrame to be analyzed.
-    :type col: str
-    :param func_col: List of columns in the DataFrame to generate the crosstabs and stack the bars in the plot.
-    :type func_col: list of str
-    :param legend_labels_list: List of legend labels corresponding to each column in ``func_col``.
-    :type legend_labels_list: list of list of str
-    :param title: List of titles for each plot generated.
-    :type title: list of str
-    :param kind: Type of plot to generate (``"bar"`` or ``"barh"`` for horizontal bars). Default is ``"bar"``.
-    :type kind: str, optional
-    :param width: Width of the bars in the bar plot. Default is ``0.9``.
-    :type width: float, optional
-    :param rot: Rotation angle of the x-axis labels. Default is ``0``.
-    :type rot: int, optional
-    :param custom_order: Custom order for the categories in ``col``.
-    :type custom_order: list, optional
-    :param image_path_png: Directory path to save PNG plot images.
-    :type image_path_png: str, optional
-    :param image_path_svg: Directory path to save SVG plot images.
-    :type image_path_svg: str, optional
-    :param save_formats: List, string, or tuple of file formats to save the plots (e.g., ``["png", "svg"]``). Default is ``None``. Raises an error if an invalid format is provided without the corresponding path.
-    :type save_formats: list, str, or tuple, optional
-    :param color: List of colors to use for the plots. Default is the seaborn color palette.
-    :type color: list of str, optional
-    :param output: Specify the output type: ``"plots_only"``, ``"crosstabs_only"``, or ``"both"``. Default is ``"both"``.
-    :type output: str, optional
-    :param return_dict: Return the crosstabs as a dictionary. Default is ``False``.
-    :type return_dict: bool, optional
-    :param x: Width of the figure in inches.
-    :type x: int, optional
-    :param y: Height of the figure in inches.
-    :type y: int, optional
-    :param p: Padding between subplots.
-    :type p: int, optional
-    :param file_prefix: Prefix for filenames when saving plots.
-    :type file_prefix: str, optional
-    :param logscale: Apply a logarithmic scale to the y-axis. Default is ``False``.
-    :type logscale: bool, optional
-    :param plot_type: Type of plot to generate: ``"both"``, ``"regular"``, or ``"normalized"``. Default is ``"both"``.
-    :type plot_type: str, optional
-    :param show_legend: Show the legend on the plot. Default is ``True``.
-    :type show_legend: bool, optional
-    :param legend_loc: Location of the legend on the plot. Passed directly to
-        ``matplotlib.axes.Axes.legend``. Common options include ``"best"``,
-        ``"upper right"``, ``"upper left"``, ``"lower left"``,
-        ``"lower right"``, and ``"center"``.
-    :type legend_loc: str, optional
-    :param label_fontsize: Font size for axis labels. Default is ``12``.
-    :type label_fontsize: int, optional
-    :param tick_fontsize: Font size for tick labels. Default is ``10``.
-    :type tick_fontsize: int, optional
-    :param text_wrap: Maximum width of the title text before wrapping. Default is ``50``.
-    :type text_wrap: int, optional
-    :param remove_stacks: Remove stacks and create a regular bar plot. Only works when ``plot_type`` is ``"regular"``. Default is ``False``.
-    :type remove_stacks: bool, optional
-    :param xlim: Tuple or list specifying limits of the x-axis (e.g., ``(min, max)``).
-    :type xlim: tuple or list, optional
-    :param ylim: Tuple or list specifying limits of the y-axis (e.g., ``(min, max)``).
-    :type ylim: tuple or list, optional
+   :param df: The DataFrame containing the data to plot.
+   :type df: pandas.DataFrame
 
-    :raises ValueError:
-        - If ``remove_stacks`` is ``True`` and ``plot_type`` is not ``"regular"``.
-        - If an invalid save format is specified without providing the corresponding path.
-        - If ``output`` is not one of ``"both"``, ``"plots_only"``, or ``"crosstabs_only"``.
-        - If ``plot_type`` is not one of ``"both"``, ``"regular"``, or ``"normalized"``.
-        - If ``remove_stacks`` is used with ``plot_type`` not set to ``"regular"``.
-        - If lengths of ``title``, ``func_col``, and ``legend_labels_list`` are unequal.
-    :raises KeyError: If any column in ``col`` or ``func_col`` is missing from the DataFrame.
+   :param col: The name of the column in the DataFrame to be analyzed.
+   :type col: str
 
-    :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is ``True``. Otherwise, returns ``None``.
-    :rtype: dict or ``None``
+   :param func_col: List of columns in the DataFrame to generate the
+      crosstabs and stack the bars in the plot.
+   :type func_col: list of str
 
-.. admonition:: Notes
+   :param legend_labels_list: List of legend labels corresponding to each
+      column in ``func_col``.
+   :type legend_labels_list: list of list of str
 
-    - Ensure ``save_formats`` aligns with provided paths for saving images. For instance, specify ``image_path_png`` or ``image_path_svg`` if saving as ``"png"`` or ``"svg"`` respectively.
-    - The returned crosstabs dictionary includes both absolute and normalized values when ``return_dict=True``.
+   :param title: List of titles for each plot generated.
+   :type title: list of str
 
+   :param kind: Type of plot to generate. ``"bar"`` for vertical bars,
+      ``"barh"`` for horizontal bars. Default is ``"bar"``.
+   :type kind: str, optional
+
+   :param width: Width of the bars in the bar plot. Default is ``0.9``.
+   :type width: float, optional
+
+   :param rot: Rotation angle of the x-axis labels. Default is ``0``.
+   :type rot: int, optional
+
+   :param custom_order: Custom order for the categories in ``col``.
+   :type custom_order: list, optional
+
+   :param image_path_png: Directory path to save PNG plot images.
+   :type image_path_png: str, optional
+
+   :param image_path_svg: Directory path to save SVG plot images.
+   :type image_path_svg: str, optional
+
+   :param save_formats: List, string, or tuple of file formats to save
+      the plots (e.g. ``["png", "svg"]``). Default is ``None``.
+   :type save_formats: list, str, or tuple, optional
+
+   :param color: List of colors to use for the plots. Default is the
+      seaborn color palette.
+   :type color: list of str or str, optional
+
+   :param output: Specify the output type: ``"plots_only"``,
+      ``"crosstabs_only"``, or ``"both"``. Default is ``"both"``.
+   :type output: str, optional
+
+   :param return_dict: Return the crosstabs as a dictionary.
+      Default is ``False``.
+   :type return_dict: bool, optional
+
+   :param figsize: A ``(width, height)`` tuple controlling the figure
+      size in inches. Defaults to ``(12, 8)`` if not provided.
+   :type figsize: tuple of int, optional
+
+   :param outer_pad: Outer padding around the entire figure, passed to
+      ``tight_layout(pad=...)``. Default is ``10.0``.
+   :type outer_pad: float, optional
+
+   :param h_pad: Vertical padding between subplots in inches, passed to
+      ``tight_layout(h_pad=...)``. Increase this if the title of the
+      lower plot overlaps the x-axis labels of the upper plot.
+      Default is ``5.0``.
+   :type h_pad: float, optional
+
+   :param file_prefix: Prefix for filenames when saving plots.
+   :type file_prefix: str, optional
+
+   :param logscale: Apply a logarithmic scale to the y-axis.
+      Default is ``False``.
+   :type logscale: bool, optional
+
+   :param plot_type: Type of plot to generate: ``"both"``, ``"regular"``,
+      or ``"normalized"``. Default is ``"both"``.
+   :type plot_type: str, optional
+
+   :param show_legend: Show the legend on the plot. Default is ``True``.
+   :type show_legend: bool, optional
+
+   :param legend_loc: Location of the legend on the plot, passed directly
+      to ``matplotlib.axes.Axes.legend``. Common options include
+      ``"best"``, ``"upper right"``, ``"upper left"``, ``"lower left"``,
+      ``"lower right"``, and ``"center"``. Default is ``"best"``.
+   :type legend_loc: str, optional
+
+   :param reverse_legend: If ``True``, reverses the legend entry order so
+      it matches the visual stack order (top-to-bottom in the legend
+      matches top-to-bottom in the bars). Default is ``True``.
+   :type reverse_legend: bool, optional
+
+   :param label_fontsize: Font size for axis labels and titles.
+      Default is ``12``.
+   :type label_fontsize: int, optional
+
+   :param tick_fontsize: Font size for tick labels on the axes.
+      Default is ``10``.
+   :type tick_fontsize: int, optional
+
+   :param title_wrap: Maximum character width of the plot title text
+      before wrapping to a new line. Default is ``50``.
+   :type title_wrap: int, optional
+
+   :param tick_wrap: Maximum character width of axis tick label text
+      before wrapping to a new line. Applied to x-axis tick labels for
+      vertical bar plots and y-axis tick labels for horizontal bar plots.
+      Default is ``20``.
+   :type tick_wrap: int, optional
+
+   :param thousands_sep: If ``True``, applies a thousands separator
+      (e.g. 1,000,000) to the count axis of non-normalized plots.
+      Has no effect on normalized plots. Default is ``True``.
+   :type thousands_sep: bool, optional
+
+   :param pct_format: If ``True``, formats the count axis of normalized
+      plots as percentages (e.g. 0.25 → 25%). Default is ``True``.
+   :type pct_format: bool, optional
+
+   :param show_values: If ``True``, annotates each bar segment with its
+      value. Regular plots show counts; normalized plots show percentages.
+      Segments too small to fit a label are skipped automatically.
+      Default is ``False``.
+   :type show_values: bool, optional
+
+   :param subtitle: Subtitle text displayed as italic text below each
+      figure. Accepts either a single string (applied to all plots) or a
+      list of strings with one entry per ``func_col``.
+   :type subtitle: str or list of str, optional
+
+   :param remove_stacks: Remove stacks and create a regular bar plot.
+      Only works when ``plot_type`` is ``"regular"``. Default is ``False``.
+   :type remove_stacks: bool, optional
+
+   :param xlim: Tuple specifying the limits of the x-axis.
+   :type xlim: tuple of float, optional
+
+   :param ylim: Tuple specifying the limits of the y-axis.
+   :type ylim: tuple of float, optional
+
+   :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is
+      ``True``. Otherwise returns ``None``.
+   :rtype: dict or None
+
+   :raises ValueError: If ``remove_stacks`` is ``True`` and ``plot_type``
+      is not ``"regular"``.
+   :raises ValueError: If ``output`` is not one of ``"both"``,
+      ``"plots_only"``, or ``"crosstabs_only"``.
+   :raises ValueError: If ``plot_type`` is not one of ``"both"``,
+      ``"regular"``, or ``"normalized"``.
+   :raises ValueError: If lengths of ``title``, ``func_col``, and
+      ``legend_labels_list`` are unequal.
+   :raises ValueError: If ``subtitle`` is provided and its length does
+      not match ``func_col``.
+   :raises ValueError: If an invalid save format is specified without
+      the corresponding image path.
+   :raises KeyError: If any column in ``col`` or ``func_col`` is missing
+      from the DataFrame.
+
+   .. admonition:: Notes
+
+      - Ensure ``save_formats`` aligns with provided paths. Specify
+        ``image_path_png`` or ``image_path_svg`` when saving as ``"png"``
+        or ``"svg"`` respectively.
+      - The returned crosstabs dictionary includes both absolute and
+        normalized values when ``return_dict=True``.
+      - ``figsize``, ``outer_pad``, and ``h_pad`` replace the deprecated
+        ``x``, ``y``, and ``p`` parameters from earlier versions.
+      - ``title_wrap`` and ``tick_wrap`` replace the deprecated
+        ``text_wrap`` parameter.
 
 Stacked Bar Plots With Crosstabs Example
 -----------------------------------------
@@ -2806,15 +2892,14 @@ In this example:
         legend_labels_list=legend_labels_list,
         title=title,
         kind="bar",
-        width=0.8, 
-        rot=0, 
+        width=0.8,
+        rot=0,
         custom_order=None,
-        color=["#00BFC4", "#F8766D"], 
+        color=["#00BFC4", "#F8766D"],
         output="both",
         return_dict=True,
-        x=14,
-        y=8,
-        p=10,
+        figsize=(14, 8),
+        outer_pad=10,
         logscale=False,
         plot_type="both",
         show_legend=True,
@@ -2863,8 +2948,8 @@ crosstabs for further analysis or export.
 
    <div class="no-click">
 
-.. image:: ../assets/Stacked_Bar_Age_sex.svg
-   :alt: KDE Distributions
+.. image:: ../assets/age_group_by_sex.svg
+   :alt: stacked bar plot of Age vs. Sex
    :align: center
    :width: 900px
 
@@ -2880,7 +2965,7 @@ crosstabs for further analysis or export.
 
    <div class="no-click">
 
-.. image:: ../assets/Stacked_Bar_Age_income.svg
+.. image:: ../assets/age_group_income.svg
    :alt: Stacked Bar Plot Age vs. Income
    :align: center
    :width: 900px
@@ -3146,11 +3231,20 @@ Using the census dataset [1]_, to create horizontal stacked bar plots, set the `
 standard vertical stacked bar plot into a horizontal orientation, making it easier 
 to compare categories when there are many labels on the ``y-axis``.
 
+For ``kind="barh"``, matplotlib renders categories bottom-to-top by default, so if you want < 18 at the top pass the list in reverse order:
+
+.. code-block:: python
+
+    custom_order = [
+        "90-99", "80-89", "70-79", "60-69",
+        "50-59", "40-49", "30-39", "18-29", "< 18"
+    ]
+
 .. raw:: html
 
    <div class="no-click">
 
-.. image:: ../assets/Stacked_Bar_Age_income_pivoted.svg
+.. image:: ../assets/age_group_income_pivoted.svg
    :alt: Stacked Bar Plot Age vs. Income (Pivoted)
    :align: center
    :width: 900px
@@ -3178,7 +3272,7 @@ for income by age.
 
    <div class="no-click">
 
-.. image:: ../assets/Stacked_Bar_Age_income_regular.svg
+.. image:: ../assets/age_group_income_regular.svg
    :alt: Stacked Bar Plot Age vs. Income (Regular)
    :align: center
    :width: 900px
@@ -3214,7 +3308,7 @@ regular bar plots for income by age, without stacking.
 
    <div class="no-click">
 
-.. image:: ../assets/Bar_Age_regular_income.svg
+.. image:: ../assets/age_group_distribution.svg
    :alt: Bar Plot Age vs. Income (Regular)
    :align: center
    :width: 900px
@@ -3361,72 +3455,127 @@ This function supports:
 - Saving plots in PNG and/or SVG format with customizable file paths.
 - Visualizing the distribution of metrics across categories, either individually, as subplots, or both.
 
-.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=False, show_legend=True, legend_loc="best", plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, **kwargs)
+.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, image_filename=None, show_legend=True, legend_loc="best", plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, custom_order=None, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, **kwargs)
 
-    :param df: The DataFrame containing the data to plot.
-    :type df: pandas.DataFrame
-    :param metrics_list: List of column names representing the metrics to plot.
-    :type metrics_list: list of str
-    :param metrics_comp: List of column names representing the comparison categories.
-    :type metrics_comp: list of str
-    :param n_rows: Number of rows in the subplot grid. Automatically calculated if not provided.
-    :type n_rows: int, optional
-    :param n_cols: Number of columns in the subplot grid. Automatically calculated if not provided.
-    :type n_cols: int, optional
-    :param image_path_png: Directory path to save plots in PNG format.
-    :type image_path_png: str, optional
-    :param image_path_svg: Directory path to save plots in SVG format.
-    :type image_path_svg: str, optional
-    :param save_plots: Boolean indicating whether to save plots. Defaults to ``False``.
-    :type save_plots: bool, optional
-    :param show_legend: Whether to display the legend in the plots. Defaults to ``True``.
-    :type show_legend: bool, optional
-    :param legend_loc: Location of the legend on the plot. Passed directly to
-        ``matplotlib.axes.Axes.legend``. Common options include ``"best"``,
-        ``"upper right"``, ``"upper left"``, ``"lower left"``,
-        ``"lower right"``, and ``"center"``.
-    :type legend_loc: str, optional
-    :param plot_type: Type of plot to generate, either ``"boxplot"`` or ``"violinplot"``. Defaults to ``"boxplot"``.
-    :type plot_type: str, optional
-    :param xlabel_rot: Rotation angle for x-axis labels. Defaults to ``0``.
-    :type xlabel_rot: int, optional
-    :param show_plot: Specify the plot display mode: ``"individual"``, ``"subplots"``, or ``"both"``. Defaults to ``"both"``.
-    :type show_plot: str, optional
-    :param rotate_plot: Whether to rotate the plots by swapping the x and y axes. Defaults to ``False``.
-    :type rotate_plot: bool, optional
-    :param individual_figsize: Dimensions (width, height) for individual plots. Defaults to ``(6, 4)``.
-    :type individual_figsize: tuple, optional
-    :param subplot_figsize: Dimensions (width, height) of the subplots.
-    :type subplot_figsize: tuple, optional
-    :param label_fontsize: Font size for axis labels. Defaults to ``12``.
-    :type label_fontsize: int, optional
-    :param tick_fontsize: Font size for tick labels. Defaults to ``10``.
-    :type tick_fontsize: int, optional
-    :param text_wrap: Maximum width of plot titles before wrapping. Defaults to ``50``.
-    :type text_wrap: int, optional
-    :param xlim: Limits for the x-axis as a tuple or list (``min``, ``max``).
-    :type xlim: tuple or list, optional
-    :param ylim: Limits for the y-axis as a tuple or list (``min``, ``max``).
-    :type ylim: tuple or list, optional
-    :param kwargs: Additional keyword arguments passed to the Seaborn plotting function.
-    :type kwargs: additional keyword arguments
+   :param df: The DataFrame containing the data to plot.
+   :type df: pandas.DataFrame
 
-    :raises ValueError:
-        - If ``show_plot`` is not one of ``"individual"``, ``"subplots"``, or ``"both"``.
-        - If ``save_plots`` is ``True`` but neither ``image_path_png`` nor ``image_path_svg`` is specified.
-        - If ``rotate_plot`` is not a boolean value.
-        - If ``individual_figsize`` is not a tuple or list of two numbers.
-        - If ``subplot_figsize`` is provided and is not a tuple or list of two numbers.
+   :param metrics_list: List of column names representing the metrics to plot.
+   :type metrics_list: list of str
 
-    :returns: ``None``
+   :param metrics_comp: List of column names representing the comparison
+      categories. A plain string is automatically coerced to a
+      single-element list.
+   :type metrics_comp: list of str or str
 
-.. admonition:: Notes
+   :param n_rows: Number of rows in the subplot grid. Calculated
+      automatically if not provided.
+   :type n_rows: int, optional
 
-    - Automatically calculates subplot dimensions if ``n_rows`` and ``n_cols`` are not specified.
-    - Rotating plots swaps the roles of the x and y axes.
-    - Saving plots requires specifying valid file paths for PNG and/or SVG formats.
-    - Supports customization of plot labels, title wrapping, and font sizes for publication-quality visuals.
+   :param n_cols: Number of columns in the subplot grid. Calculated
+      automatically if not provided.
+   :type n_cols: int, optional
 
+   :param image_path_png: Directory path to save plots in PNG format.
+   :type image_path_png: str, optional
+
+   :param image_path_svg: Directory path to save plots in SVG format.
+   :type image_path_svg: str, optional
+
+   :param image_filename: Base filename (without extension) used when
+      saving figures. No files are saved if this is not provided. For
+      individual plots, the metric name and plot type are appended to
+      this base. For subplot grids, the plot type is appended.
+   :type image_filename: str, optional
+
+   :param show_legend: Whether to display the legend on the plots.
+      Default is ``True``.
+   :type show_legend: bool, optional
+
+   :param legend_loc: Location of the legend, passed to Matplotlib's
+      ``legend(loc=...)``. Common options include ``"best"``,
+      ``"upper right"``, ``"upper left"``, ``"lower left"``,
+      ``"lower right"``, and ``"center"``. Default is ``"best"``.
+   :type legend_loc: str, optional
+
+   :param plot_type: Type of plot to generate. Options are
+      ``"boxplot"`` or ``"violinplot"``. Shorthand aliases ``"box"``
+      and ``"violin"`` are also accepted. Default is ``"boxplot"``.
+   :type plot_type: str, optional
+
+   :param xlabel_rot: Rotation angle for x-axis labels. Default is ``0``.
+   :type xlabel_rot: int, optional
+
+   :param show_plot: Specify the plot display mode: ``"individual"``,
+      ``"subplots"``, or ``"both"``. Default is ``"both"``.
+   :type show_plot: str, optional
+
+   :param rotate_plot: If ``True``, rotates the plots by swapping the
+      x and y axes. Default is ``False``.
+   :type rotate_plot: bool, optional
+
+   :param custom_order: Specifies the display order of categories along
+      the comparison axis. If ``None``, the default order observed in
+      the data is used.
+   :type custom_order: list, optional
+
+   :param individual_figsize: Dimensions ``(width, height)`` for
+      individual plots. Default is ``(6, 4)``.
+   :type individual_figsize: tuple of int, optional
+
+   :param subplot_figsize: Dimensions ``(width, height)`` of the
+      subplots. Defaults to a size proportional to the number of rows
+      and columns if not provided.
+   :type subplot_figsize: tuple of int, optional
+
+   :param label_fontsize: Font size for axis labels. Default is ``12``.
+   :type label_fontsize: int, optional
+
+   :param tick_fontsize: Font size for axis tick labels. Default is ``10``.
+   :type tick_fontsize: int, optional
+
+   :param text_wrap: Maximum number of characters in plot titles and
+      axis labels before wrapping to the next line. Default is ``50``.
+   :type text_wrap: int, optional
+
+   :param xlim: Limits for the x-axis as ``(min, max)``.
+   :type xlim: tuple of float, optional
+
+   :param ylim: Limits for the y-axis as ``(min, max)``.
+   :type ylim: tuple of float, optional
+
+   :param kwargs: Additional keyword arguments passed to the Seaborn
+      plotting function. Layout-related keys (``"figsize"``,
+      ``"subplot_figsize"``, ``"individual_figsize"``) are automatically
+      stripped. If ``palette`` is passed here it takes precedence over
+      the internal default and is applied consistently across all
+      subplots.
+
+   :returns: ``None``
+   :rtype: None
+
+   :raises ValueError: If ``show_plot`` is not one of ``"individual"``,
+      ``"subplots"``, or ``"both"``.
+   :raises ValueError: If ``rotate_plot`` is not a boolean value.
+   :raises ValueError: If ``individual_figsize`` or ``subplot_figsize``
+      is not a tuple or list of two numbers.
+   :raises ValueError: If ``plot_type`` is not one of ``"boxplot"``,
+      ``"violinplot"``, ``"box"``, or ``"violin"``.
+   :raises ValueError: If ``image_filename`` is provided but neither
+      ``image_path_png`` nor ``image_path_svg`` is specified.
+
+   .. admonition:: Notes
+
+      - ``save_plots`` has been removed. Figures are saved only when
+        ``image_filename`` is provided alongside at least one output
+        path.
+      - ``custom_order`` is passed directly to Seaborn's ``order``
+        parameter and controls category ordering on the comparison axis.
+      - Shorthand aliases ``"box"`` and ``"violin"`` are accepted for
+        ``plot_type``.
+      - If ``palette`` is supplied via ``**kwargs``, it is resolved once
+        before any plotting loop and applied consistently to all
+        subplots.
 
 
 This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, subplots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.
@@ -3434,23 +3583,23 @@ This function provides the ability to create and save boxplots or violin plots f
 Box Plots: Subplots Example
 -----------------------------
 
-In this example with the US census data [1]_, the box_violin_plot function is employed to create subplots of 
-boxplots, comparing different metrics against the ``"age_group"`` column in the 
-DataFrame. The ``metrics_comp`` parameter is set to [``"age_group"``], meaning 
-that the comparison will be based on different age groups. The ``metrics_list`` is 
-provided as ``age_boxplot_list``, which contains the specific metrics to be visualized. 
-The function is configured to arrange the plots in a subplots format. The ``image_path_png`` and 
-``image_path_svg`` parameters are specified to save the plots in both PNG and 
-SVG formats, and the save_plots option is set to ``"all"``, ensuring that both 
-individual and subplots are saved.
+In this example with the US census data [1]_, the ``box_violin_plot`` function is
+employed to create subplots of boxplots, comparing different metrics against the
+``"age_group"`` column in the DataFrame. The ``metrics_comp`` parameter is set to
+``["age_group"]``, meaning that the comparison will be based on different age
+groups. The ``metrics_list`` is provided as ``age_boxplot_list``, which contains
+the specific metrics to be visualized.
 
-The plots are displayed in a subplots format, as indicated by the ``show_plot="subplots"`` 
-parameter. The ``plot_type`` is set to ``"boxplot"``, so the function will generate 
-boxplots for each metric in the list. Additionally, the ```x-axis``` labels are rotated 
-by 90 degrees (``xlabel_rot=90``) to ensure that the labels are legible. The legend is 
-hidden by setting ``show_legend=False``, keeping the plots clean and focused on the data. 
-This configuration provides a comprehensive visual comparison of the specified 
-metrics across different age groups, with all plots saved for future reference or publication.
+The plots are displayed in a subplots format, as indicated by the
+``show_plot="subplots"`` parameter. The ``plot_type`` is set to ``"boxplot"``,
+so the function generates boxplots for each metric in the list. The ``x``-axis
+labels are rotated by 90 degrees (``xlabel_rot=90``) to ensure legibility, and
+the legend is hidden by setting ``show_legend=False``, keeping the plots clean
+and focused on the data. The ``image_path_png``, ``image_path_svg``, and
+``image_filename`` parameters are specified to save the plots in both PNG and
+SVG formats. This configuration provides a comprehensive visual comparison of
+the specified metrics across different age groups, with all plots saved for
+future reference or publication.
 
 
 .. code-block:: python
@@ -3475,8 +3624,8 @@ metrics across different age groups, with all plots saved for future reference o
         metrics_comp=metrics_comp,
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        save_plots="all",
-        show_plot="both",
+        image_filename="age_group_boxplot",
+        show_plot="subplots",
         show_legend=False,
         plot_type="boxplot",
         xlabel_rot=90,
@@ -3517,10 +3666,7 @@ of boxplots while maintaining all other settings.
         df=df,
         metrics_list=age_boxplot_list,
         metrics_comp=metrics_comp,
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
-        save_plots="all",
-        show_plot="both",
+        show_plot="subplots",
         show_legend=False,
         plot_type="violinplot",
         xlabel_rot=90,
@@ -3561,7 +3707,7 @@ This adjustment flips the axes, providing a different perspective on the data di
         df=df,
         metrics_list=age_boxplot_list,
         metrics_comp=metrics_comp,
-        show_plot="both",
+        show_plot="subplots",
         rotate_plot=True,
         show_legend=False,
         plot_type="violinplot",
@@ -4128,88 +4274,185 @@ The function offers flexibility in configuring axis labels and titles:
 
 The ``flex_corr_matrix`` function allows you to display the heatmap directly or save it as PNG or SVG files for use in reports or presentations. If saving is enabled, you can specify file paths and names for the images.
 
-.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, figsize=(10, 10), title=None, label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, **kwargs)
+.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, image_filename=None, figsize=(10, 10), title=None, label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, label_names=None, cbar_padding=0.8, cbar_width_ratio=0.05, show_colorbar=True, corr_method="pearson", show_significance=False, significance_level=0.05, significance_method="stars", significance_legend_x=0.5, filter_significance=None, **kwargs)
 
-    Create a customizable correlation heatmap with options for annotation, color mapping, figure size, and saving the plot.
+   Creates a correlation heatmap with extensive customization options,
+   including triangular masking, alignment adjustments, title wrapping,
+   dynamic colorbar scaling, and optional significance overlays.
 
-    :param df: The DataFrame containing the data.
-    :type df: pandas.DataFrame
+   :param df: The DataFrame containing the data.
+   :type df: pandas.DataFrame
 
-    :param cols: List of column names to include in the correlation matrix. If ``None``, all columns are included.
-    :type cols: list of str, optional
+   :param cols: List of column names to include in the correlation matrix.
+      If ``None``, all columns are included.
+   :type cols: list of str, optional
 
-    :param annot: Whether to annotate the heatmap with correlation coefficients. Default is ``True``.
-    :type annot: bool, optional
+   :param annot: Whether to annotate the heatmap with correlation
+      coefficients. Default is ``True``.
+   :type annot: bool, optional
 
-    :param cmap: The colormap to use for the heatmap. Default is ``"coolwarm"``.
-    :type cmap: str, optional
+   :param cmap: The colormap to use for the heatmap. Default is
+      ``"coolwarm"``.
+   :type cmap: str, optional
 
-    :param save_plots: Controls whether to save the plots. Default is ``False``.
-    :type save_plots: bool, optional
+   :param save_plots: Whether to save the heatmap using the title as the
+      filename. For explicit filename control use ``image_filename``
+      instead. Default is ``False``.
+   :type save_plots: bool, optional
 
-    :param image_path_png: Directory path to save PNG images of the heatmap.
-    :type image_path_png: str, optional
+   :param image_path_png: Directory path to save the heatmap as a PNG
+      image.
+   :type image_path_png: str, optional
 
-    :param image_path_svg: Directory path to save SVG images of the heatmap.
-    :type image_path_svg: str, optional
+   :param image_path_svg: Directory path to save the heatmap as an SVG
+      image.
+   :type image_path_svg: str, optional
 
-    :param figsize: Width and height of the figure for the heatmap. Default is ``(10, 10)``.
-    :type figsize: tuple, optional
+   :param image_filename: Base filename (without extension) for saving
+      the figure. When provided, takes precedence over the
+      ``save_plots``-derived filename. Requires at least one of
+      ``image_path_png`` or ``image_path_svg`` to be set.
+   :type image_filename: str, optional
 
-    :param title: Title of the heatmap. Default is ``None``.
-    :type title: str, optional
+   :param figsize: Width and height of the heatmap figure.
+      Default is ``(10, 10)``.
+   :type figsize: tuple of int, optional
 
-    :param label_fontsize: Font size for tick labels and colorbar label. Default is ``12``.
-    :type label_fontsize: int, optional
+   :param title: Title of the heatmap. Default is ``None``.
+   :type title: str, optional
 
-    :param tick_fontsize: Font size for axis tick labels. Default is ``10``.
-    :type tick_fontsize: int, optional
+   :param label_fontsize: Font size for axis labels and title.
+      Default is ``12``.
+   :type label_fontsize: int, optional
 
-    :param xlabel_rot: Rotation angle for x-axis labels. Default is ``45``.
-    :type xlabel_rot: int, optional
+   :param tick_fontsize: Font size for tick labels and colorbar labels.
+      Default is ``10``.
+   :type tick_fontsize: int, optional
 
-    :param ylabel_rot: Rotation angle for y-axis labels. Default is ``0``.
-    :type ylabel_rot: int, optional
+   :param xlabel_rot: Rotation angle for x-axis labels. Default is ``45``.
+   :type xlabel_rot: int, optional
 
-    :param xlabel_alignment: Horizontal alignment for x-axis labels. Default is ``"right"``.
-    :type xlabel_alignment: str, optional
+   :param ylabel_rot: Rotation angle for y-axis labels. Default is ``0``.
+   :type ylabel_rot: int, optional
 
-    :param ylabel_alignment: Vertical alignment for y-axis labels. Default is ``"center_baseline"``.
-    :type ylabel_alignment: str, optional
+   :param xlabel_alignment: Horizontal alignment for x-axis labels
+      (e.g. ``"center"``, ``"right"``). Default is ``"right"``.
+   :type xlabel_alignment: str, optional
 
-    :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
-    :type text_wrap: int, optional
+   :param ylabel_alignment: Vertical alignment for y-axis labels
+      (e.g. ``"center"``, ``"top"``). Default is ``"center_baseline"``.
+   :type ylabel_alignment: str, optional
 
-    :param vmin: Minimum value for the heatmap color scale. Default is ``-1``.
-    :type vmin: float, optional
+   :param text_wrap: Maximum character width of the title and axis labels
+      before wrapping. Default is ``50``.
+   :type text_wrap: int, optional
 
-    :param vmax: Maximum value for the heatmap color scale. Default is ``1``.
-    :type vmax: float, optional
+   :param vmin: Minimum value for the heatmap color scale. Default is
+      ``-1``.
+   :type vmin: float, optional
 
-    :param cbar_label: Label for the colorbar. Default is ``"Correlation Index"``.
-    :type cbar_label: str, optional
+   :param vmax: Maximum value for the heatmap color scale. Default is
+      ``1``.
+   :type vmax: float, optional
 
-    :param triangular: Whether to show only the upper triangle of the correlation matrix. Default is ``True``. Excludes the diagonal and lower triangle if enabled.
-    :type triangular: bool, optional
+   :param cbar_label: Label for the colorbar. Default is
+      ``"Correlation Index"``.
+   :type cbar_label: str, optional
 
-    :param kwargs: Additional keyword arguments for ``seaborn.heatmap()`` to customize the plot further.
-    :type kwargs: dict, optional
+   :param triangular: Whether to show only the upper triangle of the
+      correlation matrix, excluding the diagonal. Default is ``True``.
+   :type triangular: bool, optional
 
-    :raises ValueError: 
+   :param label_names: A dictionary mapping original column names to
+      custom display labels.
+   :type label_names: dict, optional
 
-        - If ``annot`` is not a boolean.
-        - If ``cols`` is not a list of column names.
-        - If ``save_plots`` is not a boolean.
-        - If ``triangular`` is not a boolean.
-        - If ``save_plots`` is True but neither ``image_path_png`` nor ``image_path_svg`` is specified.
+   :param cbar_padding: Padding between the heatmap and the colorbar.
+      Default is ``0.8``.
+   :type cbar_padding: float, optional
 
-    :returns: ``None``
-        This function does not return any value but generates and optionally saves a correlation heatmap.
+   :param cbar_width_ratio: Relative width of the colorbar compared to
+      the heatmap. Default is ``0.05``.
+   :type cbar_width_ratio: float, optional
 
-.. note::
+   :param show_colorbar: Whether to display the colorbar. Default is
+      ``True``.
+   :type show_colorbar: bool, optional
 
-    To save images, you must specify the paths for ``image_path_png`` or ``image_path_svg``. 
-    Saving plots is triggered by providing a valid ``save_formats`` string.
+   :param corr_method: Method for computing the correlation matrix.
+      Options are ``"pearson"``, ``"spearman"``, or ``"kendall"``. The
+      corresponding scipy pairwise function is used when computing
+      p-values for significance testing. Default is ``"pearson"``.
+   :type corr_method: str, optional
+
+   :param show_significance: If ``True``, overlays significance
+      information on heatmap cells based on pairwise p-values computed
+      using ``corr_method``. Default is ``False``.
+   :type show_significance: bool, optional
+
+   :param significance_level: The p-value threshold below which a
+      correlation is considered statistically significant. Used in both
+      ``"stars"`` and ``"mask"`` modes. Default is ``0.05``.
+   :type significance_level: float, optional
+
+   :param significance_method: How to display significance on the
+      heatmap. Options are:
+
+      - ``"stars"``: appends significance stars to each cell annotation
+        (:math:`* \; p < 0.05`, :math:`** \; p < 0.01`,
+        :math:`*** \; p < 0.001`).
+      - ``"mask"``: blanks out cells where the correlation is not
+        significant (:math:`p \geq` ``significance_level``).
+
+      Default is ``"stars"``.
+   :type significance_method: str, optional
+
+   :param significance_legend_x: Horizontal position of the significance
+      legend in figure coordinates when ``show_significance=True`` and
+      ``significance_method="stars"``. ``0.0`` is the left edge, ``1.0``
+      is the right edge, and ``0.5`` centers the legend. The vertical
+      position is computed automatically. Default is ``0.5``.
+   :type significance_legend_x: float, optional
+
+   :param filter_significance: If provided, filters the correlation
+      matrix to only include variables that have at least one significant
+      pairwise correlation at the specified threshold. For example,
+      ``filter_significance=0.05`` drops any variable with no p-value
+      below ``0.05``. Automatically enables ``show_significance``.
+      Default is ``None``.
+   :type filter_significance: float or None, optional
+
+   :param kwargs: Additional keyword arguments passed to
+      ``sns.heatmap()``.
+
+   :returns: ``None``
+   :rtype: None
+
+   :raises ValueError: If ``annot``, ``save_plots``, or ``triangular``
+      is not a boolean value.
+   :raises ValueError: If ``cols`` is not a list of column names.
+   :raises ValueError: If ``save_plots`` is ``True`` but neither
+      ``image_path_png`` nor ``image_path_svg`` is specified.
+   :raises ValueError: If ``image_filename`` is provided but neither
+      ``image_path_png`` nor ``image_path_svg`` is specified.
+   :raises ValueError: If ``corr_method`` is not one of ``"pearson"``,
+      ``"spearman"``, or ``"kendall"``.
+   :raises ValueError: If ``significance_method`` is not one of
+      ``"stars"`` or ``"mask"``.
+   :raises ValueError: If ``filter_significance`` is not ``None`` and
+      is not a positive float.
+
+   .. note::
+
+      - When ``show_significance=True``, the diagonal always displays
+        ``"1.00"`` to reflect perfect self-correlation regardless of
+        significance method.
+      - ``filter_significance`` auto-enables ``show_significance`` so
+        the overlay is always visible alongside the filtered matrix.
+      - Near-zero correlation values (:math:`|r| < 0.005`) are zeroed
+        before plotting to eliminate the ``-0.00`` display artifact.
+      - ``image_filename`` takes precedence over ``save_plots`` when
+        both are provided.
 
 
 Triangular Correlation Matrix Example
@@ -4264,8 +4507,8 @@ options.
 
    <div class="no-click">
 
-.. image:: ../assets/us_census_correlation_matrix.svg
-   :alt: Scatter Plot Comparisons (Grouped)
+.. image:: ../assets/correlation_matrix.svg
+   :alt: Correlation Matrix - Triangular
    :align: center
    :width: 900px
 
@@ -4276,6 +4519,69 @@ options.
 .. raw:: html
    
    <div style="height: 50px;"></div>
+
+
+Correlation Matrix with Significance Overlay
+---------------------------------------------
+
+Building on the triangular correlation matrix above, the following example
+extends the visualization by overlaying statistical significance information
+directly on each cell. The ``show_significance=True`` parameter activates
+pairwise p-value computation using the method specified by ``corr_method``
+(Pearson by default). Cells are annotated with significance stars following
+the convention :math:`* \; p < 0.05`, :math:`** \; p < 0.01`,
+:math:`*** \; p < 0.001`, allowing the reader to distinguish statistically
+meaningful correlations at a glance. The ``filter_significance`` parameter
+can optionally restrict the matrix to only those variables that share at
+least one significant pairwise correlation at the specified threshold,
+reducing visual clutter in wide feature sets.
+
+.. code-block:: python
+
+    from eda_toolkit import flex_corr_matrix
+
+    flex_corr_matrix(
+        df=df,
+        cols=df_num.columns.to_list(),
+        annot=True,
+        cmap="coolwarm",
+        figsize=(10, 8),
+        title="US Census Correlation Matrix with Significance",
+        xlabel_alignment="right",
+        label_fontsize=14,
+        tick_fontsize=12,
+        xlabel_rot=45,
+        ylabel_rot=0,
+        text_wrap=50,
+        vmin=-1,
+        vmax=1,
+        cbar_label="Correlation Index",
+        triangular=True,
+        corr_method="pearson",
+        show_significance=True,
+        significance_method="stars",
+        significance_level=0.05,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/corr_matrix_stat_sig.svg
+   :alt: Correlation Matrix with Significance Overlay
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+
 
 Full Correlation Matrix Example
 ----------------------------------
@@ -4316,8 +4622,8 @@ when you want a comprehensive view of all correlations in the dataset.
 
    <div class="no-click">
 
-.. image:: ../assets/us_census_correlation_matrix_full.svg
-   :alt: Scatter Plot Comparisons (Grouped)
+.. image:: ../assets/correlation_matrix_full.svg
+   :alt: Correlation Matrix - Full
    :align: center
    :width: 900px
 

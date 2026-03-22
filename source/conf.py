@@ -28,9 +28,7 @@ extensions = [
     # "sphinxcontrib.bibtex",
 ]
 
-smv_tag_whitelist = (
-    r"^v\d+\.\d+.*$"  # Whitelist tags with versions like v1.0, v2.0, etc.
-)
+smv_tag_whitelist = r"^v0\.0\.(1[6-9]|2[0-9])$"
 smv_branch_whitelist = r"^main$"  # Whitelist the main branch
 
 # Add this line to specify the bibliography file

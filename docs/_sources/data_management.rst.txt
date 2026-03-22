@@ -676,9 +676,8 @@ including the underlying formulas and a side-by-side comparison see
         ``bounds`` dict directly as inputs to :func:`data_doctor` for
         feature-level transformation and treatment.
 
-
-Implementation Examples
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. rubric:: Implementation Examples
+    :class: rubric-large
 
 Example 1: Basic IQR outlier detection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -728,7 +727,7 @@ Example 2: Within-group detection using ``groupby``
     1             age          239         0.49        -23.0        101.0
 
 Example 3: Z-Score Outlier Detection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Z-score method flags observations that deviate from the mean by more
 than a specified number of standard deviations. 
@@ -760,7 +759,7 @@ than a specified number of standard deviations.
 
 
 Example 4: Isolation Forest Outlier Detection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -825,9 +824,11 @@ The ``dataframe_profiler`` function provides a comprehensive summary of a DataFr
     - Preprocesses columns to handle NaN values and replaces empty strings with Pandas' ``pd.NA`` for consistency.
 
 
-
+.. rubric:: Implementation Examples
+    :class: rubric-large
+    
 Census Income Example
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^
 
 In the example below, we demonstrate how to use the ``dataframe_profiler`` 
 function to analyze a DataFrame's columns. 
@@ -1057,7 +1058,7 @@ function to analyze a DataFrame's columns.
 
 
 DataFrame Column Names
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``unique_values_total``
     This column indicates the total number of unique values present in each column of the DataFrame. It measures the distinct values that a column holds. For example, in the ``age`` column, there are 74 unique values, meaning the ages vary across 74 distinct entries.
@@ -1072,7 +1073,8 @@ DataFrame Column Names
     This column shows the percentage that the most frequent value constitutes of the total number of rows. For example, in the ``race`` column, the value ``White`` makes up ``85.5%`` of the data, suggesting a significant majority of the dataset belongs to this racial group.
 
 Calculation Details
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
 - ``unique_values_total`` is calculated using the ``nunique()`` function, which counts the number of unique values in a column.
 - ``max_unique_value`` is determined by finding the value with the highest frequency using ``value_counts()``. For string columns, any missing values (if present) are replaced with the string ``"null"`` before computing the frequency.
 - ``max_unique_value_total`` is the frequency count of the ``max_unique_value``.
@@ -1647,10 +1649,11 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
 
    This design keeps the output clean for interactive use while still supporting unpacking in scripts and pipelines.
 
-
+.. rubric:: Implementation Examples
+    :class: rubric-large
 
 Example 1: Mixed Summary Table ``(value_counts=False)``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the example below, we generate a summary table from a dataset containing both 
 categorical and continuous variables. We explicitly define which columns fall into 
@@ -1716,7 +1719,7 @@ summary row, rather than expanding into one row per category-level value.
 
 
 Example 2: Mixed Summary Table ``(value_counts=True)``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this example, we call ``generate_table1`` without manually specifying which 
 columns are categorical or continuous. Instead, the function automatically detects 
@@ -2161,7 +2164,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
    <div style="height: 50px;"></div>
 
 Example 3: Group Comparisons (*P*-Values)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this example we first turn the continuous `fnlwgt` variable into two new categorical factors:
 
@@ -2942,7 +2945,8 @@ pipelines, and long-running notebooks.
       pass that dict as ``namespace``.
     - Process RSS memory may not decrease immediately even after garbage collection.
 
-**Usage Examples**
+.. rubric:: Implementation Examples
+   :class: rubric-large
 
 The following examples demonstrate common and advanced usage patterns for
 ``del_inactive_dataframes``. Each example recreates its own DataFrames so behavior
@@ -2954,7 +2958,7 @@ in this script or notebook.
 
 
 Example 1: List Active DataFrames (No Deletion)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Inspect which DataFrames are currently active without deleting anything.
 
@@ -3006,7 +3010,7 @@ Inspect which DataFrames are currently active without deleting anything.
 
 
 Example 2: Delete Everything Except a Single DataFrame
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Remove all DataFrames except the one explicitly listed.
 
@@ -3128,7 +3132,7 @@ Remove all DataFrames except the one explicitly listed.
     'memory': None}
 
 Example 3: Dry Run (Preview Deletions)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Preview which DataFrames *would* be deleted without actually removing them.
 
@@ -3209,7 +3213,7 @@ This mode is recommended before running destructive cleanup steps.
 
 
 Example 4: Include IPython Output Cache Variables
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In Jupyter notebooks, output cache variables such as ``_14`` may reference large
 DataFrames. These are ignored by default but can be included explicitly.
@@ -3289,7 +3293,7 @@ DataFrames. These are ignored by default but can be included explicitly.
     'memory': None}
 
 Example 5: Track DataFrame Memory Usage
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Report total DataFrame memory usage before and after cleanup.
 
@@ -3368,7 +3372,7 @@ Report total DataFrame memory usage before and after cleanup.
 
 
 Example 6: Track DataFrame Memory and Process RSS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Enable power-user memory tracking, including process-level RSS when available.
 
@@ -3448,7 +3452,7 @@ after garbage collection.
 
 
 Example 7: Programmatic Usage (No Console Output)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Suppress console output and consume the returned summary dictionary directly.
 

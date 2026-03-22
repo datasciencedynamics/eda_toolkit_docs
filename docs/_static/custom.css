@@ -18,3 +18,7 @@
     color: red;  /* Set the text color to red */
     font-family: monospace;
 }
+
+.rubric-large {
+    font-size: 1.4em;
+}
