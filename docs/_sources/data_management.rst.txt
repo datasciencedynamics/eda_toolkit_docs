@@ -591,6 +591,232 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
     3   13/02/2022    David  250.25        2022-02-13
     4   07/04/2022      Eve  300.00        2022-04-07
 
+
+
+Normality Tests
+----------------
+
+For a theoretical treatment of the Shapiro-Wilk, D'Agostino K², and
+Anderson-Darling tests including the underlying formulas and a
+side-by-side comparison see :ref:`normality_tests_theory`.
+
+.. function:: normality_tests(df, features=None, alpha=0.05, tests=None, decimal_places=6)
+
+   Run batch normality tests across numeric columns of a DataFrame.
+   Applies Shapiro-Wilk, D'Agostino K², and/or Anderson-Darling tests
+   to each specified feature and returns a summary DataFrame with test
+   statistics, p-values, and a pass/fail determination at the given
+   significance level.
+
+   :param df: The DataFrame to analyze.
+   :type df: pandas.DataFrame
+
+   :param features: List of numeric column names to test. If ``None``,
+      all numeric columns are used.
+   :type features: list of str, optional
+
+   :param alpha: Significance level for the pass/fail determination.
+      A feature is considered normally distributed (``True``) if the
+      p-value exceeds ``alpha``. For Anderson-Darling, the test
+      statistic is compared to the critical value at the significance
+      level closest to ``alpha``. Default is ``0.05``.
+   :type alpha: float, optional
+
+   :param tests: List of tests to run. Options are ``"shapiro"``,
+      ``"dagostino"``, and ``"anderson"``. Defaults to all three if
+      not specified.
+   :type tests: list of str, optional
+
+   :param decimal_places: Number of decimal places to round the
+      ``Statistic`` and ``P-value`` columns in the returned summary
+      DataFrame. Default is ``6``.
+   :type decimal_places: int, optional
+
+   :returns:
+      A summary DataFrame with columns ``Variable``, ``Test``,
+      ``Statistic``, ``P-value``, and ``Normal``.
+
+      - ``P-value`` for Anderson-Darling is interpolated from
+        pre-calculated tables when scipy >= 1.17 is installed.
+        On older scipy versions, ``"-"`` is shown and pass/fail is
+        determined by comparing the statistic against the critical
+        value at ``alpha``.
+      - Shapiro-Wilk is skipped for features with n > 5,000. Affected
+        rows show ``"-"`` in all fields and a note is printed to the
+        console.
+      - ``Normal`` is ``True`` if the feature passes the normality
+        test at the given ``alpha``, ``False`` otherwise.
+
+   :rtype: pandas.DataFrame
+
+   :raises ValueError: If ``alpha`` is not between 0 and 1.
+   :raises ValueError: If any value in ``tests`` is not one of
+      ``"shapiro"``, ``"dagostino"``, or ``"anderson"``.
+   :raises ValueError: If no numeric features are found.
+
+   .. note::
+
+      - Shapiro-Wilk was designed for small samples and is most
+        reliable for n < 5,000. At large n, even trivially small
+        deviations from normality cause rejection, a phenomenon
+        known as the large sample problem. Use D'Agostino K² or
+        Anderson-Darling for large datasets.
+      - D'Agostino K² tests for departures from normality via
+        skewness and kurtosis jointly and is better suited for
+        larger samples (n ≥ 8).
+      - Anderson-Darling requires a minimum of 3 observations.
+        Pass/fail on older scipy versions is determined by comparing
+        the test statistic against the critical value at the
+        significance level closest to ``alpha`` from the set
+        ``[15%, 10%, 5%, 2.5%, 1%]``.
+      - NaN values are dropped per feature before testing.
+      - Results are sorted by ``Variable`` then ``Test``.
+
+
+.. rubric:: Implementation Examples
+    :class: rubric-large
+
+Example 1: All Three Tests on Numeric Features
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   from eda_toolkit import normality_tests
+
+   summary = normality_tests(df)
+   print(summary)
+
+**Output**
+
+.. code-block:: text
+
+    Note: Shapiro-Wilk was skipped for: age, capital-gain, capital-loss, 
+    census_id, education-num, fnlwgt, hours-per-week
+    Reason: n > 5,000. The test is unreliable at large n
+    — even trivial deviations cause rejection.
+    Use D'Agostino K² or Anderson-Darling instead.
+
+              Variable              Test   Statistic P-value Normal
+    0              age  Anderson-Darling    360.3992       -  False
+    1              age     D'Agostino K²   2297.7388     0.0  False
+    2              age      Shapiro-Wilk           -       -      -
+    3     capital-gain  Anderson-Darling  15742.7739       -  False
+    4     capital-gain     D'Agostino K²   82380.708     0.0  False
+    5     capital-gain      Shapiro-Wilk           -       -      -
+    6     capital-loss  Anderson-Darling  17487.0774       -  False
+    7     capital-loss     D'Agostino K²  43751.6371     0.0  False
+    8     capital-loss      Shapiro-Wilk           -       -      -
+    9        census_id  Anderson-Darling    524.4184       -  False
+    10       census_id     D'Agostino K²  39324.1803     0.0  False
+    11       census_id      Shapiro-Wilk           -       -      -
+    12   education-num  Anderson-Darling   1656.4921       -  False
+    13   education-num     D'Agostino K²   1250.5686     0.0  False
+    14   education-num      Shapiro-Wilk           -       -      -
+    15          fnlwgt  Anderson-Darling    573.8888       -  False
+    16          fnlwgt     D'Agostino K²  15801.4515     0.0  False
+    17          fnlwgt      Shapiro-Wilk           -       -      -
+    18  hours-per-week  Anderson-Darling   2658.0842       -  False
+    19  hours-per-week     D'Agostino K²   3839.2537     0.0  False
+    20  hours-per-week      Shapiro-Wilk           -       -      -
+
+
+Example 2: All Three Tests on Numeric Features
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   from eda_toolkit import normality_tests
+
+   summary = normality_tests(
+       df,
+       features=["age", "capital-gain", "hours-per-week"],
+   )
+   print(summary)
+
+**Output**
+
+.. code-block:: text
+
+    Note: Shapiro-Wilk was skipped for: age, capital-gain, hours-per-week
+    Reason: n > 5,000. The test is unreliable at large n
+    — even trivial deviations cause rejection.
+    Use D'Agostino K² or Anderson-Darling instead.
+
+             Variable              Test     Statistic P-value Normal
+    0             age  Anderson-Darling    360.399195       -  False
+    1             age     D'Agostino K²   2297.738804     0.0  False
+    2             age      Shapiro-Wilk             -       -      -
+    3    capital-gain  Anderson-Darling  15742.773884       -  False
+    4    capital-gain     D'Agostino K²  82380.708015     0.0  False
+    5    capital-gain      Shapiro-Wilk             -       -      -
+    6  hours-per-week  Anderson-Darling   2658.084159       -  False
+    7  hours-per-week     D'Agostino K²   3839.253695     0.0  False
+    8  hours-per-week      Shapiro-Wilk             -       -      -
+
+
+Example 3: Specific Tests and Custom Alpha
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   from eda_toolkit import normality_tests
+   
+   summary = normality_tests(
+       df,
+       features=["age", "capital-gain", "hours-per-week"],
+       tests=["shapiro", "dagostino"],
+       alpha=0.01,
+       decimal_places=4,
+   )
+   print(summary)
+
+
+**Output**
+
+.. code-block:: text
+
+    Note: Shapiro-Wilk was skipped for: age, capital-gain, hours-per-week
+    Reason: n > 5,000. The test is unreliable at large n
+    — even trivial deviations cause rejection.
+    Use D'Agostino K² or Anderson-Darling instead.
+
+             Variable           Test  Statistic P-value Normal
+    0             age  D'Agostino K²  2297.7388     0.0  False
+    1             age   Shapiro-Wilk          -       -      -
+    2    capital-gain  D'Agostino K²  82380.708     0.0  False
+    3    capital-gain   Shapiro-Wilk          -       -      -
+    4  hours-per-week  D'Agostino K²  3839.2537     0.0  False
+    5  hours-per-week   Shapiro-Wilk          -       -      -
+
+
+Example 4: Small Dataset Where Shapiro-Wilk Runs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On datasets with fewer than 5,000 rows, Shapiro-Wilk runs normally
+and returns a p-value alongside the other tests.
+
+.. code-block:: python
+
+   from eda_toolkit import normality_tests
+   
+   summary = normality_tests(
+       df_small,
+       features=["bmi", "age", "blood_pressure"],
+       tests=["shapiro", "anderson"],
+       alpha=0.05,
+   )
+   print(summary)
+
+**Output**
+
+.. code-block:: text
+
+      Variable              Test  Statistic P-value  Normal
+    0      age  Anderson-Darling   3.513461       -   False
+    1      age      Shapiro-Wilk   0.964522     0.0   False
+
+
+
 Outlier Detection
 -------------------
 
@@ -699,7 +925,7 @@ Example 1: Basic IQR outlier detection
 
 .. code-block:: text
 
-            Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
+             Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
     0  hours-per-week        13496        27.63         32.5         52.5
     1    capital-gain         4035         8.26          0.0          0.0
     2             age          216         0.44         -2.0         78.0
@@ -722,7 +948,7 @@ Example 2: Within-group detection using ``groupby``
 
 .. code-block:: text
 
-            Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
+             Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
     0  hours-per-week        11282        23.10        -10.0         77.5
     1             age          239         0.49        -23.0        101.0
 
@@ -860,7 +1086,7 @@ outlier detection to feature-level treatment.
    [12] return_bounds=True — bounds dict for downstream data_doctor use
      Bounds per feature:
        age                  lower=      -2.0  upper=      78.0
-       fnlwgt               lower=  -62586.75  upper=  417779.25
+       fnlwgt               lower= -62586.75  upper= 417779.25
        education-num        lower=       4.5  upper=      16.5
        capital-gain         lower=       0.0  upper=       0.0
        capital-loss         lower=       0.0  upper=       0.0

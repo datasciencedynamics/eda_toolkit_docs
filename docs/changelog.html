@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.24 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=81383b35"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2540bf2c"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -83,6 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#normality-tests">Normality Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#outlier-detection-methods">Outlier Detection Methods</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
@@ -92,6 +93,11 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-25">Version 0.0.25</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fix-correct-p-value-precision-loss-in-bonferroni-bh-adjustment">Fix: correct <em>p</em>-value precision loss in Bonferroni/BH adjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#added-new-normality-tests-function-to-eda-toolkit">Added new <code class="docutils literal notranslate"><span class="pre">normality_tests()</span></code> function to <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-24">Version 0.0.24</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enhancements">Enhancements</a></li>
@@ -135,9 +141,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id22">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id23">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id24">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id25">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -170,6 +176,26 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-25">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.25/index.html">Version 0.0.25</a><a class="headerlink" href="#version-0-0-25" title="Permalink to this heading"></a></h2>
+<section id="fix-correct-p-value-precision-loss-in-bonferroni-bh-adjustment">
+<h3>Fix: correct <em>p</em>-value precision loss in Bonferroni/BH adjustment<a class="headerlink" href="#fix-correct-p-value-precision-loss-in-bonferroni-bh-adjustment" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Previously, <em>p</em>-values were rounded before being fed into the multiple comparison correction block, causing small but meaningful errors in adjusted values. Raw <em>p</em>-values are now stored as <code class="docutils literal notranslate"><span class="pre">_raw_pval</span></code> internally, the correction block reads from those, and a cleanup pass removes the key before DataFrame construction. All rounding is handled consistently via <code class="docutils literal notranslate"><span class="pre">decimal_places</span></code> at the formatting stage.</p></li>
+</ul>
+</section>
+<section id="added-new-normality-tests-function-to-eda-toolkit">
+<h3>Added new <code class="docutils literal notranslate"><span class="pre">normality_tests()</span></code> function to <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.<a class="headerlink" href="#added-new-normality-tests-function-to-eda-toolkit" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Batch normality testing across numeric columns via Shapiro-Wilk, D’Agostino K², and Anderson-Darling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">tests</span></code>, <code class="docutils literal notranslate"><span class="pre">features</span></code>, and <code class="docutils literal notranslate"><span class="pre">decimal_places</span></code> parameters</p></li>
+<li><p>Shapiro-Wilk auto-skipped for n &gt; 5,000 with printed explanation</p></li>
+<li><p>Anderson-Darling uses <code class="docutils literal notranslate"><span class="pre">method=&quot;interpolate&quot;</span></code> on scipy &gt;= 1.17 for real p-values; falls back to critical value comparison on older scipy</p></li>
+<li><p>Returns tidy summary DataFrame with <code class="docutils literal notranslate"><span class="pre">Variable</span></code>, <code class="docutils literal notranslate"><span class="pre">Test</span></code>, <code class="docutils literal notranslate"><span class="pre">Statistic</span></code>, <code class="docutils literal notranslate"><span class="pre">P-value</span></code>, <code class="docutils literal notranslate"><span class="pre">Normal</span></code> columns</p></li>
+<li><p>40 pytest tests added</p></li>
+</ul>
+</section>
+</section>
 <section id="version-0-0-24">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.24/index.html">Version 0.0.24</a><a class="headerlink" href="#version-0-0-24" title="Permalink to this heading"></a></h2>
 <section id="new-features">
@@ -1162,8 +1188,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id22">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h2>
+<section id="id23">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1181,8 +1207,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id23">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h2>
+<section id="id24">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1264,8 +1290,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id24">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h2>
+<section id="id25">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>

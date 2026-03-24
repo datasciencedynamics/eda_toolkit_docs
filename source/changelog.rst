@@ -24,6 +24,27 @@
 Changelog
 ==========
 
+`Version 0.0.25`_
+----------------------
+
+.. _Version 0.0.25: https://lshpaner.github.io/eda_toolkit_docs/v0.0.25/index.html
+
+Fix: correct *p*-value precision loss in Bonferroni/BH adjustment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Previously, *p*-values were rounded before being fed into the multiple comparison correction block, causing small but meaningful errors in adjusted values. Raw *p*-values are now stored as ``_raw_pval`` internally, the correction block reads from those, and a cleanup pass removes the key before DataFrame construction. All rounding is handled consistently via ``decimal_places`` at the formatting stage.
+
+Added new ``normality_tests()`` function to ``eda_toolkit``.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Batch normality testing across numeric columns via Shapiro-Wilk, D'Agostino K², and Anderson-Darling
+- ``alpha``, ``tests``, ``features``, and ``decimal_places`` parameters
+- Shapiro-Wilk auto-skipped for n > 5,000 with printed explanation
+- Anderson-Darling uses ``method="interpolate"`` on scipy >= 1.17 for real p-values; falls back to critical value comparison on older scipy
+- Returns tidy summary DataFrame with ``Variable``, ``Test``, ``Statistic``, ``P-value``, ``Normal`` columns
+- 40 pytest tests added
+
+
 `Version 0.0.24`_
 ----------------------
 

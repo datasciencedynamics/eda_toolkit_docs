@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gaussian Assumption for Normality &mdash; EDA Toolkit 0.0.24 documentation</title>
+  <title>Gaussian Assumption for Normality &mdash; EDA Toolkit 0.0.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=81383b35"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2540bf2c"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -120,6 +120,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#comparison-with-histogram-and-kde">Comparison with Histogram and KDE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tail-behavior-and-exceedance-functions">Tail Behavior and Exceedance Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">Practical Considerations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#normality-tests">Normality Tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#shapiro-wilk-test">Shapiro-Wilk Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#d-agostino-k2-test">D’Agostino K² Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#anderson-darling-test">Anderson-Darling Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-of-tests">Comparison of Tests</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#outlier-detection-methods">Outlier Detection Methods</a><ul>
@@ -699,6 +706,129 @@ logarithmic axis scaling.</p>
 analysis and serve as a robust complement to density-based visualizations.</p>
 </section>
 </section>
+<section id="normality-tests">
+<span id="normality-tests-theory"></span><h1>Normality Tests<a class="headerlink" href="#normality-tests" title="Permalink to this heading"></a></h1>
+<p>Normality tests provide a formal statistical framework for assessing
+whether a feature’s observed distribution is consistent with a Gaussian
+distribution. They complement visual diagnostics such as histograms,
+KDE plots, and ECDFs by quantifying the degree of departure from
+normality and attaching a probability to that departure under the null
+hypothesis <span class="math notranslate nohighlight">\(H_0: \text{the data are normally distributed}\)</span>.</p>
+<p>The <a class="reference internal" href="data_management.html#normality_tests" title="normality_tests"><code class="xref py py-func docutils literal notranslate"><span class="pre">normality_tests()</span></code></a> function supports three classical tests, each
+operating on a different principle and suited to different sample sizes.</p>
+<section id="shapiro-wilk-test">
+<h2>Shapiro-Wilk Test<a class="headerlink" href="#shapiro-wilk-test" title="Permalink to this heading"></a></h2>
+<p>The <strong>Shapiro-Wilk test</strong> <a class="footnote-reference brackets" href="#id9" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> is based on the correlation between the
+observed order statistics and the expected order statistics of a standard
+normal distribution. For a sample
+<span class="math notranslate nohighlight">\(X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}\)</span> of ordered
+observations, the test statistic is:</p>
+<div class="math notranslate nohighlight">
+\[W = \frac{\left( \sum_{i=1}^{n} a_i X_{(i)} \right)^2}
+         {\sum_{i=1}^{n} \left( X_i - \bar{X} \right)^2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(a_i\)</span> are coefficients derived from the means, variances,
+and covariances of the order statistics of a standard normal
+distribution, and <span class="math notranslate nohighlight">\(\bar{X}\)</span> is the sample mean.</p>
+<p><span class="math notranslate nohighlight">\(W\)</span> ranges from 0 to 1. A value close to 1 indicates the sample
+is consistent with normality; small values indicate departure. The null
+hypothesis is rejected when <span class="math notranslate nohighlight">\(W\)</span> falls below a critical threshold
+at the chosen significance level <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Shapiro-Wilk was designed for small samples and is most reliable for
+<span class="math notranslate nohighlight">\(n &lt; 5{,}000\)</span>. At large <span class="math notranslate nohighlight">\(n\)</span>, the test becomes so powerful
+that even trivially small, practically meaningless deviations from
+normality cause rejection. For this reason, <a class="reference internal" href="data_management.html#normality_tests" title="normality_tests"><code class="xref py py-func docutils literal notranslate"><span class="pre">normality_tests()</span></code></a>
+skips Shapiro-Wilk when <span class="math notranslate nohighlight">\(n &gt; 5{,}000\)</span> and prints an explanatory
+note directing the user to D’Agostino K² or Anderson-Darling instead.</p>
+</div>
+</section>
+<section id="d-agostino-k2-test">
+<h2>D’Agostino K² Test<a class="headerlink" href="#d-agostino-k2-test" title="Permalink to this heading"></a></h2>
+<p>The <strong>D’Agostino K² test</strong> <a class="footnote-reference brackets" href="#id10" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> assesses normality by jointly testing
+for excess skewness and kurtosis. The test statistic is:</p>
+<div class="math notranslate nohighlight">
+\[K^2 = Z_1(\sqrt{b_1})^2 + Z_2(b_2)^2\]</div>
+<p>where <span class="math notranslate nohighlight">\(Z_1\)</span> and <span class="math notranslate nohighlight">\(Z_2\)</span> are transformations of the sample
+skewness <span class="math notranslate nohighlight">\(\sqrt{b_1}\)</span> and sample excess kurtosis <span class="math notranslate nohighlight">\(b_2\)</span>
+respectively, normalized to approximately standard normal distributions
+under <span class="math notranslate nohighlight">\(H_0\)</span>.</p>
+<p>The sample skewness and kurtosis are defined as:</p>
+<div class="math notranslate nohighlight">
+\[\sqrt{b_1} = \frac{\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^3}
+                  {\left[\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^2
+                  \right]^{3/2}}\]</div>
+<div class="math notranslate nohighlight">
+\[b_2 = \frac{\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^4}
+           {\left[\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^2
+           \right]^{2}}\]</div>
+<p>Under <span class="math notranslate nohighlight">\(H_0\)</span>, <span class="math notranslate nohighlight">\(K^2\)</span> follows a chi-squared distribution with
+2 degrees of freedom. The p-value is computed as:</p>
+<div class="math notranslate nohighlight">
+\[p = P\left(\chi^2_2 &gt; K^2\right)\]</div>
+<p>D’Agostino K² is well suited for larger samples (<span class="math notranslate nohighlight">\(n \geq 8\)</span>) and
+is more powerful than Shapiro-Wilk when the departure from normality
+arises from skewness or heavy tails rather than a general shape
+mismatch.</p>
+</section>
+<section id="anderson-darling-test">
+<h2>Anderson-Darling Test<a class="headerlink" href="#anderson-darling-test" title="Permalink to this heading"></a></h2>
+<p>The <strong>Anderson-Darling test</strong> <a class="footnote-reference brackets" href="#id11" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> is a modification of the
+Kolmogorov-Smirnov test that gives greater weight to the tails of the
+distribution. It measures the discrepancy between the empirical
+cumulative distribution function <span class="math notranslate nohighlight">\(\hat{F}_n(x)\)</span> and the
+theoretical CDF <span class="math notranslate nohighlight">\(F(x)\)</span> of the hypothesized distribution:</p>
+<div class="math notranslate nohighlight">
+\[A^2 = -n - \frac{1}{n} \sum_{i=1}^{n}
+      \left(2i - 1\right)
+      \left[\ln F(X_{(i)}) + \ln\left(1 - F(X_{(n+1-i)})\right)
+      \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(X_{(1)} \leq \cdots \leq X_{(n)}\)</span> are the ordered
+observations and <span class="math notranslate nohighlight">\(F\)</span> is the standard normal CDF when testing
+for normality.</p>
+<p>Larger values of <span class="math notranslate nohighlight">\(A^2\)</span> indicate greater departure from the
+hypothesized distribution. The test compares <span class="math notranslate nohighlight">\(A^2\)</span> against
+critical values at fixed significance levels
+<span class="math notranslate nohighlight">\([15\%, 10\%, 5\%, 2.5\%, 1\%]\)</span>. When scipy &gt;= 1.17 is
+installed, a p-value is interpolated directly from pre-calculated
+tables via <code class="docutils literal notranslate"><span class="pre">method=&quot;interpolate&quot;</span></code>.</p>
+</section>
+<section id="comparison-of-tests">
+<h2>Comparison of Tests<a class="headerlink" href="#comparison-of-tests" title="Permalink to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Test</p></th>
+<th class="head"><p>Basis</p></th>
+<th class="head"><p>Best For</p></th>
+<th class="head"><p>P-value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Shapiro-Wilk</p></td>
+<td><p>Order statistic correlation</p></td>
+<td><p>Small samples (n &lt; 5,000)</p></td>
+<td><p>Analytic</p></td>
+</tr>
+<tr class="row-odd"><td><p>D’Agostino K²</p></td>
+<td><p>Skewness and kurtosis</p></td>
+<td><p>Larger samples (n ≥ 8)</p></td>
+<td><p>Chi-squared approximation</p></td>
+</tr>
+<tr class="row-even"><td><p>Anderson-Darling</p></td>
+<td><p>Weighted ECDF discrepancy</p></td>
+<td><p>All sample sizes</p></td>
+<td><p>Interpolated (scipy ≥ 1.17)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
 <section id="outlier-detection-methods">
 <span id="outlier-detection-theory"></span><h1>Outlier Detection Methods<a class="headerlink" href="#outlier-detection-methods" title="Permalink to this heading"></a></h1>
 <p>The <a class="reference internal" href="data_management.html#detect_outliers" title="detect_outliers"><code class="xref py py-func docutils literal notranslate"><span class="pre">detect_outliers()</span></code></a> function supports three classical methods for
@@ -746,7 +876,7 @@ often preferred for skewed or heavy-tailed distributions.</p>
 </section>
 <section id="isolation-forest">
 <h2>Isolation Forest<a class="headerlink" href="#isolation-forest" title="Permalink to this heading"></a></h2>
-<p><strong>Isolation Forest</strong> <a class="footnote-reference brackets" href="#id5" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is a tree-based anomaly
+<p><strong>Isolation Forest</strong> <a class="footnote-reference brackets" href="#id8" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is a tree-based anomaly
 detection algorithm that exploits the observation that outliers are few and
 different; they are easier to isolate than normal observations. The
 algorithm builds an ensemble of isolation trees by recursively partitioning
@@ -769,8 +899,8 @@ all features simultaneously and flags rows rather than individual feature
 values. As a result, every flagged row receives the same outlier flag across
 all features, and no explicit lower or upper bounds are computed (reported
 as <code class="docutils literal notranslate"><span class="pre">&quot;N/A&quot;</span></code> in the summary output).</p>
-<table class="docutils align-default" id="id6">
-<caption><span class="caption-text">Comparison of Outlier Detection Methods</span><a class="headerlink" href="#id6" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id12">
+<caption><span class="caption-text">Comparison of Outlier Detection Methods</span><a class="headerlink" href="#id12" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 25.0%" />
@@ -803,11 +933,31 @@ as <code class="docutils literal notranslate"><span class="pre">&quot;N/A&quot;<
 </tbody>
 </table>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id5" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">1</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id8" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">1</a><span class="fn-bracket">]</span></span>
 <p>Liu, F. T., Ting, K. M., &amp; Zhou, Z. H. (2008). Isolation Forest.
 <em>2008 Eighth IEEE International Conference on Data Mining</em>, 413–422.
 <a class="reference external" href="https://doi.org/10.1109/ICDM.2008.17">https://doi.org/10.1109/ICDM.2008.17</a></p>
+</aside>
+<aside class="footnote brackets" id="id9" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">2</a><span class="fn-bracket">]</span></span>
+<p>Shapiro, S. S., &amp; Wilk, M. B. (1965). An analysis of variance
+test for normality (complete samples). <em>Biometrika</em>, 52(3–4),
+591–611. <a class="reference external" href="https://doi.org/10.1093/biomet/52.3-4.591">https://doi.org/10.1093/biomet/52.3-4.591</a></p>
+</aside>
+<aside class="footnote brackets" id="id10" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">3</a><span class="fn-bracket">]</span></span>
+<p>D’Agostino, R. B., Belanger, A., &amp; D’Agostino, R. B. Jr.
+(1990). A suggestion for using powerful and informative tests of
+normality. <em>The American Statistician</em>, 44(4), 316–321.
+<a class="reference external" href="https://doi.org/10.1080/00031305.1990.10475751">https://doi.org/10.1080/00031305.1990.10475751</a></p>
+</aside>
+<aside class="footnote brackets" id="id11" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">4</a><span class="fn-bracket">]</span></span>
+<p>Anderson, T. W., &amp; Darling, D. A. (1952). Asymptotic theory
+of certain goodness-of-fit criteria based on stochastic processes.
+<em>Annals of Mathematical Statistics</em>, 23(2), 193–212.
+<a class="reference external" href="https://doi.org/10.1214/aoms/1177729437">https://doi.org/10.1214/aoms/1177729437</a></p>
 </aside>
 </aside>
 </section>

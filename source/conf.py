@@ -12,7 +12,7 @@ from docutils.parsers.rst import roles
 project = "EDA Toolkit"
 copyright = "2024, Leon Shpaner, Oscar Gil"
 author = "Leonid Shpaner, Oscar Gil"
-release = "0.0.24"
+release = "0.0.25"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

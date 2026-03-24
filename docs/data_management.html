@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Management Overview &mdash; EDA Toolkit 0.0.24 documentation</title>
+  <title>Data Management Overview &mdash; EDA Toolkit 0.0.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=81383b35"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2540bf2c"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -78,6 +78,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#standardized-dates">Standardized Dates</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#parse_date_with_rule"><code class="docutils literal notranslate"><span class="pre">parse_date_with_rule()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#normality-tests">Normality Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#normality_tests"><code class="docutils literal notranslate"><span class="pre">normality_tests()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-1-all-three-tests-on-numeric-features">Example 1: All Three Tests on Numeric Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-2-all-three-tests-on-numeric-features">Example 2: All Three Tests on Numeric Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-3-specific-tests-and-custom-alpha">Example 3: Specific Tests and Custom Alpha</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-4-small-dataset-where-shapiro-wilk-runs">Example 4: Small Dataset Where Shapiro-Wilk Runs</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#outlier-detection">Outlier Detection</a><ul>
@@ -162,6 +170,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#parameter-estimation-for-density-models-and-distribution-gof-plots">Parameter Estimation for Density Models and Distribution GOF Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#empirical-cumulative-distribution-function-ecdf">Empirical Cumulative Distribution Function: ECDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#normality-tests">Normality Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#outlier-detection-methods">Outlier Detection Methods</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
@@ -742,6 +751,213 @@ entire column in a DataFrame.</p>
 </pre></div>
 </div>
 </section>
+<section id="normality-tests">
+<h2>Normality Tests<a class="headerlink" href="#normality-tests" title="Permalink to this heading"></a></h2>
+<p>For a theoretical treatment of the Shapiro-Wilk, D’Agostino K², and
+Anderson-Darling tests including the underlying formulas and a
+side-by-side comparison see <a class="reference internal" href="theoretical_overview.html#normality-tests-theory"><span class="std std-ref">Normality Tests</span></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="normality_tests">
+<span class="sig-name descname"><span class="pre">normality_tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#normality_tests" title="Permalink to this definition"></a></dt>
+<dd><p>Run batch normality tests across numeric columns of a DataFrame.
+Applies Shapiro-Wilk, D’Agostino K², and/or Anderson-Darling tests
+to each specified feature and returns a summary DataFrame with test
+statistics, p-values, and a pass/fail determination at the given
+significance level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame to analyze.</p></li>
+<li><p><strong>features</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – List of numeric column names to test. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+all numeric columns are used.</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Significance level for the pass/fail determination.
+A feature is considered normally distributed (<code class="docutils literal notranslate"><span class="pre">True</span></code>) if the
+p-value exceeds <code class="docutils literal notranslate"><span class="pre">alpha</span></code>. For Anderson-Darling, the test
+statistic is compared to the critical value at the significance
+level closest to <code class="docutils literal notranslate"><span class="pre">alpha</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">0.05</span></code>.</p></li>
+<li><p><strong>tests</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – List of tests to run. Options are <code class="docutils literal notranslate"><span class="pre">&quot;shapiro&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;dagostino&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;anderson&quot;</span></code>. Defaults to all three if
+not specified.</p></li>
+<li><p><strong>decimal_places</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Number of decimal places to round the
+<code class="docutils literal notranslate"><span class="pre">Statistic</span></code> and <code class="docutils literal notranslate"><span class="pre">P-value</span></code> columns in the returned summary
+DataFrame. Default is <code class="docutils literal notranslate"><span class="pre">6</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A summary DataFrame with columns <code class="docutils literal notranslate"><span class="pre">Variable</span></code>, <code class="docutils literal notranslate"><span class="pre">Test</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Statistic</span></code>, <code class="docutils literal notranslate"><span class="pre">P-value</span></code>, and <code class="docutils literal notranslate"><span class="pre">Normal</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">P-value</span></code> for Anderson-Darling is interpolated from
+pre-calculated tables when scipy &gt;= 1.17 is installed.
+On older scipy versions, <code class="docutils literal notranslate"><span class="pre">&quot;-&quot;</span></code> is shown and pass/fail is
+determined by comparing the statistic against the critical
+value at <code class="docutils literal notranslate"><span class="pre">alpha</span></code>.</p></li>
+<li><p>Shapiro-Wilk is skipped for features with n &gt; 5,000. Affected
+rows show <code class="docutils literal notranslate"><span class="pre">&quot;-&quot;</span></code> in all fields and a note is printed to the
+console.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Normal</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> if the feature passes the normality
+test at the given <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">alpha</span></code> is not between 0 and 1.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If any value in <code class="docutils literal notranslate"><span class="pre">tests</span></code> is not one of
+<code class="docutils literal notranslate"><span class="pre">&quot;shapiro&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;dagostino&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;anderson&quot;</span></code>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If no numeric features are found.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Shapiro-Wilk was designed for small samples and is most
+reliable for n &lt; 5,000. At large n, even trivially small
+deviations from normality cause rejection, a phenomenon
+known as the large sample problem. Use D’Agostino K² or
+Anderson-Darling for large datasets.</p></li>
+<li><p>D’Agostino K² tests for departures from normality via
+skewness and kurtosis jointly and is better suited for
+larger samples (n ≥ 8).</p></li>
+<li><p>Anderson-Darling requires a minimum of 3 observations.
+Pass/fail on older scipy versions is determined by comparing
+the test statistic against the critical value at the
+significance level closest to <code class="docutils literal notranslate"><span class="pre">alpha</span></code> from the set
+<code class="docutils literal notranslate"><span class="pre">[15%,</span> <span class="pre">10%,</span> <span class="pre">5%,</span> <span class="pre">2.5%,</span> <span class="pre">1%]</span></code>.</p></li>
+<li><p>NaN values are dropped per feature before testing.</p></li>
+<li><p>Results are sorted by <code class="docutils literal notranslate"><span class="pre">Variable</span></code> then <code class="docutils literal notranslate"><span class="pre">Test</span></code>.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<p class="rubric-large rubric">Implementation Examples</p>
+<section id="example-1-all-three-tests-on-numeric-features">
+<h3>Example 1: All Three Tests on Numeric Features<a class="headerlink" href="#example-1-all-three-tests-on-numeric-features" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">normality_tests</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="n">normality_tests</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Note: Shapiro-Wilk was skipped for: age, capital-gain, capital-loss,
+census_id, education-num, fnlwgt, hours-per-week
+Reason: n &gt; 5,000. The test is unreliable at large n
+— even trivial deviations cause rejection.
+Use D&#39;Agostino K² or Anderson-Darling instead.
+
+          Variable              Test   Statistic P-value Normal
+0              age  Anderson-Darling    360.3992       -  False
+1              age     D&#39;Agostino K²   2297.7388     0.0  False
+2              age      Shapiro-Wilk           -       -      -
+3     capital-gain  Anderson-Darling  15742.7739       -  False
+4     capital-gain     D&#39;Agostino K²   82380.708     0.0  False
+5     capital-gain      Shapiro-Wilk           -       -      -
+6     capital-loss  Anderson-Darling  17487.0774       -  False
+7     capital-loss     D&#39;Agostino K²  43751.6371     0.0  False
+8     capital-loss      Shapiro-Wilk           -       -      -
+9        census_id  Anderson-Darling    524.4184       -  False
+10       census_id     D&#39;Agostino K²  39324.1803     0.0  False
+11       census_id      Shapiro-Wilk           -       -      -
+12   education-num  Anderson-Darling   1656.4921       -  False
+13   education-num     D&#39;Agostino K²   1250.5686     0.0  False
+14   education-num      Shapiro-Wilk           -       -      -
+15          fnlwgt  Anderson-Darling    573.8888       -  False
+16          fnlwgt     D&#39;Agostino K²  15801.4515     0.0  False
+17          fnlwgt      Shapiro-Wilk           -       -      -
+18  hours-per-week  Anderson-Darling   2658.0842       -  False
+19  hours-per-week     D&#39;Agostino K²   3839.2537     0.0  False
+20  hours-per-week      Shapiro-Wilk           -       -      -
+</pre></div>
+</div>
+</section>
+<section id="example-2-all-three-tests-on-numeric-features">
+<h3>Example 2: All Three Tests on Numeric Features<a class="headerlink" href="#example-2-all-three-tests-on-numeric-features" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">normality_tests</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="n">normality_tests</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;capital-gain&quot;</span><span class="p">,</span> <span class="s2">&quot;hours-per-week&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Note: Shapiro-Wilk was skipped for: age, capital-gain, hours-per-week
+Reason: n &gt; 5,000. The test is unreliable at large n
+— even trivial deviations cause rejection.
+Use D&#39;Agostino K² or Anderson-Darling instead.
+
+         Variable              Test     Statistic P-value Normal
+0             age  Anderson-Darling    360.399195       -  False
+1             age     D&#39;Agostino K²   2297.738804     0.0  False
+2             age      Shapiro-Wilk             -       -      -
+3    capital-gain  Anderson-Darling  15742.773884       -  False
+4    capital-gain     D&#39;Agostino K²  82380.708015     0.0  False
+5    capital-gain      Shapiro-Wilk             -       -      -
+6  hours-per-week  Anderson-Darling   2658.084159       -  False
+7  hours-per-week     D&#39;Agostino K²   3839.253695     0.0  False
+8  hours-per-week      Shapiro-Wilk             -       -      -
+</pre></div>
+</div>
+</section>
+<section id="example-3-specific-tests-and-custom-alpha">
+<h3>Example 3: Specific Tests and Custom Alpha<a class="headerlink" href="#example-3-specific-tests-and-custom-alpha" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">normality_tests</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="n">normality_tests</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;capital-gain&quot;</span><span class="p">,</span> <span class="s2">&quot;hours-per-week&quot;</span><span class="p">],</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;shapiro&quot;</span><span class="p">,</span> <span class="s2">&quot;dagostino&quot;</span><span class="p">],</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">decimal_places</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Note: Shapiro-Wilk was skipped for: age, capital-gain, hours-per-week
+Reason: n &gt; 5,000. The test is unreliable at large n
+— even trivial deviations cause rejection.
+Use D&#39;Agostino K² or Anderson-Darling instead.
+
+         Variable           Test  Statistic P-value Normal
+0             age  D&#39;Agostino K²  2297.7388     0.0  False
+1             age   Shapiro-Wilk          -       -      -
+2    capital-gain  D&#39;Agostino K²  82380.708     0.0  False
+3    capital-gain   Shapiro-Wilk          -       -      -
+4  hours-per-week  D&#39;Agostino K²  3839.2537     0.0  False
+5  hours-per-week   Shapiro-Wilk          -       -      -
+</pre></div>
+</div>
+</section>
+<section id="example-4-small-dataset-where-shapiro-wilk-runs">
+<h3>Example 4: Small Dataset Where Shapiro-Wilk Runs<a class="headerlink" href="#example-4-small-dataset-where-shapiro-wilk-runs" title="Permalink to this heading"></a></h3>
+<p>On datasets with fewer than 5,000 rows, Shapiro-Wilk runs normally
+and returns a p-value alongside the other tests.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">normality_tests</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="n">normality_tests</span><span class="p">(</span>
+    <span class="n">df_small</span><span class="p">,</span>
+    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;bmi&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;blood_pressure&quot;</span><span class="p">],</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;shapiro&quot;</span><span class="p">,</span> <span class="s2">&quot;anderson&quot;</span><span class="p">],</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  Variable              Test  Statistic P-value  Normal
+0      age  Anderson-Darling   3.513461       -   False
+1      age      Shapiro-Wilk   0.964522     0.0   False
+</pre></div>
+</div>
+</section>
+</section>
 <section id="outlier-detection">
 <h2>Outlier Detection<a class="headerlink" href="#outlier-detection" title="Permalink to this heading"></a></h2>
 <p>For a theoretical treatment of the Z-score, IQR, and Isolation Forest methods,
@@ -837,7 +1053,7 @@ feature-level transformation and treatment.</p></li>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>        Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>         Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
 0  hours-per-week        13496        27.63         32.5         52.5
 1    capital-gain         4035         8.26          0.0          0.0
 2             age          216         0.44         -2.0         78.0
@@ -856,7 +1072,7 @@ feature-level transformation and treatment.</p></li>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>        Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>         Variable  Outlier (n)  Outlier (%)  Lower Bound  Upper Bound
 0  hours-per-week        11282        23.10        -10.0         77.5
 1             age          239         0.49        -23.0        101.0
 </pre></div>
@@ -975,7 +1191,7 @@ outlier detection to feature-level treatment.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[12] return_bounds=True — bounds dict for downstream data_doctor use
   Bounds per feature:
     age                  lower=      -2.0  upper=      78.0
-    fnlwgt               lower=  -62586.75  upper=  417779.25
+    fnlwgt               lower= -62586.75  upper= 417779.25
     education-num        lower=       4.5  upper=      16.5
     capital-gain         lower=       0.0  upper=       0.0
     capital-loss         lower=       0.0  upper=       0.0

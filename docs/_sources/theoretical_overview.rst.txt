@@ -717,6 +717,147 @@ Practical Considerations
 Because of these properties, ECDFs are a foundational tool in exploratory data
 analysis and serve as a robust complement to density-based visualizations.
 
+
+.. _normality_tests_theory:
+
+Normality Tests
+----------------
+
+Normality tests provide a formal statistical framework for assessing
+whether a feature's observed distribution is consistent with a Gaussian
+distribution. They complement visual diagnostics such as histograms,
+KDE plots, and ECDFs by quantifying the degree of departure from
+normality and attaching a probability to that departure under the null
+hypothesis :math:`H_0: \text{the data are normally distributed}`.
+
+The :func:`normality_tests` function supports three classical tests, each
+operating on a different principle and suited to different sample sizes.
+
+Shapiro-Wilk Test
+^^^^^^^^^^^^^^^^^^
+
+The **Shapiro-Wilk test** [2]_ is based on the correlation between the
+observed order statistics and the expected order statistics of a standard
+normal distribution. For a sample
+:math:`X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}` of ordered
+observations, the test statistic is:
+
+.. math::
+
+    W = \frac{\left( \sum_{i=1}^{n} a_i X_{(i)} \right)^2}
+             {\sum_{i=1}^{n} \left( X_i - \bar{X} \right)^2}
+
+where :math:`a_i` are coefficients derived from the means, variances,
+and covariances of the order statistics of a standard normal
+distribution, and :math:`\bar{X}` is the sample mean.
+
+:math:`W` ranges from 0 to 1. A value close to 1 indicates the sample
+is consistent with normality; small values indicate departure. The null
+hypothesis is rejected when :math:`W` falls below a critical threshold
+at the chosen significance level :math:`\alpha`.
+
+.. note::
+
+   Shapiro-Wilk was designed for small samples and is most reliable for
+   :math:`n < 5{,}000`. At large :math:`n`, the test becomes so powerful
+   that even trivially small, practically meaningless deviations from
+   normality cause rejection. For this reason, :func:`normality_tests`
+   skips Shapiro-Wilk when :math:`n > 5{,}000` and prints an explanatory
+   note directing the user to D'Agostino K² or Anderson-Darling instead.
+
+D'Agostino K² Test
+^^^^^^^^^^^^^^^^^^^
+
+The **D'Agostino K² test** [3]_ assesses normality by jointly testing
+for excess skewness and kurtosis. The test statistic is:
+
+.. math::
+
+    K^2 = Z_1(\sqrt{b_1})^2 + Z_2(b_2)^2
+
+where :math:`Z_1` and :math:`Z_2` are transformations of the sample
+skewness :math:`\sqrt{b_1}` and sample excess kurtosis :math:`b_2`
+respectively, normalized to approximately standard normal distributions
+under :math:`H_0`.
+
+The sample skewness and kurtosis are defined as:
+
+.. math::
+
+    \sqrt{b_1} = \frac{\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^3}
+                      {\left[\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^2
+                      \right]^{3/2}}
+
+.. math::
+
+    b_2 = \frac{\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^4}
+               {\left[\frac{1}{n} \sum_{i=1}^{n}(X_i - \bar{X})^2
+               \right]^{2}}
+
+Under :math:`H_0`, :math:`K^2` follows a chi-squared distribution with
+2 degrees of freedom. The p-value is computed as:
+
+.. math::
+
+    p = P\left(\chi^2_2 > K^2\right)
+
+D'Agostino K² is well suited for larger samples (:math:`n \geq 8`) and
+is more powerful than Shapiro-Wilk when the departure from normality
+arises from skewness or heavy tails rather than a general shape
+mismatch.
+
+Anderson-Darling Test
+^^^^^^^^^^^^^^^^^^^^^^
+
+The **Anderson-Darling test** [4]_ is a modification of the
+Kolmogorov-Smirnov test that gives greater weight to the tails of the
+distribution. It measures the discrepancy between the empirical
+cumulative distribution function :math:`\hat{F}_n(x)` and the
+theoretical CDF :math:`F(x)` of the hypothesized distribution:
+
+.. math::
+
+    A^2 = -n - \frac{1}{n} \sum_{i=1}^{n}
+          \left(2i - 1\right)
+          \left[\ln F(X_{(i)}) + \ln\left(1 - F(X_{(n+1-i)})\right)
+          \right]
+
+where :math:`X_{(1)} \leq \cdots \leq X_{(n)}` are the ordered
+observations and :math:`F` is the standard normal CDF when testing
+for normality.
+
+Larger values of :math:`A^2` indicate greater departure from the
+hypothesized distribution. The test compares :math:`A^2` against
+critical values at fixed significance levels
+:math:`[15\%, 10\%, 5\%, 2.5\%, 1\%]`. When scipy >= 1.17 is
+installed, a p-value is interpolated directly from pre-calculated
+tables via ``method="interpolate"``.
+
+Comparison of Tests
+^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :widths: 20 25 25 30
+   :header-rows: 1
+
+   * - Test
+     - Basis
+     - Best For
+     - P-value
+   * - Shapiro-Wilk
+     - Order statistic correlation
+     - Small samples (n < 5,000)
+     - Analytic
+   * - D'Agostino K²
+     - Skewness and kurtosis
+     - Larger samples (n ≥ 8)
+     - Chi-squared approximation
+   * - Anderson-Darling
+     - Weighted ECDF discrepancy
+     - All sample sizes
+     - Interpolated (scipy ≥ 1.17)
+
+
 .. _outlier_detection_theory:
 
 Outlier Detection Methods
@@ -757,7 +898,7 @@ is non-parametric and robust to non-normal distributions since it depends
 only on order statistics rather than the mean or variance.
 
 Z-Score
-^^^^^^^
+^^^^^^^^
 
 The **Z-score method** measures how many standard deviations an observation
 lies from the mean. For a feature :math:`X` with mean :math:`\mu` and
@@ -845,3 +986,17 @@ as ``"N/A"`` in the summary output).
 .. [1] Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). Isolation Forest.
    *2008 Eighth IEEE International Conference on Data Mining*, 413–422.
    https://doi.org/10.1109/ICDM.2008.17
+
+.. [2] Shapiro, S. S., & Wilk, M. B. (1965). An analysis of variance
+   test for normality (complete samples). *Biometrika*, 52(3–4),
+   591–611. https://doi.org/10.1093/biomet/52.3-4.591
+
+.. [3] D'Agostino, R. B., Belanger, A., & D'Agostino, R. B. Jr.
+   (1990). A suggestion for using powerful and informative tests of
+   normality. *The American Statistician*, 44(4), 316–321.
+   https://doi.org/10.1080/00031305.1990.10475751
+
+.. [4] Anderson, T. W., & Darling, D. A. (1952). Asymptotic theory
+   of certain goodness-of-fit criteria based on stochastic processes.
+   *Annals of Mathematical Statistics*, 23(2), 193–212.
+   https://doi.org/10.1214/aoms/1177729437

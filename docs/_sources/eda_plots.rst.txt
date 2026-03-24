@@ -356,7 +356,7 @@ Histogram Example (Density)
 
 In this example, the ``plot_distributions()`` function is used to generate histograms for 
 the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with 
-``plot_type="hist"``, meaning no KDE plots are included—only histograms are displayed. 
+``plot_type="hist"``, meaning no KDE plots are included, only histograms are displayed. 
 The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
 with a subplot grid size of `14x4 inches` (``subplot_figsize=(14, 4)``). The histograms are 
 divided into `10 bins` (``bins=10``), and the ``y-axis`` is labeled "Density" (``y_axis_label="Density"``).
