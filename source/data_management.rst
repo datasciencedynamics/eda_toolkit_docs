@@ -2008,14 +2008,14 @@ summary row, rather than expanding into one row per category-level value.
 
 .. code-block:: text
 
-    Variable       | Type        | Mean | SD | Median | Min | Max | Mode    | Missing (n) | Missing (%) | Count  | Proportion (%) 
-   ----------------|-------------|------|----|--------|-----|-----|---------|-------------|-------------|--------|----------------
-    hours-per-week | Continuous  | 40   | 12 | 40     | 1   | 99  | 40      | 0           | 0           | 48,842 | 100            
-    age            | Continuous  | 39   | 14 | 37     | 17  | 90  | 36      | 0           | 0           | 48,842 | 100            
-    education-num  | Continuous  | 10   | 3  | 10     | 1   | 16  | 9       | 0           | 0           | 48,842 | 100            
-    sex            | Categorical |      |    |        |     |     | Male    | 0           | 0           | 48,842 | 100            
-    race           | Categorical |      |    |        |     |     | White   | 0           | 0           | 48,842 | 100            
-    workclass      | Categorical |      |    |        |     |     | Private | 963         | 2           | 47,879 | 98      
+    Variable       | Overall       | Type        | Mean | SD | Median | Min | Max | Mode    | Missing (n) | Missing (%) | Count  | Proportion (%) 
+   ----------------|---------------|-------------|------|----|--------|-----|-----|---------|-------------|-------------|--------|----------------
+    hours-per-week | 40 (12)       | Continuous  | 40   | 12 | 40     | 1   | 99  | 40      | 0           | 0           | 48,842 | 100            
+    age            | 39 (14)       | Continuous  | 39   | 14 | 37     | 17  | 90  | 36      | 0           | 0           | 48,842 | 100            
+    education-num  | 10 (3)        | Continuous  | 10   | 3  | 10     | 1   | 16  | 9       | 0           | 0           | 48,842 | 100            
+    sex            | 48,842 (100%) | Categorical |      |    |        |     |     | Male    | 0           | 0           | 48,842 | 100            
+    race           | 48,842 (100%) | Categorical |      |    |        |     |     | White   | 0           | 0           | 48,842 | 100            
+    workclass      | 47,879 (98%)  | Categorical |      |    |        |     |     | Private | 963         | 2           | 47,879 | 98    
 
 
 .. note::
@@ -2073,6 +2073,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     )
 
     table1_cont = table1_cont.drop(columns=["Type", "Mode"])
+    table1_cat = table1_cat.drop(columns=["Type"])
 
 **Output**
 
@@ -2080,7 +2081,6 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
 ``table1_cont``
 
 .. raw:: html
-    
 
     <style type="text/css">
     .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
@@ -2095,10 +2095,9 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     .tg .tg-jkyp{border-color:inherit;text-align:right;vertical-align:bottom}
     .tg .tg-8d8j{text-align:center;vertical-align:bottom}
     @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
-    <div class="tg-wrap"><table class="tg" style="undefined;table-layout: fixed; width: 696px"><colgroup>
-    <col style="width: 100px">
-    <col style="width: 73px">
-    <col style="width: 73px">
+    <div class="tg-wrap"><table class="tg" style="undefined;table-layout: fixed; width: 623px"><colgroup>
+    <col style="width: 95px">
+    <col style="width: 150px">
     <col style="width: 73px">
     <col style="width: 65px">
     <col style="width: 85px">
@@ -2110,8 +2109,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     <thead>
     <tr>
         <th class="tg-6ic8">Variable</th>
-        <th class="tg-6ic8">Mean</th>
-        <th class="tg-6ic8">SD</th>
+        <th class="tg-amwm">Overall</th>
         <th class="tg-l2oz">Median</th>
         <th class="tg-l2oz">Min</th>
         <th class="tg-l2oz">Max</th>
@@ -2123,8 +2121,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     <tbody>
     <tr>
         <td class="tg-jkyp">age</td>
-        <td class="tg-jkyp">38.64</td>
-        <td class="tg-jkyp">13.71</td>
+        <td class="tg-8d8j">38.64 (13.71)</td>
         <td class="tg-2b7s">37</td>
         <td class="tg-2b7s">17</td>
         <td class="tg-2b7s">90</td>
@@ -2135,8 +2132,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-jkyp">capital-gain</td>
-        <td class="tg-jkyp">1,079.07</td>
-        <td class="tg-jkyp">7,452.02</td>
+        <td class="tg-8d8j">1079.07 (7452.02)</td>
         <td class="tg-2b7s">0</td>
         <td class="tg-2b7s">0.00</td>
         <td class="tg-2b7s">99,999.00</td>
@@ -2147,8 +2143,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">capital-loss</td>
-        <td class="tg-2b7s">87.5</td>
-        <td class="tg-2b7s">403</td>
+        <td class="tg-8d8j">87.50 (403.00)</td>
         <td class="tg-2b7s">0</td>
         <td class="tg-2b7s">0.00</td>
         <td class="tg-2b7s">4,356.00</td>
@@ -2159,8 +2154,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">education-num</td>
-        <td class="tg-2b7s">10.08</td>
-        <td class="tg-2b7s">2.57</td>
+        <td class="tg-8d8j">10.08 (2.57)</td>
         <td class="tg-2b7s">10</td>
         <td class="tg-2b7s">1</td>
         <td class="tg-2b7s">16</td>
@@ -2171,8 +2165,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">fnlwgt</td>
-        <td class="tg-2b7s">189,664.13</td>
-        <td class="tg-2b7s">105,604.03</td>
+        <td class="tg-8d8j">189664.13 (105604.03)</td>
         <td class="tg-2b7s">178,144.50</td>
         <td class="tg-2b7s">12,285.00</td>
         <td class="tg-2b7s">1,490,400.00</td>
@@ -2183,8 +2176,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">hours-per-week</td>
-        <td class="tg-2b7s">40.42</td>
-        <td class="tg-2b7s">12.39</td>
+        <td class="tg-8d8j">40.42 (12.39)</td>
         <td class="tg-2b7s">40</td>
         <td class="tg-2b7s">1</td>
         <td class="tg-2b7s">99</td>
@@ -2215,18 +2207,18 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     .tg .tg-8d8j{text-align:center;vertical-align:bottom}
     @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
     <div class="tg-wrap"><table class="tg" style="margin-left: 11px;undefined;table-layout: fixed; width: 663px"><colgroup>
-    <col style="width: 250px">
-    <col style="width: 72px">
+    <col style="width: 240px">
+    <col style="width: 110px">
     <col style="width: 120px">
-    <col style="width: 61px">
-    <col style="width: 61px">
+    <col style="width: 50px">
+    <col style="width: 50px">
     <col style="width: 44px">
-    <col style="width: 77px">
+    <col style="width: 70px">
     </colgroup>
     <thead>
     <tr>
         <th class="tg-l2oz">Variable</th>
-        <th class="tg-l2oz">Type</th>
+        <th class="tg-l2oz">Overall</th>
         <th class="tg-l2oz">Mode</th>
         <th class="tg-amwm">Missing (n)</th>
         <th class="tg-amwm">Missing (%)</th>
@@ -2235,8 +2227,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr></thead>
     <tbody>
     <tr>
+        <td class="tg-2b7s">workclass</td>
+        <td class="tg-2b7s">47,879 (98.03%)</td>
+        <td class="tg-2b7s">Private</td>
+        <td class="tg-8d8j">963</td>
+        <td class="tg-8d8j">1.97</td>
+        <td class="tg-8d8j">47,879</td>
+        <td class="tg-8d8j">98.03</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">workclass = Private</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">33,906 (69.42%)</td>
         <td class="tg-2b7s">Private</td>
         <td class="tg-8d8j">963</td>
         <td class="tg-8d8j">1.97</td>
@@ -2245,7 +2246,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">workclass = Self-emp-not-inc</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">3,862 (7.91%)</td>
         <td class="tg-2b7s">Private</td>
         <td class="tg-8d8j">963</td>
         <td class="tg-8d8j">1.97</td>
@@ -2254,7 +2255,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">workclass = Local-gov</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">3,136 (6.42%)</td>
         <td class="tg-2b7s">Private</td>
         <td class="tg-8d8j">963</td>
         <td class="tg-8d8j">1.97</td>
@@ -2262,8 +2263,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">6.42</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">education</td>
+        <td class="tg-2b7s">48,842 (100.00%)</td>
+        <td class="tg-2b7s">HS-grad</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100.00</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">education = HS-grad</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">15,784 (32.32%)</td>
         <td class="tg-2b7s">HS-grad</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2272,7 +2282,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">education = Some-college</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">10,878 (22.27%)</td>
         <td class="tg-2b7s">HS-grad</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2281,7 +2291,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">education = Bachelors</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">8,025 (16.43%)</td>
         <td class="tg-2b7s">HS-grad</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2289,8 +2299,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">16.43</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">marital-status</td>
+        <td class="tg-2b7s">48,842 (100.00%)</td>
+        <td class="tg-2b7s">Married-civ-spouse</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100.00</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">marital-status =&nbsp;&nbsp;&nbsp;Married-civ-spouse</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">22,379 (45.82%)</td>
         <td class="tg-2b7s">Married-civ-spouse</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2299,7 +2318,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">marital-status = Never-married</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">16,117 (33.00%)</td>
         <td class="tg-2b7s">Married-civ-spouse</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2308,7 +2327,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">marital-status = Divorced</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">6,633 (13.58%)</td>
         <td class="tg-2b7s">Married-civ-spouse</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2316,8 +2335,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">13.58</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">occupation</td>
+        <td class="tg-2b7s">47,876 (98.02%)</td>
+        <td class="tg-2b7s">Prof-specialty</td>
+        <td class="tg-8d8j">966</td>
+        <td class="tg-8d8j">1.98</td>
+        <td class="tg-8d8j">47,876</td>
+        <td class="tg-8d8j">98.02</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">occupation = Prof-specialty</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">6,172 (12.64%)</td>
         <td class="tg-2b7s">Prof-specialty</td>
         <td class="tg-8d8j">966</td>
         <td class="tg-8d8j">1.98</td>
@@ -2326,7 +2354,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">occupation = Craft-repair</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">6,112 (12.51%)</td>
         <td class="tg-2b7s">Prof-specialty</td>
         <td class="tg-8d8j">966</td>
         <td class="tg-8d8j">1.98</td>
@@ -2335,7 +2363,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">occupation = Exec-managerial</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">6,086 (12.46%)</td>
         <td class="tg-2b7s">Prof-specialty</td>
         <td class="tg-8d8j">966</td>
         <td class="tg-8d8j">1.98</td>
@@ -2343,8 +2371,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">12.46</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">relationship</td>
+        <td class="tg-2b7s">48,842 (100.00%)</td>
+        <td class="tg-2b7s">Husband</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100.00</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">relationship = Husband</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">19,716 (40.37%)</td>
         <td class="tg-2b7s">Husband</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2353,7 +2390,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">relationship = Not-in-family</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">12,583 (25.76%)</td>
         <td class="tg-2b7s">Husband</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2362,7 +2399,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">relationship = Own-child</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">7,581 (15.52%)</td>
         <td class="tg-2b7s">Husband</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2370,8 +2407,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">15.52</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">race</td>
+        <td class="tg-2b7s">48,842 (100.00%)</td>
+        <td class="tg-2b7s">White</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100.00</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">race = White</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">41,762 (85.50%)</td>
         <td class="tg-2b7s">White</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2380,7 +2426,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">race = Black</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">4,685 (9.59%)</td>
         <td class="tg-2b7s">White</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2389,7 +2435,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">race = Asian-Pac-Islander</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">1,519 (3.11%)</td>
         <td class="tg-2b7s">White</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2397,8 +2443,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">3.11</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">sex</td>
+        <td class="tg-2b7s">48,842 (100.00%)</td>
+        <td class="tg-2b7s">Male</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100.00</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">sex = Male</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">32,650 (66.85%)</td>
         <td class="tg-2b7s">Male</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2407,7 +2462,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">sex = Female</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">16,192 (33.15%)</td>
         <td class="tg-2b7s">Male</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2415,8 +2470,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">33.15</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">native-country</td>
+        <td class="tg-2b7s">48,568 (99.44%)</td>
+        <td class="tg-2b7s">United-States</td>
+        <td class="tg-8d8j">274</td>
+        <td class="tg-8d8j">0.56</td>
+        <td class="tg-8d8j">48,568</td>
+        <td class="tg-8d8j">99.44</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">native-country = United-States</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">43,832 (89.74%)</td>
         <td class="tg-2b7s">United-States</td>
         <td class="tg-8d8j">274</td>
         <td class="tg-8d8j">0.56</td>
@@ -2425,7 +2489,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">native-country = Mexico</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">951 (1.95%)</td>
         <td class="tg-2b7s">United-States</td>
         <td class="tg-8d8j">274</td>
         <td class="tg-8d8j">0.56</td>
@@ -2434,7 +2498,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">native-country = ?</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">583 (1.19%)</td>
         <td class="tg-2b7s">United-States</td>
         <td class="tg-8d8j">274</td>
         <td class="tg-8d8j">0.56</td>
@@ -2442,8 +2506,17 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         <td class="tg-8d8j">1.19</td>
     </tr>
     <tr>
+        <td class="tg-2b7s">income</td>
+        <td class="tg-2b7s">48,842 (100.00%)</td>
+        <td class="tg-2b7s">&lt;=50K</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100.00</td>
+    </tr>
+    <tr>
         <td class="tg-2b7s">income = &lt;=50K</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">24,720 (50.61%)</td>
         <td class="tg-2b7s">&lt;=50K</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2452,7 +2525,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">income = &lt;=50K.</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">12,435 (25.46%)</td>
         <td class="tg-2b7s">&lt;=50K</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2461,7 +2534,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">income = &gt;50K</td>
-        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">7,841 (16.05%)</td>
         <td class="tg-2b7s">&lt;=50K</td>
         <td class="tg-8d8j">0</td>
         <td class="tg-8d8j">0</td>
@@ -2534,7 +2607,6 @@ After creating those, we build a mixed summary table that computes *p*-values fo
 
 **Output**
 
-
 .. raw:: html
 
     <style type="text/css">
@@ -2550,19 +2622,19 @@ After creating those, we build a mixed summary table that computes *p*-values fo
     @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}
     </style>
     <div class="tg-wrap">
-      <table class="tg" style="table-layout: fixed; width: 696px">
+      <table class="tg" style="table-layout: fixed; width: 600px">
         <colgroup>
-          <col style="width: 95px">
-          <col style="width: 65px">
-          <col style="width: 65px">
-          <col style="width: 65px">
-          <col style="width: 65px">
-          <col style="width: 65px">
+          <col style="width: 160px">
+          <col style="width: 115px">
+          <col style="width: 100px">
+          <col style="width: 125px">
+          <col style="width: 125px">
+          <col style="width: 60px">
         </colgroup>
         <thead>
           <tr>
             <th class="tg-l2oz">Variable</th>
-            <th class="tg-amwm">Count</th>
+            <th class="tg-l2oz">Overall</th>
             <th class="tg-amwm">Proportion (%)</th>
             <th class="tg-amwm">&le;50K (n = 37,155)</th>
             <th class="tg-amwm">&gt;50K (n = 11,687)</th>
@@ -2572,7 +2644,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
         <tbody>
           <tr>
             <td class="tg-2b7s">fnlwgt_bin_width</td>
-            <td class="tg-8d8j">48,842</td>
+            <td class="tg-2b7s">48,842 (100.00%)</td>
             <td class="tg-8d8j">100.00</td>
             <td class="tg-8d8j">37,155</td>
             <td class="tg-8d8j">11,687</td>
@@ -2580,7 +2652,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">fnlwgt_bin_width = Bin 1</td>
-            <td class="tg-8d8j">42,729</td>
+            <td class="tg-2b7s">42,729 (87.48%)</td>
             <td class="tg-8d8j">87.48</td>
             <td class="tg-8d8j">32,517 (87.52%)</td>
             <td class="tg-8d8j">10,212 (87.38%)</td>
@@ -2588,7 +2660,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">fnlwgt_bin_width = Bin 2</td>
-            <td class="tg-8d8j">5,898</td>
+            <td class="tg-2b7s">5,898 (12.08%)</td>
             <td class="tg-8d8j">12.08</td>
             <td class="tg-8d8j">4,466 (12.02%)</td>
             <td class="tg-8d8j">1,432 (12.25%)</td>
@@ -2596,7 +2668,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">fnlwgt_bin_width = Bin 3</td>
-            <td class="tg-8d8j">186</td>
+            <td class="tg-2b7s">186 (0.38%)</td>
             <td class="tg-8d8j">0.38</td>
             <td class="tg-8d8j">148 (0.40%)</td>
             <td class="tg-8d8j">38 (0.33%)</td>
@@ -2604,7 +2676,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">fnlwgt_bin_width = Bin 4</td>
-            <td class="tg-8d8j">22</td>
+            <td class="tg-2b7s">22 (0.05%)</td>
             <td class="tg-8d8j">0.05</td>
             <td class="tg-8d8j">18 (0.05%)</td>
             <td class="tg-8d8j">4 (0.03%)</td>
@@ -2612,7 +2684,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">fnlwgt_bin_width = Bin 5</td>
-            <td class="tg-8d8j">7</td>
+            <td class="tg-2b7s">7 (0.01%)</td>
             <td class="tg-8d8j">0.01</td>
             <td class="tg-8d8j">6 (0.02%)</td>
             <td class="tg-8d8j">1 (0.01%)</td>
@@ -2620,55 +2692,55 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">age_group</td>
-            <td class="tg-8d8j">48,842</td>
+            <td class="tg-2b7s">48,842 (100.00%)</td>
             <td class="tg-8d8j">100.00</td>
             <td class="tg-8d8j">37,155</td>
             <td class="tg-8d8j">11,687</td>
             <td class="tg-8d8j">0.00</td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 18–29</td>
-            <td class="tg-8d8j">13,920</td>
+            <td class="tg-2b7s">age_group = 18&ndash;29</td>
+            <td class="tg-2b7s">13,920 (28.50%)</td>
             <td class="tg-8d8j">28.50</td>
             <td class="tg-8d8j">13,174 (35.46%)</td>
             <td class="tg-8d8j">746 (6.38%)</td>
             <td class="tg-8d8j"></td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 30–39</td>
-            <td class="tg-8d8j">12,929</td>
+            <td class="tg-2b7s">age_group = 30&ndash;39</td>
+            <td class="tg-2b7s">12,929 (26.47%)</td>
             <td class="tg-8d8j">26.47</td>
             <td class="tg-8d8j">9,468 (25.48%)</td>
             <td class="tg-8d8j">3,461 (29.61%)</td>
             <td class="tg-8d8j"></td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 40–49</td>
-            <td class="tg-8d8j">10,724</td>
+            <td class="tg-2b7s">age_group = 40&ndash;49</td>
+            <td class="tg-2b7s">10,724 (21.96%)</td>
             <td class="tg-8d8j">21.96</td>
             <td class="tg-8d8j">6,738 (18.13%)</td>
             <td class="tg-8d8j">3,986 (34.11%)</td>
             <td class="tg-8d8j"></td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 50–59</td>
-            <td class="tg-8d8j">6,619</td>
+            <td class="tg-2b7s">age_group = 50&ndash;59</td>
+            <td class="tg-2b7s">6,619 (13.55%)</td>
             <td class="tg-8d8j">13.55</td>
             <td class="tg-8d8j">4,110 (11.06%)</td>
             <td class="tg-8d8j">2,509 (21.47%)</td>
             <td class="tg-8d8j"></td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 60–69</td>
-            <td class="tg-8d8j">3,054</td>
+            <td class="tg-2b7s">age_group = 60&ndash;69</td>
+            <td class="tg-2b7s">3,054 (6.25%)</td>
             <td class="tg-8d8j">6.25</td>
             <td class="tg-8d8j">2,245 (6.04%)</td>
             <td class="tg-8d8j">809 (6.92%)</td>
             <td class="tg-8d8j"></td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 70–79</td>
-            <td class="tg-8d8j">815</td>
+            <td class="tg-2b7s">age_group = 70&ndash;79</td>
+            <td class="tg-2b7s">815 (1.67%)</td>
             <td class="tg-8d8j">1.67</td>
             <td class="tg-8d8j">668 (1.80%)</td>
             <td class="tg-8d8j">147 (1.26%)</td>
@@ -2676,23 +2748,23 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">age_group = &lt; 18</td>
-            <td class="tg-8d8j">595</td>
+            <td class="tg-2b7s">595 (1.22%)</td>
             <td class="tg-8d8j">1.22</td>
             <td class="tg-8d8j">595 (1.60%)</td>
             <td class="tg-8d8j">0 (0.00%)</td>
             <td class="tg-8d8j"></td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 80–89</td>
-            <td class="tg-8d8j">131</td>
+            <td class="tg-2b7s">age_group = 80&ndash;89</td>
+            <td class="tg-2b7s">131 (0.27%)</td>
             <td class="tg-8d8j">0.27</td>
             <td class="tg-8d8j">115 (0.31%)</td>
             <td class="tg-8d8j">16 (0.14%)</td>
             <td class="tg-8d8j"></td>
           </tr>
           <tr>
-            <td class="tg-2b7s">age_group = 90–99</td>
-            <td class="tg-8d8j">55</td>
+            <td class="tg-2b7s">age_group = 90&ndash;99</td>
+            <td class="tg-2b7s">55 (0.11%)</td>
             <td class="tg-8d8j">0.11</td>
             <td class="tg-8d8j">42 (0.11%)</td>
             <td class="tg-8d8j">13 (0.11%)</td>
@@ -2700,7 +2772,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
           </tr>
           <tr>
             <td class="tg-2b7s">age_group = 100 +</td>
-            <td class="tg-8d8j">0</td>
+            <td class="tg-2b7s">0 (0.00%)</td>
             <td class="tg-8d8j">0.00</td>
             <td class="tg-8d8j">0 (0.00%)</td>
             <td class="tg-8d8j">0 (0.00%)</td>
@@ -2709,6 +2781,7 @@ After creating those, we build a mixed summary table that computes *p*-values fo
         </tbody>
       </table>
     </div>
+
 
 .. raw:: html
    
