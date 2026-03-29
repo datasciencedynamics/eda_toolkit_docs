@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.26 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.27 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=12b83546"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b6c0b15f"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -93,6 +93,10 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-27">Version 0.0.27</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fix-missing-thousands-separator-in-continuous-overall-column-of-generate-table1">Fix missing thousands separator in continuous “Overall” column of <code class="docutils literal notranslate"><span class="pre">generate_table1()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-26">Version 0.0.26</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#summary">Summary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#motivation">Motivation</a></li>
@@ -155,9 +159,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id24">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id25">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id26">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id27">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -190,6 +194,15 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-27">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.27/index.html">Version 0.0.27</a><a class="headerlink" href="#version-0-0-27" title="Permalink to this heading"></a></h2>
+<section id="fix-missing-thousands-separator-in-continuous-overall-column-of-generate-table1">
+<h3>Fix missing thousands separator in continuous “Overall” column of <code class="docutils literal notranslate"><span class="pre">generate_table1()</span></code><a class="headerlink" href="#fix-missing-thousands-separator-in-continuous-overall-column-of-generate-table1" title="Permalink to this heading"></a></h3>
+<p>Inside <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code>, the <code class="docutils literal notranslate"><span class="pre">make_overall</span></code> helper was formatting mean and SD with <code class="docutils literal notranslate"><span class="pre">:.{n}f</span></code> instead of <code class="docutils literal notranslate"><span class="pre">:,.{n}f</span></code>, so values like
+<code class="docutils literal notranslate"><span class="pre">189664.13</span></code> appeared without commas. Added the <code class="docutils literal notranslate"><span class="pre">,</span></code> flag to both format strings. No behavioral change to categorical Overall or any
+other column.</p>
+</section>
+</section>
 <section id="version-0-0-26">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.26/index.html">Version 0.0.26</a><a class="headerlink" href="#version-0-0-26" title="Permalink to this heading"></a></h2>
 <section id="summary">
@@ -1353,8 +1366,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id24">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h2>
+<section id="id25">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1372,8 +1385,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id25">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
+<section id="id26">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1455,8 +1468,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id26">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h2>
+<section id="id27">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>

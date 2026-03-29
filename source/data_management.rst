@@ -2132,7 +2132,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-jkyp">capital-gain</td>
-        <td class="tg-8d8j">1079.07 (7452.02)</td>
+        <td class="tg-8d8j">1,079.07 (7,452.02)</td>
         <td class="tg-2b7s">0</td>
         <td class="tg-2b7s">0.00</td>
         <td class="tg-2b7s">99,999.00</td>
@@ -2165,7 +2165,7 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
     </tr>
     <tr>
         <td class="tg-2b7s">fnlwgt</td>
-        <td class="tg-8d8j">189664.13 (105604.03)</td>
+        <td class="tg-8d8j">189,664.13 (105,604.03)</td>
         <td class="tg-2b7s">178,144.50</td>
         <td class="tg-2b7s">12,285.00</td>
         <td class="tg-2b7s">1,490,400.00</td>

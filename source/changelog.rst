@@ -24,6 +24,19 @@
 Changelog
 ==========
 
+`Version 0.0.27`_
+----------------------
+
+.. _Version 0.0.27: https://lshpaner.github.io/eda_toolkit_docs/v0.0.27/index.html
+
+Fix missing thousands separator in continuous "Overall" column of ``generate_table1()``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Inside ``generate_table1``, the ``make_overall`` helper was formatting mean and SD with ``:.{n}f`` instead of ``:,.{n}f``, so values like
+``189664.13`` appeared without commas. Added the ``,`` flag to both format strings. No behavioral change to categorical Overall or any
+other column.
+
+
 `Version 0.0.26`_
 ----------------------
 
