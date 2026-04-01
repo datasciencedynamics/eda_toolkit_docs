@@ -93,12 +93,20 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-28">Version 0.0.28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#new-parameters">New Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edge-case-handling">Edge Case Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-27">Version 0.0.27</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fix-missing-thousands-separator-in-continuous-overall-column-of-generate-table1">Fix missing thousands separator in continuous “Overall” column of <code class="docutils literal notranslate"><span class="pre">generate_table1()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-26">Version 0.0.26</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Summary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#motivation">Motivation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changes">Changes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#include-overall-parameter-default-true">1. <code class="docutils literal notranslate"><span class="pre">include_overall</span></code> parameter (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)</a></li>
@@ -119,7 +127,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-24">Version 0.0.24</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enhancements">Enhancements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dependency-updates">Dependency Updates</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#infrastructure">Infrastructure</a></li>
 </ul>
@@ -159,9 +167,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id25">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id26">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id27">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id28">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id29">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id30">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -194,6 +202,91 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-28">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.28/index.html">Version 0.0.28</a><a class="headerlink" href="#version-0-0-28" title="Permalink to this heading"></a></h2>
+<section id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this heading"></a></h3>
+<p>This PR spans three functions, <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code>,
+<code class="docutils literal notranslate"><span class="pre">generate_table1</span></code>, and <code class="docutils literal notranslate"><span class="pre">box_violin_plot</span></code>, addressing a y-axis
+formatting bug, a clinical Table 1 convention fix, a shared helper
+signature break, and several new parameters for layout and legend
+control.</p>
+</section>
+<section id="bug-fixes">
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading"></a></h3>
+<p><strong>grouped_distributions</strong></p>
+<ul class="simple">
+<li><p>Y-axis showed raw density decimals (e.g., <code class="docutils literal notranslate"><span class="pre">0.04</span></code>) instead of
+formatted percentages (e.g., <code class="docutils literal notranslate"><span class="pre">4%</span></code>). Fixed via <code class="docutils literal notranslate"><span class="pre">FuncFormatter</span></code>
+gated on the new <code class="docutils literal notranslate"><span class="pre">pct_format</span></code> parameter.</p></li>
+<li><p>Y-axis label always read <code class="docutils literal notranslate"><span class="pre">&quot;Percentage&quot;</span></code> regardless of
+<code class="docutils literal notranslate"><span class="pre">pct_format</span></code> value. Now reads <code class="docutils literal notranslate"><span class="pre">&quot;Density&quot;</span></code> when
+<code class="docutils literal notranslate"><span class="pre">pct_format=False</span></code>.</p></li>
+</ul>
+<p><strong>_apply_legend</strong></p>
+<ul class="simple">
+<li><p>Removing the <code class="docutils literal notranslate"><span class="pre">labels</span></code> positional argument broke all existing call
+sites in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> and other functions. Restored
+<code class="docutils literal notranslate"><span class="pre">labels</span></code> as the second positional argument; new parameters appended
+at the end for backward compatibility.</p></li>
+</ul>
+<p><strong>generate_table1</strong></p>
+<ul class="simple">
+<li><p>Categorical parent rows (e.g., Gender, Age group) showed
+<code class="docutils literal notranslate"><span class="pre">133,768</span> <span class="pre">(100.00%)</span></code> in each group column, the group total as a
+proportion of itself, which is always 100% and meaningless. Parent
+rows now show the group n as a proportion of the total cohort (e.g.,
+<code class="docutils literal notranslate"><span class="pre">133,768</span> <span class="pre">(41.43%)</span></code>), consistent with standard clinical Table 1
+convention. Child-level value_counts rows are unaffected.</p></li>
+</ul>
+</section>
+<section id="new-parameters">
+<h3>New Parameters<a class="headerlink" href="#new-parameters" title="Permalink to this heading"></a></h3>
+<p><strong>grouped_distributions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pct_format</span></code> – toggles y-axis between percentage and raw density
+display</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">suptitle</span></code> / <code class="docutils literal notranslate"><span class="pre">suptitle_y</span></code> – figure-level title and vertical
+position control</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xlim</span></code> / <code class="docutils literal notranslate"><span class="pre">ylim</span></code> – uniform tuple or per-feature dict for
+per-subplot axis limits</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">w_pad</span></code> / <code class="docutils literal notranslate"><span class="pre">h_pad</span></code> – subplot spacing via <code class="docutils literal notranslate"><span class="pre">tight_layout</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bbox_inches</span></code> / <code class="docutils literal notranslate"><span class="pre">dpi</span></code> – forwarded to <code class="docutils literal notranslate"><span class="pre">_save_figure</span></code> for save
+quality control</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">legend_bbox_to_anchor</span></code> – external legend anchor placement</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">legend_ncols</span></code> – number of legend columns for below-plot legend
+layouts</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reverse_legend</span></code> – reverses handle/label order via
+<code class="docutils literal notranslate"><span class="pre">_apply_legend</span></code></p></li>
+</ul>
+<p><strong>_apply_legend</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bbox_to_anchor</span></code> – external legend anchor placement</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ncols</span></code> – multi-column legend layout</p></li>
+</ul>
+<p><strong>box_violin_plot</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">suptitle</span></code> / <code class="docutils literal notranslate"><span class="pre">suptitle_y</span></code> – figure-level title and vertical
+position control for the subplot grid only; individual plots are
+unaffected</p></li>
+</ul>
+</section>
+<section id="edge-case-handling">
+<h3>Edge Case Handling<a class="headerlink" href="#edge-case-handling" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Empty group guard in <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code>: features with fewer
+than 2 non-null observations in either group emit a <code class="docutils literal notranslate"><span class="pre">UserWarning</span></code>
+and skip that group’s density curve rather than crashing on
+<code class="docutils literal notranslate"><span class="pre">vals.min()</span></code> / <code class="docutils literal notranslate"><span class="pre">vals.max()</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xlabel</span></code> in <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code> now wraps with <code class="docutils literal notranslate"><span class="pre">text_wrap</span></code>
+consistent with subplot titles.</p></li>
+</ul>
+</section>
+<section id="breaking-changes">
+<h3>Breaking Changes<a class="headerlink" href="#breaking-changes" title="Permalink to this heading"></a></h3>
+<p>None. All new parameters have defaults matching prior behavior.</p>
+</section>
+</section>
 <section id="version-0-0-27">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.27/index.html">Version 0.0.27</a><a class="headerlink" href="#version-0-0-27" title="Permalink to this heading"></a></h2>
 <section id="fix-missing-thousands-separator-in-continuous-overall-column-of-generate-table1">
@@ -205,8 +298,8 @@ other column.</p>
 </section>
 <section id="version-0-0-26">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.26/index.html">Version 0.0.26</a><a class="headerlink" href="#version-0-0-26" title="Permalink to this heading"></a></h2>
-<section id="summary">
-<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this heading"></a></h3>
+<section id="id5">
+<h3>Summary<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <p>Adds three enhancements to <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> to improve output correctness and
 usability, driven by reviewer feedback on a clinical Table 1. Also removes locally
 redefined <code class="docutils literal notranslate"><span class="pre">_flag_iqr</span></code> and <code class="docutils literal notranslate"><span class="pre">_flag_zscore</span></code> helpers from inside <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code>
@@ -391,8 +484,8 @@ IQR, Z-score, and Isolation Forest methods with <code class="docutils literal no
 passthrough to <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code></p></li>
 </ul>
 </section>
-<section id="bug-fixes">
-<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading"></a></h3>
+<section id="id8">
+<h3>Bug Fixes<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code>: Fixed title misalignment, <code class="docutils literal notranslate"><span class="pre">-0.00</span></code> display artifact,
 diagonal now shows <code class="docutils literal notranslate"><span class="pre">1.00</span></code> in both stars and mask modes; fixed <code class="docutils literal notranslate"><span class="pre">abs()</span></code> stripping
@@ -1366,8 +1459,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id25">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
+<section id="id28">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1385,8 +1478,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id26">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h2>
+<section id="id29">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1468,8 +1561,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id27">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h2>
+<section id="id30">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>

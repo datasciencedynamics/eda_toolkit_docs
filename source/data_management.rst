@@ -1803,7 +1803,7 @@ in a DataFrame. This section describes how to generate a summary "Table 1" from
 a given dataset using the ``generate_table1`` function. It supports automatic detection 
 of variable types, pretty-printing, optional export to Markdown, and *p*-value adjustments.
 
-.. function:: generate_table1(df, apply_bonferroni=False, apply_bh_fdr=False, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, drop_columns=None, drop_variables=None, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False, include_types="both", combine=True, groupby_col=None, use_fisher_exact=False, use_welch=True)
+.. function:: generate_table1(df, apply_bonferroni=False, apply_bh_fdr=False, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, drop_columns=None, drop_variables=None, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False, include_types="both", combine=True, groupby_col=None, use_fisher_exact=False, use_welch=True, proportion_relative_to_cohort=True, include_overall=True)
 
    :param df: Input DataFrame containing the data to summarize.
    :type df: pandas.DataFrame
@@ -1859,8 +1859,19 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
    :param use_fisher_exact: Whether to use Fisher's Exact Test for 2x2 categorical comparisons.
    :type use_fisher_exact: bool, optional
 
-   :param use_welch: Whether to use Welch’s t-test (default). If ``False``, uses Student’s t-test.
+   :param use_welch: Whether to use Welch's t-test (default). If ``False``, uses Student's t-test.
    :type use_welch: bool, optional
+
+   :param proportion_relative_to_cohort: If ``True``, categorical value
+      count proportions are calculated relative to the total cohort size.
+      If ``False``, proportions are calculated relative to the number of
+      non-missing values for that variable. Default is ``True``.
+   :type proportion_relative_to_cohort: bool, optional
+
+   :param include_overall: If ``True``, inserts an "Overall" column
+      containing ``mean (SD)`` for continuous variables and ``n (%)``
+      for categorical variables. Default is ``True``.
+   :type include_overall: bool, optional
 
    :returns:
       - If ``include_types="both"`` and ``combine=False``: tuple of two DataFrames (continuous, categorical)
@@ -1886,6 +1897,12 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
      is set.
    - Value counts rows are only generated when ``include_types`` is
      ``"categorical"`` or ``"both"``, never when ``"continuous"``.
+   - When ``proportion_relative_to_cohort=False``, value count percentages
+     reflect the share of non-missing observations rather than the full
+     cohort, which can be useful when missingness varies across variables.
+   - The "Overall" column added by ``include_overall`` is inserted as the
+     second column (immediately after "Variable") in both continuous and
+     categorical output DataFrames.
 
 .. important::
 
@@ -1954,7 +1971,7 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
           table1_cont
           table1_cat
 
-   2. **Don’t assign the result at all** when calling from a notebook or REPL cell; this will trigger automatic pretty-printing of both tables, with a blank line in between::
+   2. **Don't assign the result at all** when calling from a notebook or REPL cell; this will trigger automatic pretty-printing of both tables, with a blank line in between::
 
           generate_table1(df, combine=False)
 
@@ -1962,6 +1979,7 @@ of variable types, pretty-printing, optional export to Markdown, and *p*-value a
 
 .. rubric:: Implementation Examples
     :class: rubric-large
+
 
 Example 1: Mixed Summary Table ``(value_counts=False)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2646,8 +2664,8 @@ After creating those, we build a mixed summary table that computes *p*-values fo
             <td class="tg-2b7s">fnlwgt_bin_width</td>
             <td class="tg-2b7s">48,842 (100.00%)</td>
             <td class="tg-8d8j">100.00</td>
-            <td class="tg-8d8j">37,155</td>
-            <td class="tg-8d8j">11,687</td>
+            <td class="tg-8d8j">37,155 (76.07%)</td>
+            <td class="tg-8d8j">11,687 (23.93%)</td>
             <td class="tg-8d8j">0.66</td>
           </tr>
           <tr>
@@ -2694,8 +2712,8 @@ After creating those, we build a mixed summary table that computes *p*-values fo
             <td class="tg-2b7s">age_group</td>
             <td class="tg-2b7s">48,842 (100.00%)</td>
             <td class="tg-8d8j">100.00</td>
-            <td class="tg-8d8j">37,155</td>
-            <td class="tg-8d8j">11,687</td>
+            <td class="tg-8d8j">37,155 (76.07%)</td>
+            <td class="tg-8d8j">11,687 (23.93%)</td>
             <td class="tg-8d8j">0.00</td>
           </tr>
           <tr>

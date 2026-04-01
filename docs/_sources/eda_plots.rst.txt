@@ -729,7 +729,7 @@ groups is critical.
 - ``normalize="count"``: Raw counts (histograms only)
 - ``normalize="density"``: Probability density (histograms or density plots)
 
-.. function:: grouped_distributions(df, features, by, *, bins=30, normalize="density", plot_style="hist", alpha=0.6, colors=None, n_rows=None, n_cols=None, common_bins=True, show_legend=True, legend_loc="best", label_fontsize=12, tick_fontsize=10, text_wrap=50, figsize=(10, 6), image_path_png=None, image_path_svg=None, image_filename=None)
+.. function:: grouped_distributions(df, features, by, *, bins=30, normalize="density", plot_style="hist", pct_format=True, alpha=0.6, colors=None, n_rows=None, n_cols=None, common_bins=True, show_legend=True, legend_loc="best", legend_bbox_to_anchor=None, legend_ncols=1, reverse_legend=False, label_fontsize=12, tick_fontsize=10, text_wrap=50, figsize=(10, 6), suptitle=None, suptitle_y=1.02, xlim=None, ylim=None, w_pad=1.0, h_pad=1.0, bbox_inches="tight", dpi=None, image_path_png=None, image_path_svg=None, image_filename=None)
 
     :param df: Input DataFrame containing the features and grouping variable.
     :type df: pandas.DataFrame
@@ -747,12 +747,18 @@ groups is critical.
 
     :param normalize: Controls histogram normalization. Options are
         ``"density"`` or ``"count"``. Ignored for density plots, which always
-        use probability density.
+        use probability density. Default is ``"density"``.
     :type normalize: str, optional
 
     :param plot_style: Plot type to generate. Options are ``"hist"`` or
         ``"density"``. Default is ``"hist"``.
     :type plot_style: str, optional
+
+    :param pct_format: If ``True``, formats the y-axis as percentages when
+        ``plot_style`` is ``"density"`` or ``normalize`` is ``"density"``.
+        Set to ``False`` to display raw density values instead.
+        Default is ``True``.
+    :type pct_format: bool, optional
 
     :param alpha: Transparency level for histogram bars or density fills.
         Default is ``0.6``.
@@ -770,29 +776,85 @@ groups is critical.
     :type n_cols: int, optional
 
     :param common_bins: If ``True``, both groups share identical histogram bin
-        edges. Ignored for density plots.
+        edges. Ignored for density plots. Default is ``True``.
     :type common_bins: bool, optional
 
     :param show_legend: Whether to display a legend identifying the two groups.
         Default is ``True``.
     :type show_legend: bool, optional
 
-    :param legend_loc: Legend placement passed directly to Matplotlib.
-        Default is ``"best"``.
+    :param legend_loc: Legend location string passed to Matplotlib. Valid options
+        include ``"best"``, ``"upper right"``, ``"upper left"``,
+        ``"lower left"``, ``"lower right"``, ``"right"``, ``"center left"``,
+        ``"center right"``, ``"lower center"``, ``"upper center"``, and
+        ``"center"``. Default is ``"best"``.
     :type legend_loc: str, optional
 
-    :param label_fontsize: Font size for axis labels and titles.
+    :param legend_bbox_to_anchor: ``(x, y)`` anchor point for placing the legend
+        outside the axes. Use with ``legend_loc="upper center"`` and a negative
+        ``y`` value to place the legend below the plot (e.g., ``(0.5, -0.15)``).
+    :type legend_bbox_to_anchor: tuple of float, optional
+
+    :param legend_ncols: Number of columns in the legend. Use
+        ``legend_ncols=2`` when placing the legend below a subplot to display
+        labels side by side. Default is ``1``.
+    :type legend_ncols: int, optional
+
+    :param reverse_legend: If ``True``, reverses the order of legend handles
+        and labels. Default is ``False``.
+    :type reverse_legend: bool, optional
+
+    :param label_fontsize: Font size for axis labels, subplot titles, and the
+        figure-level suptitle. Default is ``12``.
     :type label_fontsize: int, optional
 
     :param tick_fontsize: Font size for tick labels and legend text.
+        Default is ``10``.
     :type tick_fontsize: int, optional
 
-    :param text_wrap: Maximum character width before wrapping titles.
+    :param text_wrap: Maximum character width before wrapping subplot titles
+        and axis labels. Default is ``50``.
     :type text_wrap: int, optional
 
     :param figsize: Size of the overall figure in inches.
         Default is ``(10, 6)``.
-    :type figsize: tuple of int, optional
+    :type figsize: tuple of (int, int), optional
+
+    :param suptitle: Figure-level title rendered above all subplots via
+        ``fig.suptitle``. Font size is controlled by ``label_fontsize``.
+        If ``None``, no figure-level title is added.
+    :type suptitle: str, optional
+
+    :param suptitle_y: Vertical position of the figure-level suptitle as a
+        fraction of the figure height. Values above ``1.0`` place the title
+        above the subplot grid. Increase to add more space between the title
+        and the plots. Default is ``1.02``.
+    :type suptitle_y: float, optional
+
+    :param xlim: Limits for the x-axis. Provide a single tuple ``(min, max)``
+        to apply uniformly to all subplots, or a dict keyed by feature name to
+        set per-feature limits (e.g., ``{"Age": (0, 25), "BMI": (10, 60)}``).
+        Features not present in the dict are left at Matplotlib defaults.
+    :type xlim: tuple of float or dict of {str: tuple of float}, optional
+
+    :param ylim: Limits for the y-axis. Accepts the same format as ``xlim``.
+    :type ylim: tuple of float or dict of {str: tuple of float}, optional
+
+    :param w_pad: Width padding between subplots passed to ``tight_layout``.
+        Default is ``1.0``.
+    :type w_pad: float, optional
+
+    :param h_pad: Height padding between subplots passed to ``tight_layout``.
+        Default is ``1.0``.
+    :type h_pad: float, optional
+
+    :param bbox_inches: Bounding box option passed to ``_save_figure``.
+        Default is ``"tight"``.
+    :type bbox_inches: str, optional
+
+    :param dpi: DPI for raster outputs such as PNG. Passed to
+        ``_save_figure``.
+    :type dpi: int, optional
 
     :param image_path_png: Directory path to save the figure as a PNG file.
     :type image_path_png: str, optional
@@ -800,7 +862,8 @@ groups is critical.
     :param image_path_svg: Directory path to save the figure as an SVG file.
     :type image_path_svg: str, optional
 
-    :param image_filename: Base filename (without extension) for saving the figure.
+    :param image_filename: Base filename (without extension) for saving the
+        figure. No files are saved if this is not provided.
     :type image_filename: str, optional
 
     :raises ValueError:
@@ -812,6 +875,10 @@ groups is critical.
           ``image_path_png`` nor ``image_path_svg`` is specified.
         - If the subplot grid is too small for the number of features.
 
+    :warns UserWarning:
+        If a feature has fewer than two non-null observations in either
+        group, that group's density curve is skipped.
+
     :returns: ``None``
 
 .. admonition:: Notes
@@ -822,6 +889,14 @@ groups is critical.
       count-based normalization.
     - When ``common_bins=True``, histogram bin edges are computed jointly across
       both groups to enable direct shape comparison.
+    - ``xlim`` and ``ylim`` accept either a uniform tuple or a per-feature
+      dict. Features absent from a dict are left at Matplotlib defaults.
+    - ``w_pad`` and ``h_pad`` control subplot spacing via ``tight_layout``.
+    - ``dpi`` and ``bbox_inches`` are forwarded to ``_save_figure`` and only
+      take effect when ``image_filename`` is provided.
+    - To place the legend below a subplot, use
+      ``legend_loc="upper center"``, ``legend_bbox_to_anchor=(0.5, -0.15)``,
+      and ``legend_ncols=2``.
     - Font sizes are specified in absolute points and may appear small on large
       figures or dense subplot grids.
 
@@ -878,18 +953,13 @@ filename.
         alpha=0.6,
         figsize=(14, 4),
         plot_style="density",
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
-        image_filename="grouped_distributions_adult_income",
-        label_fontsize=16,
-        tick_fontsize=14,
     )
 
 .. raw:: html
 
    <div class="no-click">
 
-.. image:: ../assets/grouped_dist_adult_income.svg
+.. image:: ../assets/grouped_distributions_adult_income.svg
    :alt: Grouped Histograms with Income Groups
    :align: center
    :width: 900px
@@ -956,18 +1026,13 @@ reports or publications.
         alpha=0.6,
         figsize=(14, 4),
         plot_style="hist",
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
-        image_filename="cond_histograms_adult_income_hist",
-        label_fontsize=16,
-        tick_fontsize=14,
     )
 
 .. raw:: html
 
    <div class="no-click">
 
-.. image:: ../assets/grouped_dist_adult_income_hist.svg
+.. image:: ../assets/grouped_distributions_adult_income_hist.svg
    :alt: Grouped Histograms with Income Groups
    :align: center
    :width: 900px
@@ -3455,7 +3520,7 @@ This function supports:
 - Saving plots in PNG and/or SVG format with customizable file paths.
 - Visualizing the distribution of metrics across categories, either individually, as subplots, or both.
 
-.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, image_filename=None, show_legend=True, legend_loc="best", plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, custom_order=None, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, **kwargs)
+.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, image_filename=None, show_legend=True, legend_loc="best", plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, custom_order=None, individual_figsize=(6, 4), subplot_figsize=None, suptitle=None, suptitle_y=1.02, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, **kwargs)
 
    :param df: The DataFrame containing the data to plot.
    :type df: pandas.DataFrame
@@ -3528,6 +3593,17 @@ This function supports:
       and columns if not provided.
    :type subplot_figsize: tuple of int, optional
 
+   :param suptitle: Figure-level title rendered above the subplot grid
+      via ``fig.suptitle``. Font size is controlled by
+      ``label_fontsize``. If ``None``, no figure-level title is added.
+      Only applies to the subplot grid, not individual plots.
+   :type suptitle: str, optional
+
+   :param suptitle_y: Vertical position of the figure-level suptitle
+      as a fraction of the figure height. Values above 1.0 place the
+      title above the subplot grid. Default is ``1.02``.
+   :type suptitle_y: float, optional
+
    :param label_fontsize: Font size for axis labels. Default is ``12``.
    :type label_fontsize: int, optional
 
@@ -3576,6 +3652,8 @@ This function supports:
       - If ``palette`` is supplied via ``**kwargs``, it is resolved once
         before any plotting loop and applied consistently to all
         subplots.
+      - ``suptitle`` applies only to the subplot grid. Individual plots
+        use per-subplot titles only.
 
 
 This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, subplots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.

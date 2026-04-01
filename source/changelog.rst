@@ -24,6 +24,105 @@
 Changelog
 ==========
 
+`Version 0.0.28`_
+----------------------
+
+.. _Version 0.0.28: https://lshpaner.github.io/eda_toolkit_docs/v0.0.28/index.html
+
+Summary
+^^^^^^^
+
+This PR spans three functions, ``grouped_distributions``,
+``generate_table1``, and ``box_violin_plot``, addressing a y-axis
+formatting bug, a clinical Table 1 convention fix, a shared helper
+signature break, and several new parameters for layout and legend
+control.
+
+Bug Fixes
+^^^^^^^^^
+
+**grouped_distributions**
+
+- Y-axis showed raw density decimals (e.g., ``0.04``) instead of
+  formatted percentages (e.g., ``4%``). Fixed via ``FuncFormatter``
+  gated on the new ``pct_format`` parameter.
+
+- Y-axis label always read ``"Percentage"`` regardless of
+  ``pct_format`` value. Now reads ``"Density"`` when
+  ``pct_format=False``.
+
+**_apply_legend**
+
+- Removing the ``labels`` positional argument broke all existing call
+  sites in ``stacked_crosstab_plot`` and other functions. Restored
+  ``labels`` as the second positional argument; new parameters appended
+  at the end for backward compatibility.
+
+**generate_table1**
+
+- Categorical parent rows (e.g., Gender, Age group) showed
+  ``133,768 (100.00%)`` in each group column, the group total as a
+  proportion of itself, which is always 100% and meaningless. Parent
+  rows now show the group n as a proportion of the total cohort (e.g.,
+  ``133,768 (41.43%)``), consistent with standard clinical Table 1
+  convention. Child-level value_counts rows are unaffected.
+
+New Parameters
+^^^^^^^^^^^^^^
+
+**grouped_distributions**
+
+- ``pct_format`` -- toggles y-axis between percentage and raw density
+  display
+
+- ``suptitle`` / ``suptitle_y`` -- figure-level title and vertical
+  position control
+
+- ``xlim`` / ``ylim`` -- uniform tuple or per-feature dict for
+  per-subplot axis limits
+
+- ``w_pad`` / ``h_pad`` -- subplot spacing via ``tight_layout``
+
+- ``bbox_inches`` / ``dpi`` -- forwarded to ``_save_figure`` for save
+  quality control
+
+- ``legend_bbox_to_anchor`` -- external legend anchor placement
+
+- ``legend_ncols`` -- number of legend columns for below-plot legend
+  layouts
+
+- ``reverse_legend`` -- reverses handle/label order via
+  ``_apply_legend``
+
+**_apply_legend**
+
+- ``bbox_to_anchor`` -- external legend anchor placement
+
+- ``ncols`` -- multi-column legend layout
+
+**box_violin_plot**
+
+- ``suptitle`` / ``suptitle_y`` -- figure-level title and vertical
+  position control for the subplot grid only; individual plots are
+  unaffected
+
+Edge Case Handling
+^^^^^^^^^^^^^^^^^^
+
+- Empty group guard in ``grouped_distributions``: features with fewer
+  than 2 non-null observations in either group emit a ``UserWarning``
+  and skip that group's density curve rather than crashing on
+  ``vals.min()`` / ``vals.max()``.
+
+- ``xlabel`` in ``grouped_distributions`` now wraps with ``text_wrap``
+  consistent with subplot titles.
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+None. All new parameters have defaults matching prior behavior.
+
+
 `Version 0.0.27`_
 ----------------------
 
