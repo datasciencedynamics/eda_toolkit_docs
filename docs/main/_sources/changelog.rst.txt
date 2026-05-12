@@ -27,6 +27,8 @@ Changelog
 `Version 0.0.29`_
 ----------------------
 
+.. _Version 0.0.29: https://lshpaner.github.io/eda_toolkit_docs/v0.0.29/index.html
+
 * fix(table1): handle NaN categories in groupby by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/130
 * Fixes https://github.com/datasciencedynamics/eda_toolkit/issues/129: NaN handling in ``generate_table1`` under ``groupby_col``.
 * ``value_counts`` loop: NaN-safe ``col_mask`` so ``x = NaN`` rows show correct per-group counts (was ``0 (0.00%)``).
