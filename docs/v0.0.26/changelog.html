@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -17,9 +17,9 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=12b83546"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=6a9d8632"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="_static/copybutton.js?v=a0ccc04e"></script>
       <script src="_static/custom.js"></script>
@@ -186,21 +186,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" width="300px" /></a>
+  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" />
+</a>
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
-<h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
 <section id="version-0-0-26">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.26/index.html">Version 0.0.26</a><a class="headerlink" href="#version-0-0-26" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.26/index.html">Version 0.0.26</a><a class="headerlink" href="#version-0-0-26" title="Link to this heading"></a></h2>
 <section id="summary">
-<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this heading"></a></h3>
+<h3>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h3>
 <p>Adds three enhancements to <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> to improve output correctness and
 usability, driven by reviewer feedback on a clinical Table 1. Also removes locally
 redefined <code class="docutils literal notranslate"><span class="pre">_flag_iqr</span></code> and <code class="docutils literal notranslate"><span class="pre">_flag_zscore</span></code> helpers from inside <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code>
 that were silently shadowing module-level imports.</p>
 </section>
 <section id="motivation">
-<h3>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading"></a></h3>
+<h3>Motivation<a class="headerlink" href="#motivation" title="Link to this heading"></a></h3>
 <p>During peer review of a manuscript using <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> output, several issues
 were identified:</p>
 <ul class="simple">
@@ -220,9 +221,9 @@ to the full cohort or relative to the non-missing count of that variable.</p></l
 <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code> were shadowing those imports without any behavioral difference.</p>
 </section>
 <section id="changes">
-<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this heading"></a></h3>
+<h3>Changes<a class="headerlink" href="#changes" title="Link to this heading"></a></h3>
 <section id="include-overall-parameter-default-true">
-<h4>1. <code class="docutils literal notranslate"><span class="pre">include_overall</span></code> parameter (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)<a class="headerlink" href="#include-overall-parameter-default-true" title="Permalink to this heading"></a></h4>
+<h4>1. <code class="docutils literal notranslate"><span class="pre">include_overall</span></code> parameter (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)<a class="headerlink" href="#include-overall-parameter-default-true" title="Link to this heading"></a></h4>
 <p>A new <code class="docutils literal notranslate"><span class="pre">include_overall:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> parameter has been added to the function
 signature. When <code class="docutils literal notranslate"><span class="pre">True</span></code>, an Overall column is inserted as the second column in both
 <code class="docutils literal notranslate"><span class="pre">df_continuous</span></code> and <code class="docutils literal notranslate"><span class="pre">df_categorical</span></code>, positioned immediately after the Variable
@@ -250,7 +251,7 @@ rows.</p>
 existing call sites are unaffected.</p>
 </section>
 <section id="proportion-relative-to-cohort-parameter-default-true">
-<h4>2. <code class="docutils literal notranslate"><span class="pre">proportion_relative_to_cohort</span></code> parameter (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)<a class="headerlink" href="#proportion-relative-to-cohort-parameter-default-true" title="Permalink to this heading"></a></h4>
+<h4>2. <code class="docutils literal notranslate"><span class="pre">proportion_relative_to_cohort</span></code> parameter (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)<a class="headerlink" href="#proportion-relative-to-cohort-parameter-default-true" title="Link to this heading"></a></h4>
 <p>A new <code class="docutils literal notranslate"><span class="pre">proportion_relative_to_cohort:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> parameter controls the
 denominator used when computing <code class="docutils literal notranslate"><span class="pre">Proportion</span> <span class="pre">(%)</span></code> for categorical subcategory rows
 (i.e., rows generated by the <code class="docutils literal notranslate"><span class="pre">value_counts=True</span></code> path).</p>
@@ -269,7 +270,7 @@ Parent-level categorical rows and all continuous rows always use <code class="do
 their denominator.</p>
 </section>
 <section id="categorical-group-column-formatting-fix">
-<h4>3. Categorical group column formatting fix<a class="headerlink" href="#categorical-group-column-formatting-fix" title="Permalink to this heading"></a></h4>
+<h4>3. Categorical group column formatting fix<a class="headerlink" href="#categorical-group-column-formatting-fix" title="Link to this heading"></a></h4>
 <p>When <code class="docutils literal notranslate"><span class="pre">groupby_col</span></code> is specified, the parent-level categorical summary row now shows
 <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">(%)</span></code> in each group column rather than a raw count. Previously:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">group1_label</span><span class="p">:</span> <span class="n">ct</span><span class="p">[</span><span class="n">g1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">if</span> <span class="n">g1</span> <span class="ow">in</span> <span class="n">ct</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
@@ -301,7 +302,7 @@ since they could not be cast to integer. The group label columns now pass throug
 <code class="docutils literal notranslate"><span class="pre">format_numeric_cols</span></code> untouched.</p>
 </section>
 <section id="removed-duplicate-helpers-from-detect-outliers">
-<h4>4. Removed duplicate helpers from <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code><a class="headerlink" href="#removed-duplicate-helpers-from-detect-outliers" title="Permalink to this heading"></a></h4>
+<h4>4. Removed duplicate helpers from <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code><a class="headerlink" href="#removed-duplicate-helpers-from-detect-outliers" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Deleted local <code class="docutils literal notranslate"><span class="pre">_flag_iqr</span></code> and <code class="docutils literal notranslate"><span class="pre">_flag_zscore</span></code> definitions from inside
 <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code>.</p></li>
@@ -312,7 +313,7 @@ file; the local copies were silently shadowing those imports.</p></li>
 </section>
 </section>
 <section id="testing">
-<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h3>
+<h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Updated <code class="docutils literal notranslate"><span class="pre">test_table1_return_markdown_only</span></code> to reflect the new column order.
 The assertion was changed from <code class="docutils literal notranslate"><span class="pre">&quot;|</span> <span class="pre">Variable</span> <span class="pre">|</span> <span class="pre">Type</span> <span class="pre">|</span> <span class="pre">Mode&quot;</span></code> to
@@ -333,7 +334,7 @@ TOTAL                                     2294    356    84%
 </div>
 </section>
 <section id="backward-compatibility">
-<h3>Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Permalink to this heading"></a></h3>
+<h3>Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Link to this heading"></a></h3>
 <p>All changes are fully backward compatible. <code class="docutils literal notranslate"><span class="pre">include_overall=True</span></code> and
 <code class="docutils literal notranslate"><span class="pre">proportion_relative_to_cohort=True</span></code> are the defaults, so existing call sites receive
 the improved behavior automatically. Users who want the previous output can pass
@@ -342,15 +343,15 @@ changing an intentional behavior, and the helper removal is a no-op at runtime.<
 </section>
 </section>
 <section id="version-0-0-25">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.25/index.html">Version 0.0.25</a><a class="headerlink" href="#version-0-0-25" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.25/index.html">Version 0.0.25</a><a class="headerlink" href="#version-0-0-25" title="Link to this heading"></a></h2>
 <section id="fix-correct-p-value-precision-loss-in-bonferroni-bh-adjustment">
-<h3>Fix: correct <em>p</em>-value precision loss in Bonferroni/BH adjustment<a class="headerlink" href="#fix-correct-p-value-precision-loss-in-bonferroni-bh-adjustment" title="Permalink to this heading"></a></h3>
+<h3>Fix: correct <em>p</em>-value precision loss in Bonferroni/BH adjustment<a class="headerlink" href="#fix-correct-p-value-precision-loss-in-bonferroni-bh-adjustment" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Previously, <em>p</em>-values were rounded before being fed into the multiple comparison correction block, causing small but meaningful errors in adjusted values. Raw <em>p</em>-values are now stored as <code class="docutils literal notranslate"><span class="pre">_raw_pval</span></code> internally, the correction block reads from those, and a cleanup pass removes the key before DataFrame construction. All rounding is handled consistently via <code class="docutils literal notranslate"><span class="pre">decimal_places</span></code> at the formatting stage.</p></li>
 </ul>
 </section>
 <section id="added-new-normality-tests-function-to-eda-toolkit">
-<h3>Added new <code class="docutils literal notranslate"><span class="pre">normality_tests()</span></code> function to <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.<a class="headerlink" href="#added-new-normality-tests-function-to-eda-toolkit" title="Permalink to this heading"></a></h3>
+<h3>Added new <code class="docutils literal notranslate"><span class="pre">normality_tests()</span></code> function to <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.<a class="headerlink" href="#added-new-normality-tests-function-to-eda-toolkit" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Batch normality testing across numeric columns via Shapiro-Wilk, D’Agostino K², and Anderson-Darling</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">tests</span></code>, <code class="docutils literal notranslate"><span class="pre">features</span></code>, and <code class="docutils literal notranslate"><span class="pre">decimal_places</span></code> parameters</p></li>
@@ -362,9 +363,9 @@ changing an intentional behavior, and the helper removal is a no-op at runtime.<
 </section>
 </section>
 <section id="version-0-0-24">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.24/index.html">Version 0.0.24</a><a class="headerlink" href="#version-0-0-24" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.24/index.html">Version 0.0.24</a><a class="headerlink" href="#version-0-0-24" title="Link to this heading"></a></h2>
 <section id="new-features">
-<h3>New Features<a class="headerlink" href="#new-features" title="Permalink to this heading"></a></h3>
+<h3>New Features<a class="headerlink" href="#new-features" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">detect_outliers()</span></code>: New batch outlier detection function supporting
 IQR, Z-score, and Isolation Forest methods with <code class="docutils literal notranslate"><span class="pre">groupby</span></code>, <code class="docutils literal notranslate"><span class="pre">flag_col</span></code>,
@@ -372,14 +373,14 @@ IQR, Z-score, and Isolation Forest methods with <code class="docutils literal no
 </ul>
 </section>
 <section id="enhancements">
-<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this heading"></a></h3>
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">read_csv_with_progress()</span></code>: Added <code class="docutils literal notranslate"><span class="pre">chunksize</span></code>, <code class="docutils literal notranslate"><span class="pre">low_memory</span></code>, and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>
 passthrough to <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code></p></li>
 </ul>
 </section>
 <section id="bug-fixes">
-<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading"></a></h3>
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code>: Fixed title misalignment, <code class="docutils literal notranslate"><span class="pre">-0.00</span></code> display artifact,
 diagonal now shows <code class="docutils literal notranslate"><span class="pre">1.00</span></code> in both stars and mask modes; fixed <code class="docutils literal notranslate"><span class="pre">abs()</span></code> stripping
@@ -389,14 +390,14 @@ pandas <code class="docutils literal notranslate"><span class="pre">FutureWarnin
 </ul>
 </section>
 <section id="dependency-updates">
-<h3>Dependency Updates<a class="headerlink" href="#dependency-updates" title="Permalink to this heading"></a></h3>
+<h3>Dependency Updates<a class="headerlink" href="#dependency-updates" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Removed upper caps on <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>, and <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> to prevent
 Colab downgrades</p></li>
 </ul>
 </section>
 <section id="infrastructure">
-<h3>Infrastructure<a class="headerlink" href="#infrastructure" title="Permalink to this heading"></a></h3>
+<h3>Infrastructure<a class="headerlink" href="#infrastructure" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">_data_manager_utils.py</span></code>: Extracted <code class="docutils literal notranslate"><span class="pre">_flag_iqr</span></code> and <code class="docutils literal notranslate"><span class="pre">_flag_zscore</span></code> helpers</p></li>
 <li><p>new pytest tests added across <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code>, <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code>, and <code class="docutils literal notranslate"><span class="pre">read_csv_with_progress</span></code></p></li>
@@ -405,7 +406,7 @@ Colab downgrades</p></li>
 </section>
 </section>
 <section id="version-0-0-23">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.23/index.html">Version 0.0.23</a><a class="headerlink" href="#version-0-0-23" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.23/index.html">Version 0.0.23</a><a class="headerlink" href="#version-0-0-23" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>enhance <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> params &amp; visuals by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/119">https://github.com/datasciencedynamics/eda_toolkit/pull/119</a></p></li>
 <li><p>fix deps, bump python floor to 3.8 by &#64;lshpaner in <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/pull/120">https://github.com/datasciencedynamics/eda_toolkit/pull/120</a></p></li>
@@ -418,14 +419,14 @@ Colab downgrades</p></li>
 <p><strong>Full Changelog</strong>: <a class="reference external" href="https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22...0.0.24">https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.22…0.0.24</a></p>
 </section>
 <section id="version-0-0-22">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.22/index.html">Version 0.0.22</a><a class="headerlink" href="#version-0-0-22" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.22/index.html">Version 0.0.22</a><a class="headerlink" href="#version-0-0-22" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Renamed <code class="docutils literal notranslate"><span class="pre">conditional_histograms</span></code> to <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code></p></li>
 <li><p>Updated SciPy version requirement in <code class="docutils literal notranslate"><span class="pre">README</span></code></p></li>
 </ul>
 </section>
 <section id="version-0-0-21">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.21/index.html">Version 0.0.21</a><a class="headerlink" href="#version-0-0-21" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.21/index.html">Version 0.0.21</a><a class="headerlink" href="#version-0-0-21" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Fixed dependency resolution for Python 3.11+ by updating SciPy version constraints.</p></li>
 <li><p>Improved compatibility with Google Colab and Python 3.12 environments.</p></li>
@@ -434,9 +435,9 @@ Colab downgrades</p></li>
 </ul>
 </section>
 <section id="version-0-0-20">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.20/index.html">Version 0.0.20</a><a class="headerlink" href="#version-0-0-20" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.20/index.html">Version 0.0.20</a><a class="headerlink" href="#version-0-0-20" title="Link to this heading"></a></h2>
 <section id="what-s-changed">
-<h3>What’s Changed<a class="headerlink" href="#what-s-changed" title="Permalink to this heading"></a></h3>
+<h3>What’s Changed<a class="headerlink" href="#what-s-changed" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>flexible summarize_combinations sans excel by &#64;lshpaner in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/104">https://github.com/lshpaner/eda_toolkit/pull/104</a></p></li>
 <li><p>Groupby imputer by &#64;Oscar-Gil-Data in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/109">https://github.com/lshpaner/eda_toolkit/pull/109</a></p></li>
@@ -450,7 +451,7 @@ Colab downgrades</p></li>
 </section>
 </section>
 <section id="version-0-0-19">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.19/index.html">Version 0.0.19</a><a class="headerlink" href="#version-0-0-19" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.19/index.html">Version 0.0.19</a><a class="headerlink" href="#version-0-0-19" title="Link to this heading"></a></h2>
 <p><strong>Summary</strong></p>
 <p>Refactored <code class="docutils literal notranslate"><span class="pre">data_doctor()</span></code> to guarantee index-safe, deterministic feature
 transformations and column creation. This release resolves previously observed
@@ -493,7 +494,7 @@ identical transformed outputs across all supported
 </ul>
 </section>
 <section id="version-0-0-18">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.18/index.html">Version 0.0.18</a><a class="headerlink" href="#version-0-0-18" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.18/index.html">Version 0.0.18</a><a class="headerlink" href="#version-0-0-18" title="Link to this heading"></a></h2>
 <p><strong>What’s changed</strong></p>
 <p>1. Thousand-separator support for dynamic group columns
 We now include the two group-by columns (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;=50K</span> <span class="pre">(n</span> <span class="pre">=</span> <span class="pre">37,155)</span></code> and <code class="docutils literal notranslate"><span class="pre">&gt;50K</span> <span class="pre">(n</span> <span class="pre">=</span> <span class="pre">11,687)</span></code>) in our integer-formatting step. That means any time you run:</p>
@@ -568,7 +569,7 @@ TOTAL                              1446    270    81%
 </div>
 </section>
 <section id="version-0-0-17">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.17/index.html">Version 0.0.17</a><a class="headerlink" href="#version-0-0-17" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.17/index.html">Version 0.0.17</a><a class="headerlink" href="#version-0-0-17" title="Link to this heading"></a></h2>
 <ul>
 <li><p>Changed all instances of the word/term <code class="docutils literal notranslate"><span class="pre">grid</span></code> to <code class="docutils literal notranslate"><span class="pre">subplots</span></code> where applicable.</p></li>
 <li><p>Introduced a new function, <code class="docutils literal notranslate"><span class="pre">outcome_crosstab_plot</span></code>, which generates crosstab-based stacked bar plots for visualizing the relationship between a binary outcome variable and multiple categorical features. The function supports:</p>
@@ -584,7 +585,7 @@ TOTAL                              1446    270    81%
 </ul>
 </section>
 <section id="version-0-0-16">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.16/index.html">Version 0.0.16</a><a class="headerlink" href="#version-0-0-16" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.16/index.html">Version 0.0.16</a><a class="headerlink" href="#version-0-0-16" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Enhanced Plotting (+) Text Wrap Functionality by &#64;lshpaner in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/82">https://github.com/lshpaner/eda_toolkit/pull/82</a></p></li>
 <li><p>added <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> import by &#64;lshpaner in <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/pull/83">https://github.com/lshpaner/eda_toolkit/pull/83</a></p></li>
@@ -607,10 +608,10 @@ TOTAL                              1446    270    81%
 <p><strong>Full Changelog</strong>: <a class="reference external" href="https://github.com/lshpaner/eda_toolkit/compare/0.0.15...0.0.16">https://github.com/lshpaner/eda_toolkit/compare/0.0.15…0.0.16</a></p>
 </section>
 <section id="version-0-0-15">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.15/index.html">Version 0.0.15</a><a class="headerlink" href="#version-0-0-15" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.15/index.html">Version 0.0.15</a><a class="headerlink" href="#version-0-0-15" title="Link to this heading"></a></h2>
 <p class="rubric-large rubric">Scatter Plot Function Updates</p>
 <section id="avoid-in-place-modification-of-exclude-combinations">
-<h3>Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code><a class="headerlink" href="#avoid-in-place-modification-of-exclude-combinations" title="Permalink to this heading"></a></h3>
+<h3>Avoid In-Place Modification of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code><a class="headerlink" href="#avoid-in-place-modification-of-exclude-combinations" title="Link to this heading"></a></h3>
 <p>This addresses an issue where the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function modifies the <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code> parameter in-place, causing errors when reused in subsequent calls.</p>
 <ul>
 <li><p>Created a local copy of <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code> for normalization instead of modifying the input directly:</p>
@@ -621,7 +622,7 @@ TOTAL                              1446    270    81%
 </ul>
 </section>
 <section id="improve-progress-tracking-and-resolve-last-plot-saving-issue">
-<h3>Improve Progress Tracking and Resolve Last Plot Saving Issue<a class="headerlink" href="#improve-progress-tracking-and-resolve-last-plot-saving-issue" title="Permalink to this heading"></a></h3>
+<h3>Improve Progress Tracking and Resolve Last Plot Saving Issue<a class="headerlink" href="#improve-progress-tracking-and-resolve-last-plot-saving-issue" title="Link to this heading"></a></h3>
 <ol class="arabic simple">
 <li><p>Separate Progress Bars for Grid Plot:</p>
 <ul class="simple">
@@ -643,7 +644,7 @@ TOTAL                              1446    270    81%
 </ol>
 </section>
 <section id="updated-tqdm-saving-logic-in-scatter-fit-plot">
-<h3>Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code><a class="headerlink" href="#updated-tqdm-saving-logic-in-scatter-fit-plot" title="Permalink to this heading"></a></h3>
+<h3>Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Saving Logic in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code><a class="headerlink" href="#updated-tqdm-saving-logic-in-scatter-fit-plot" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Refactored <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> to track the overall plot-saving process, covering both individual and grid plots.</p></li>
 <li><p>Updated <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar description in <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> to use universal phrasing: “Saving scatter plot(s).”</p></li>
@@ -652,7 +653,7 @@ TOTAL                              1446    270    81%
 </section>
 </section>
 <section id="version-0-0-14">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.14/index.html">Version 0.0.14</a><a class="headerlink" href="#version-0-0-14" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.14/index.html">Version 0.0.14</a><a class="headerlink" href="#version-0-0-14" title="Link to this heading"></a></h2>
 <p class="rubric-large rubric">Ensure Crosstabs Dictionary is Populated with <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code></p>
 <p>This resolves the issue where the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function fails to
 populate and return the crosstabs dictionary (<code class="docutils literal notranslate"><span class="pre">crosstabs_dict</span></code>) when
@@ -696,7 +697,7 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </ol>
 </section>
 <section id="version-0-0-13">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.13/index.html">Version 0.0.13</a><a class="headerlink" href="#version-0-0-13" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.13/index.html">Version 0.0.13</a><a class="headerlink" href="#version-0-0-13" title="Link to this heading"></a></h2>
 <p>This version introduces a series of updates and fixes across multiple functions to enhance error handling, improve cross-environment compatibility, streamline usability, and optimize performance. These changes address critical issues, add new features, and ensure consistent behavior in both terminal and notebook environments.</p>
 <p class="rubric-large rubric">Add <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for Insufficient Pool Size in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> and Enhance ID Deduplication</p>
 <p>This update enhances the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function by adding explicit error handling and improving the uniqueness guarantee for generated IDs.</p>
@@ -821,7 +822,7 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </ul>
 </section>
 <section id="version-0-0-12">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.12/index.html">Version 0.0.12</a><a class="headerlink" href="#version-0-0-12" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.12/index.html">Version 0.0.12</a><a class="headerlink" href="#version-0-0-12" title="Link to this heading"></a></h2>
 <p class="rubric-large rubric">New Features</p>
 <ul>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function:</p>
@@ -885,7 +886,7 @@ but the saved filename will still use <code class="docutils literal notranslate"
 <p>The updated implementation removes custom logic for ID generation, leveraging NumPy’s built-in array operations for a more concise and readable codebase.</p>
 </section>
 <section id="version-0-0-11">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.11/index.html">Version 0.0.11</a><a class="headerlink" href="#version-0-0-11" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.11/index.html">Version 0.0.11</a><a class="headerlink" href="#version-0-0-11" title="Link to this heading"></a></h2>
 <p><strong>Description</strong></p>
 <p>Fixes a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function when <code class="docutils literal notranslate"><span class="pre">save_formats</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>. The update ensures that <code class="docutils literal notranslate"><span class="pre">save_formats</span></code> defaults to an empty list, preventing iteration over a <code class="docutils literal notranslate"><span class="pre">NoneType</span></code> object.</p>
 <p><strong>Changes</strong></p>
@@ -899,7 +900,7 @@ but the saved filename will still use <code class="docutils literal notranslate"
 </ul>
 </section>
 <section id="version-0-0-10">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.10/index.html">Version 0.0.10</a><a class="headerlink" href="#version-0-0-10" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.10/index.html">Version 0.0.10</a><a class="headerlink" href="#version-0-0-10" title="Link to this heading"></a></h2>
 <p><strong>Legend Handling</strong></p>
 <ul class="simple">
 <li><p>The legend is now displayed only if there are valid legend handles (<code class="docutils literal notranslate"><span class="pre">len(handles)</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>) and if <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
@@ -910,7 +911,7 @@ but the saved filename will still use <code class="docutils literal notranslate"
 <p>This update prevents empty legend squares from appearing and maintains the intended default behavior of showing legends only when they contain relevant content.</p>
 </section>
 <section id="version-0-0-9">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.9/index.html">Version 0.0.9</a><a class="headerlink" href="#version-0-0-9" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.9/index.html">Version 0.0.9</a><a class="headerlink" href="#version-0-0-9" title="Link to this heading"></a></h2>
 <p><strong>Bug Fixes and Minor Improvements</strong></p>
 <p>Improved error messages and validation checks across multiple functions to prevent common pitfalls and ensure smoother user experience.</p>
 <p><strong>Visualization Enhancements</strong></p>
@@ -932,7 +933,7 @@ DataFrame columns to provide summary statistics.</p>
 <p><strong>Scatter Plots:</strong> Enhanced <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot()</span></code> with support for hue-based coloring, best fit lines, correlation display, and flexible grid plotting options.</p>
 </section>
 <section id="version-0-0-8">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.8/index.html">Version 0.0.8</a><a class="headerlink" href="#version-0-0-8" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.8/index.html">Version 0.0.8</a><a class="headerlink" href="#version-0-0-8" title="Link to this heading"></a></h2>
 <p><a class="reference internal" href="eda_plots.html#stacked_crosstab_plot" title="stacked_crosstab_plot"><code class="xref py py-class docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code></a></p>
 <ul class="simple">
 <li><p><strong>Flexible `save_formats` Input</strong>:
@@ -1041,7 +1042,7 @@ DataFrame columns to provide summary statistics.</p>
 </ul>
 </section>
 <section id="version-0-0-8c">
-<h2>Version 0.0.8c<a class="headerlink" href="#version-0-0-8c" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.8c<a class="headerlink" href="#version-0-0-8c" title="Link to this heading"></a></h2>
 <p>Version 0.0.8c is a follow-up release to version 0.0.8b. This update includes minor enhancements and refinements based on feedback and additional testing. It serves as an incremental step towards improving the stability and functionality of the toolkit.</p>
 <p><strong>Key Updates in 0.0.8c:</strong></p>
 <ul class="simple">
@@ -1126,14 +1127,14 @@ DataFrame columns to provide summary statistics.</p>
 </ul>
 </section>
 <section id="version-0-0-8b">
-<h2>Version 0.0.8b<a class="headerlink" href="#version-0-0-8b" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.8b<a class="headerlink" href="#version-0-0-8b" title="Link to this heading"></a></h2>
 <p>Version 0.0.8b is an exact replica of version <code class="docutils literal notranslate"><span class="pre">0.0.8a</span></code>. The purpose of this
 beta release was to test whether releasing it as the latest version would update
 its status on PyPI to reflect it as the latest release. However, it continues to
 be identified as a pre-release on PyPI.</p>
 </section>
 <section id="version-0-0-8a">
-<h2>Version 0.0.8a<a class="headerlink" href="#version-0-0-8a" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.8a<a class="headerlink" href="#version-0-0-8a" title="Link to this heading"></a></h2>
 <p>Version 0.0.8a introduces significant enhancements and new features to improve
 the usability and functionality of the EDA Toolkit.</p>
 <p><strong>New Features:</strong></p>
@@ -1175,7 +1176,7 @@ the usability and functionality of the EDA Toolkit.</p>
 </ul>
 </section>
 <section id="version-0-0-7">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.7/index.html">Version 0.0.7</a><a class="headerlink" href="#version-0-0-7" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.7/index.html">Version 0.0.7</a><a class="headerlink" href="#version-0-0-7" title="Link to this heading"></a></h2>
 <p><strong>Added Function for Customizable Correlation Matrix Visualization</strong></p>
 <p>This release introduces a new function, <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code>, which allows users to
 generate both full and upper triangular correlation heatmaps with a high degree
@@ -1210,7 +1211,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </div>
 </section>
 <section id="version-0-0-6">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.6/index.html">Version 0.0.6</a><a class="headerlink" href="#version-0-0-6" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.6/index.html">Version 0.0.6</a><a class="headerlink" href="#version-0-0-6" title="Link to this heading"></a></h2>
 <p><strong>Added validation for Plot Type Parameter in KDE Distributions Function</strong></p>
 <p>This release adds a validation step for the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> function. The allowed values for <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> are <code class="docutils literal notranslate"><span class="pre">&quot;hist&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kde&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>. If an invalid value is provided, the function will now raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> with a clear message indicating the accepted values. This change improves the robustness of the function and helps prevent potential errors due to incorrect parameter values.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Validate plot_type parameter</span>
@@ -1224,7 +1225,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </div>
 </section>
 <section id="version-0-0-5">
-<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.5/index.html">Version 0.0.5</a><a class="headerlink" href="#version-0-0-5" title="Permalink to this heading"></a></h2>
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.5/index.html">Version 0.0.5</a><a class="headerlink" href="#version-0-0-5" title="Link to this heading"></a></h2>
 <p><strong>Ensure Consistent Font Size and Text Wrapping Across Plot Elements</strong></p>
 <p>This PR addresses inconsistencies in font sizes and text wrapping across various plot elements in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function. The following updates have been implemented to ensure uniformity and improve the readability of plots:</p>
 <ol class="arabic simple">
@@ -1242,7 +1243,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 </section>
 <section id="version-0-0-4">
-<h2>Version 0.0.4<a class="headerlink" href="#version-0-0-4" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.4<a class="headerlink" href="#version-0-0-4" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>Stable release</strong></p>
 <ul>
@@ -1258,7 +1259,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 </section>
 <section id="version-0-0-3">
-<h2>Version 0.0.3<a class="headerlink" href="#version-0-0-3" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.3<a class="headerlink" href="#version-0-0-3" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>Stable release</strong></p>
 <ul>
@@ -1272,7 +1273,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 </section>
 <section id="version-0-0-2">
-<h2>Version 0.0.2<a class="headerlink" href="#version-0-0-2" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.2<a class="headerlink" href="#version-0-0-2" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt><strong>First stable release</strong></dt><dd><ul>
@@ -1285,13 +1286,13 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 </section>
 <section id="version-0-0-1rc0">
-<h2>Version 0.0.1rc0<a class="headerlink" href="#version-0-0-1rc0" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.1rc0<a class="headerlink" href="#version-0-0-1rc0" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>No new updates to the codebase; minimal documentation updates to README and <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> files.</p></li>
 </ul>
 </section>
 <section id="version-0-0-1b0">
-<h2>Version 0.0.1b0<a class="headerlink" href="#version-0-0-1b0" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.1b0<a class="headerlink" href="#version-0-0-1b0" title="Link to this heading"></a></h2>
 <p><strong>New Scatter Fit Plot and Additional Updates</strong></p>
 <ul class="simple">
 <li><p>Added new <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot()</span></code>, removed unused <code class="docutils literal notranslate"><span class="pre">data_types()</span></code>, and added comment section headers.</p></li>
@@ -1354,7 +1355,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
 <section id="id24">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.1b0<a class="headerlink" href="#id24" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1373,7 +1374,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ol>
 </section>
 <section id="id25">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.1b0<a class="headerlink" href="#id25" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1456,7 +1457,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ol>
 </section>
 <section id="id26">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h2>
+<h2>Version 0.0.1b0<a class="headerlink" href="#id26" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
