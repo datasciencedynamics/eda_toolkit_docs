@@ -24,6 +24,17 @@
 Changelog
 ==========
 
+`Version 0.0.29`_
+----------------------
+
+* fix(table1): handle NaN categories in groupby by @lshpaner in https://github.com/datasciencedynamics/eda_toolkit/pull/130
+* Fixes https://github.com/datasciencedynamics/eda_toolkit/issues/129: NaN handling in ``generate_table1`` under ``groupby_col``.
+* ``value_counts`` loop: NaN-safe ``col_mask`` so ``x = NaN`` rows show correct per-group counts (was ``0 (0.00%)``).
+* Categorical loop: all-NaN columns emit a placeholder row instead of being skipped by the crosstab shape check.
+* Closes https://github.com/datasciencedynamics/eda_toolkit/issues/129
+* **Full Changelog**: https://github.com/datasciencedynamics/eda_toolkit/compare/0.0.28...0.0.29
+
+
 `Version 0.0.28`_
 ----------------------
 
