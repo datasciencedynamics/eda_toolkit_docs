@@ -103,7 +103,8 @@ shape, spread, and modality of numeric variables is critical.
 - **Log Scaling**: Supports selective log scaling of variables that span
   multiple orders of magnitude.
 - **Output Options**: Supports saving combined figures or per-variable plots
-  in PNG or SVG format.
+  in PNG or SVG format, either to a directory via a base filename or to an
+  explicit full path with extension.
 
 .. function:: plot_distributions(df, vars_of_interest=None, figsize=(5, 5), subplot_figsize=None, hist_color="#0000FF", density_color=None, mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="hist", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, show_legend=True, legend_loc="best", custom_xlabels=None, custom_titles=None, **kwargs)
 
@@ -143,16 +144,20 @@ shape, spread, and modality of numeric variables is critical.
     :type image_path_png: str, optional
     :param image_path_svg: Directory path to save SVG images.
     :type image_path_svg: str, optional
-    :param image_filename: Filename to use when saving combined plots.
+    :param image_filename: Filename for the overall (subplot grid) figure. If it includes a file extension it is saved verbatim and no output directory is required; otherwise it is used as a base stem with ``image_path_png`` and/or ``image_path_svg``.
     :type image_filename: str, optional
     :param bbox_inches: Bounding box used when saving figures.
     :type bbox_inches: str, optional
-    :param single_var_image_filename: Filename prefix used when saving per-variable plots.
+    :param single_var_image_filename: Filename for the separate per-variable plots. May be a bare stem (legacy: requires ``image_path_png`` / ``image_path_svg``) or a full path with extension (saved verbatim, no directory needed). The variable name is appended to the stem, before the extension. When this is used, ``figsize`` controls the individual plot size and ``subplot_figsize`` is ignored.
     :type single_var_image_filename: str, optional
     :param y_axis_label: Label displayed on the y-axis.
     :type y_axis_label: str, optional
     :param plot_type: Type of plot to generate (``'hist'``, ``'density'``, or ``'both'``).
     :type plot_type: str, optional
+    :param density_function: Density overlay(s) to render when ``plot_type`` is ``'density'`` or ``'both'``. Either ``'kde'`` or the name of any continuous distribution in ``scipy.stats`` (e.g. ``'norm'``, ``'lognorm'``), or a list combining them. Default is ``'kde'``.
+    :type density_function: str or list of str, optional
+    :param density_fit: Parameter estimation method for parametric density overlays. ``'MLE'`` for maximum likelihood, ``'MM'`` for method of moments. Default is ``'MLE'``.
+    :type density_fit: str, optional
     :param log_scale_vars: Variable name(s) to apply log scaling.
     :type log_scale_vars: str or list of str, optional
     :param bins: Histogram bin specification.
@@ -167,7 +172,7 @@ shape, spread, and modality of numeric variables is critical.
     :type text_wrap: int, optional
     :param disable_sci_notation: Disable scientific notation on axes.
     :type disable_sci_notation: bool, optional
-    :param stat: Aggregate statistic computed per bin.
+    :param stat: Aggregate statistic computed per bin (``'count'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``, ``'density'``).
     :type stat: str, optional
     :param xlim: Limits for the x-axis.
     :type xlim: tuple or list, optional
@@ -201,7 +206,9 @@ shape, spread, and modality of numeric variables is critical.
         - If ``fill`` is set to ``False`` and ``hist_edgecolor`` or ``fill_alpha`` is specified.
         - If ``bins`` and ``binwidth`` are both specified.
         - If ``subplot_figsize`` is provided when only one plot is being created.
-
+        - If ``density_function`` contains a value that is not ``'kde'`` or a valid ``scipy.stats`` distribution.
+        - If ``density_fit`` is not ``'MLE'`` or ``'MM'``.
+        
     :raises UserWarning:
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
 
@@ -213,9 +220,11 @@ shape, spread, and modality of numeric variables is critical.
     calculate an optimal subplot layout based on the number of variables being
     plotted.
 
-    To save images, at least one of ``image_path_png`` or ``image_path_svg`` must
-    be specified. Saving is triggered by providing ``image_filename`` or
-    ``single_var_image_filename``.
+    Saving is triggered by providing ``image_filename`` (combined figure) or
+    ``single_var_image_filename`` (per-variable plots). Each accepts either a
+    bare base name, which requires at least one of ``image_path_png`` or
+    ``image_path_svg``, or a full path with extension, which saves verbatim
+    with no directory required.
 
 
 \
@@ -357,7 +366,7 @@ Histogram Example (Density)
 In this example, the ``plot_distributions()`` function is used to generate histograms for 
 the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with 
 ``plot_type="hist"``, meaning no KDE plots are included, only histograms are displayed. 
-The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
+The plots are arranged in a single row of three columns (``n_rows=1, n_cols=3``), 
 with a subplot grid size of `14x4 inches` (``subplot_figsize=(14, 4)``). The histograms are 
 divided into `10 bins` (``bins=10``), and the ``y-axis`` is labeled "Density" (``y_axis_label="Density"``).
 Font sizes for the axis labels and tick labels are set to `16` and `14` points, 
@@ -419,7 +428,7 @@ histogram bars. The ``y-axis`` label is updated to "Count" (``y_axis_label="Coun
 reflecting that the histograms display the count of observations within each bin. 
 Additionally, the stat parameter is set to ``"Count"`` to show the actual counts instead of 
 densities. The rest of the parameters remain the same as in the previous example, 
-with the plots arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
+with the plots arranged in a single row of three columns (``n_rows=1, n_cols=3``), 
 a subplot grid size of `14x4 inches`, and a bin count of `10`. This setup focuses on 
 visualizing the raw counts in the dataset using orange-colored histograms.
 
@@ -477,8 +486,8 @@ between the two statistical measures. The function parameters are adjusted to
 ensure that both the mean and median lines are plotted ``(plot_mean=True, plot_median=True)``. 
 The ``y_axis_label`` remains ``"Density"``, indicating that the histograms 
 represent the density of observations within each bin. The histogram bars are 
-colored using ``hist_color="brown"``, with a ``fill_alpha=0.60`` while the s
-tatistical overlays enhance the interpretability of the data. The layout is 
+colored using ``hist_color="brown"``, with a ``fill_alpha=0.60`` while the 
+statistical overlays enhance the interpretability of the data. The layout is 
 configured with a single row and multiple columns ``(n_rows=1, n_cols=3)``, and 
 the subplot grid size is set to `15x5 inches`. This example highlights how to visualize 
 central tendencies within the data using a histogram that prominently displays 
@@ -658,8 +667,6 @@ models.
         df=df,
         vars_of_interest=vars_of_interest,
         # layout
-        n_rows=1,
-        n_cols=3,
         hue=None,
         hist_color="yellow",
         figsize=(10, 6),
@@ -676,9 +683,6 @@ models.
         tick_fontsize=14,
         legend_loc="best",
         bbox_inches="tight",
-        image_filename="age_distribution_norm_fit",
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
     )
 
 .. raw:: html
@@ -862,8 +866,10 @@ groups is critical.
     :param image_path_svg: Directory path to save the figure as an SVG file.
     :type image_path_svg: str, optional
 
-    :param image_filename: Base filename (without extension) for saving the
-        figure. No files are saved if this is not provided.
+    :param image_filename: Filename for saving the figure. With an extension it
+        is saved verbatim and no output directory is required; without one it is
+        used as a base stem combined with ``image_path_png`` /
+        ``image_path_svg``. No files are saved if this is not provided.
     :type image_filename: str, optional
 
     :raises ValueError:
@@ -871,7 +877,7 @@ groups is critical.
         - If ``plot_style`` is not one of ``"hist"`` or ``"density"``.
         - If ``normalize`` is not one of ``"density"`` or ``"count"``.
         - If ``plot_style="density"`` and ``normalize!="density"``.
-        - If ``image_filename`` is provided but neither
+        - If ``image_filename`` is provided without an extension and neither
           ``image_path_png`` nor ``image_path_svg`` is specified.
         - If the subplot grid is too small for the number of features.
 
@@ -897,6 +903,9 @@ groups is critical.
     - To place the legend below a subplot, use
       ``legend_loc="upper center"``, ``legend_bbox_to_anchor=(0.5, -0.15)``,
       and ``legend_ncols=2``.
+    - In count mode (``normalize="count"``), the count (y) axis uses thousands
+      separators. In density/percentage mode the y-axis shows whole-number
+      percentages when ``pct_format=True``.
     - Font sizes are specified in absolute points and may appear small on large
       figures or dense subplot grids.
 
@@ -924,8 +933,9 @@ consistent visual identification of income groups across all features. The
 ``alpha=0.6`` parameter applies partial transparency, making overlapping density
 regions easier to interpret.
 
-The resulting figure is saved in both PNG and SVG formats using a shared base
-filename.
+The resulting figure is displayed inline. To save it, pass ``image_filename`` as
+a full path with extension to save verbatim, or as a base filename together with
+``image_path_png`` and/or ``image_path_svg`` to save into those directories.
 
 .. code-block:: python
 
@@ -997,8 +1007,9 @@ A shared binning strategy is used by default, ensuring that both income groups
 are evaluated against identical bin edges for each feature. Custom group colors
 are applied consistently across all subplots to maintain interpretability.
 
-The resulting figure is saved in both PNG and SVG formats for downstream use in
-reports or publications.
+The resulting figure is displayed inline. To save it, pass ``image_filename`` as
+a full path with extension to save verbatim, or as a base filename together with
+``image_path_png`` and/or ``image_path_svg`` to save into those directories.
 
 .. code-block:: python
 
@@ -1146,7 +1157,7 @@ The function currently supports the following diagnostic visualizations:
     :param image_path_svg: Directory path for saving SVG output.
     :type image_path_svg: str, optional
 
-    :param image_filename: Base filename used when saving plots (without extension).
+    :param image_filename: Filename used when saving plots. With an extension it is saved verbatim and no output directory is required; without one it is used as a base stem combined with ``image_path_png`` / ``image_path_svg``.
     :type image_filename: str, optional
 
     :raises ValueError:
@@ -1156,10 +1167,9 @@ The function currently supports the following diagnostic visualizations:
         - If ``tail`` is not one of ``"lower"``, ``"upper"``, or ``"both"``.
         - If ``palette`` is provided but does not define colors for every distribution in ``dist``.
         - If ``qq_type="empirical"`` is used without valid ``reference_data`` (must be provided and contain at least two observations).
-        - If ``image_filename`` is provided but neither ``image_path_png`` nor ``image_path_svg`` is specified.
+        - If ``image_filename`` is provided without an extension and neither ``image_path_png`` nor ``image_path_svg`` is specified.
 
     :returns: ``None``
-
 
 
 Theoretical QQ Plot Example
@@ -1206,8 +1216,6 @@ paths and filename.
         plot_types="qq",
         qq_type="theoretical",
         show_reference=True,
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
         palette={
             "norm": "tab:blue",
             "lognorm": "tab:orange",
@@ -1236,7 +1244,7 @@ distributional assumptions in downstream modeling.
    <div class="no-click">
 
 .. image:: ../assets/gof_qq_age_adult_income.png
-   :alt: Grouped Histograms with Income Groups
+   :alt: Theoretical QQ Plot Goodness of Fit
    :align: center
    :width: 500px
 
@@ -1375,7 +1383,7 @@ tail behavior is as important as central tendency.
    <div class="no-click">
 
 .. image:: ../assets/gof_cdf_age_adult_income_empirical_reference.svg
-   :alt: Goodness of Fit Empirical QQ Plot
+   :alt: Goodness of Fit CDF Plot
    :align: center
    :width: 500px
 
@@ -1390,14 +1398,15 @@ tail behavior is as important as central tendency.
 Feature Scaling and Outliers
 =============================
 
-.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, plot_type="all", figsize=(18, 6), xlim=None, kde_ylim=None, hist_ylim=None, box_violin_ylim=None, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None)
+.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, plot_type="all", xlim=None, kde_ylim=None, hist_ylim=None, box_violin_ylim=None, image_path_png=None, image_path_svg=None, image_filename=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None, figsize=(18, 6))
 
     Analyze and transform a specific feature in a DataFrame, with options for
     scaling, applying cutoffs, and visualizing the results. This function also
     allows for the creation of a new column with the transformed data if
-    specified. Plots can be saved in PNG or SVG format with filenames that
-    incorporate the ``plot_type``, ``feature_name``, ``scale_conversion``, and
-    ``cutoff`` if cutoffs are applied.
+    specified. Plots are displayed by default; when ``image_filename`` is
+    provided the figure is saved, with the auto-generated name incorporating the
+    ``feature_name``, ``scale_conversion``, ``plot_type``, and a ``"_cutoff"``
+    suffix if cutoffs are applied.
 
     :param df: The DataFrame containing the feature to analyze.
     :type df: pandas.DataFrame
@@ -1445,7 +1454,7 @@ Feature Scaling and Outliers
     :param upper_cutoff: Upper bound to apply if ``apply_cutoff=True``.
     :type upper_cutoff: float, optional
 
-    :param show_plot: Whether to display plots of the transformed feature: KDE, histogram, and boxplot/violinplot.
+    :param show_plot: Whether to display plots of the transformed feature: KDE, histogram, ECDF, and/or boxplot/violinplot.
     :type show_plot: bool, optional (default=True)
 
     :param plot_type: Specifies the type of plot(s) to produce. Options are:
@@ -1453,6 +1462,7 @@ Feature Scaling and Outliers
         - ``'all'``: Generates KDE, histogram, and boxplot/violinplot.
         - ``'kde'``: KDE plot only.
         - ``'hist'``: Histogram plot only.
+        - ``'ecdf'``: Empirical CDF plot only.
         - ``'box_violin'``: Boxplot or violin plot only (specified by
           ``box_violin``).
 
@@ -1460,9 +1470,6 @@ Feature Scaling and Outliers
         the specified plots are displayed in a single row with sufficient
         spacing. A ``ValueError`` is raised if an invalid plot type is included.
     :type plot_type: str, list, or tuple, optional (default="all")
-
-    :param figsize: Specifies the figure size for the plots. This applies to all plot types, including single plots (when ``plot_type`` is set to "kde", "hist", or "box_violin") and multi-plot layout when ``plot_type`` is "all".
-    :type figsize: tuple or list, optional (default=(18, 6))
 
     :param xlim: Limits for the x-axis in all plots, specified as ``(xmin, xmax)``.
     :type xlim: tuple or list, optional
@@ -1476,14 +1483,14 @@ Feature Scaling and Outliers
     :param box_violin_ylim: Limits for the y-axis in the boxplot or violin plot, specified as ``(ymin, ymax)``.
     :type box_violin_ylim: tuple or list, optional
 
-    :param save_plot: Whether to save the plots as PNG and/or SVG images. If ``True``, the user must specify at least one of ``image_path_png`` or ``image_path_svg``, otherwise a ``ValueError`` is raised.
-    :type save_plot: bool, optional (default=False)
-
-    :param image_path_png: Directory path to save the plot as a PNG file. Only used if ``save_plot=True``.
+    :param image_path_png: Directory path to save the plot as a PNG file. Used when ``image_filename`` is a bare stem.
     :type image_path_png: str, optional
 
-    :param image_path_svg: Directory path to save the plot as an SVG file. Only used if ``save_plot=True``.
+    :param image_path_svg: Directory path to save the plot as an SVG file. Used when ``image_filename`` is a bare stem.
     :type image_path_svg: str, optional
+
+    :param image_filename: Filename used when saving the figure. May be a full path with extension (saved verbatim, no directory required) or a bare stem combined with ``image_path_png`` / ``image_path_svg``. When a stem (or no name) is used, the feature name, transformation, plot types, and cutoff flag are encoded into the auto-generated name. If ``None``, the figure is not saved.
+    :type image_filename: str, optional
 
     :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If ``True``, the new column name is generated based on the feature name and the transformation applied:
     
@@ -1514,22 +1521,34 @@ Feature Scaling and Outliers
     :param random_state: Seed for reproducibility when sampling the data.
     :type random_state: int, optional
 
+    :param figsize: Specifies the figure size for the plots. This applies to all plot types, including single plots (when ``plot_type`` is set to "kde", "hist", "ecdf", or "box_violin") and multi-plot layout when ``plot_type`` is "all".
+    :type figsize: tuple or list, optional (default=(18, 6))
+
     :returns: ``None`` 
         Displays the feature's descriptive statistics, quartile information,
-        and outlier details. If a new column is created, confirms the addition to the DataFrame. For Box-Cox, either the lambda or its confidence interval is displayed.
+        and outlier details. If ``apply_as_new_col_to_df=True``, the DataFrame
+        is modified in place with the new column. For Box-Cox, either the lambda
+        or its confidence interval is displayed.
 
     :raises ValueError: 
         - If an invalid ``scale_conversion`` is provided.
         - If Box-Cox transformation is applied to non-positive values.
-        - If ``save_plot=True`` but neither ``image_path_png`` nor ``image_path_svg`` is provided.
         - If an invalid option is provided for ``box_violin``.
         - If an invalid option is provided for ``plot_type``.
+        - If ``image_filename`` is provided without an extension and neither
+          ``image_path_png`` nor ``image_path_svg`` is specified.
         - If the length of transformed data does not match the original feature length.
 
     .. note::  
         
-        When saving plots, the filename will include the ``feature_name``, ``scale_conversion``, each selected ``plot_type``, and, if cutoffs are applied, ``"_cutoff"``. For example, if ``feature_name`` is ``"age"``, ``scale_conversion`` is ``"boxcox"``, and ``plot_type`` is ``"kde"``, with cutoffs applied, the filename will be: ``age_boxcox_kde_cutoff.png`` or ``age_boxcox_kde_cutoff.svg``.
-
+        When the figure is saved via a bare-stem ``image_filename`` (or an
+        auto-generated name), the filename includes the ``feature_name``,
+        ``scale_conversion``, each selected ``plot_type``, and, if cutoffs are
+        applied, ``"_cutoff"``. For example, if ``feature_name`` is ``"age"``,
+        ``scale_conversion`` is ``"boxcox"``, and ``plot_type`` is ``"kde"``,
+        with cutoffs applied, the filename will be: ``age_boxcox_kde_cutoff.png``
+        or ``age_boxcox_kde_cutoff.svg``. A full-path ``image_filename`` with an
+        extension is saved verbatim instead.
 
 Available Scale Conversions
 -----------------------------
@@ -1565,7 +1584,7 @@ The ``data_doctor`` function provides a flexible way to preprocess data by apply
 various scaling techniques. In this case, we apply the Box-Cox transformation **without any tuning** 
 of the ``alpha`` or ``lambda`` parameters, allowing the function to handle the transformation in a 
 barebones approach. You can also choose other scaling conversions from the list of available 
-options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on your needs.
+options (such as ``'minmax'``, ``'stdrz'``, ``'robust'``, etc.), depending on your needs.
 
 
 .. code-block:: python
@@ -2006,8 +2025,9 @@ any desired keyword arguments based on the correct version of Python you're usin
 - ``box_violin_kws={"boxprops": dict(facecolor='none', edgecolor="blue")}``: This keyword argument customizes the appearance of the boxplot by removing the fill color and setting the edge color to blue. This syntax is specific to Python 3.7. In later versions (i.e., 3.11+), the ``fill=True`` argument can be used to control this behavior.
 - ``kde_kws={"fill":True, "color":"blue"}``: This fills the area under the KDE plot with a blue color, enhancing the plot's visual presentation.
 - ``hist_kws={"color":"blue"}``: This colors the histogram bars in blue for visual consistency across plots.
-- ``image_path_svg=image_path_svg``: This parameter specifies the path where the resulting plot will be saved as an SVG file.
-- ``save_plot=True``: This tells the function to save the plot, and since an image path is provided, the plot will be saved as an SVG file.
+- ``image_path_png=image_path_png``: Specifies the directory where the resulting plot is saved as a PNG file when ``image_filename`` is given as a base name. Similar to the SVG option, saving is triggered by providing ``image_filename``.
+- ``image_path_svg=image_path_svg``: Specifies the directory where the resulting plot is saved as an SVG file when ``image_filename`` is given as a base name. Saving is triggered by providing ``image_filename``.
+- ``image_filename="age_boxcox"``: Sets the filename for the saved figure. Provided as a base name, it is combined with ``image_path_svg`` (and/or ``image_path_png``) to write the file, with the feature name, transformation, and plot types encoded into the auto-generated name. Alternatively, passing a full path with extension saves the figure verbatim with no directory required.
 
 1. **Box-Cox Transformation with Confidence Interval**: In this example, we use the Box-Cox transformation with the ``alpha`` parameter set to 0.8, which returns a confidence interval for the lambda value rather than a single value.
    
@@ -2017,7 +2037,7 @@ any desired keyword arguments based on the correct version of Python you're usin
 
 4. **Custom Plot Visuals**: The KDE, histogram, and boxplot are customized with blue colors, and specific keyword arguments are provided for the boxplot appearance based on Python version. These changes allow for finer control over the visual aesthetics of the resulting plots.
 
-5. **Plot Saving**: The ``save_plot`` parameter is set to ``True``, and the plot will be saved as an SVG file at the specified location.
+5. **Plot Saving**: Providing ``image_filename`` together with ``image_path_svg`` and/or ``image_path_png`` saves the figure as an SVG file at the specified location. A full path with extension would instead save it verbatim with no directory required.
 
 
 Data Fraction Usage
@@ -2295,8 +2315,7 @@ The following code demonstrates this:
         plot_type=["box_violin", "hist"],
         hist_kws={"color": "gray"},
         figsize=(8, 4),
-        image_path_svg=image_path_svg,
-        save_plot=True,
+        image_filename="fnlwgt_sans_cutoffs.png",
         random_state=111,
     )
 
@@ -2386,8 +2405,7 @@ The following code demonstrates this configuration:
         plot_type=["box_violin", "hist"],
         hist_kws={"color": "gray", "bins": 20},
         figsize=(8, 4),
-        image_path_svg=image_path_svg,
-        save_plot=True,
+        image_filename="fnlwgt.png",
         random_state=111,
     )
 
@@ -2690,7 +2708,6 @@ The following code demonstrates this workflow:
    <div style="height: 50px;"></div>
 
 
-
 Stacked Crosstab Plots
 =======================
 
@@ -2698,7 +2715,7 @@ Stacked Crosstab Plots
 
 The ``stacked_crosstab_plot`` function is a powerful tool for visualizing categorical data relationships through stacked bar plots and contingency tables (crosstabs). It supports extensive customization options, including plot appearance, color schemes, and saving output in multiple formats. Users can choose between regular or normalized plots and control whether the function returns the generated crosstabs as a dictionary.
 
-.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, figsize=None, outer_pad=10.0, h_pad=5.0, file_prefix=None, logscale=False, plot_type="both", show_legend=True, legend_loc="best", reverse_legend=True, label_fontsize=12, tick_fontsize=10, title_wrap=50, tick_wrap=20, thousands_sep=True, pct_format=True, show_values=False, subtitle=None, remove_stacks=False, xlim=None, ylim=None)
+.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, image_filename=None, save_formats=None, color=None, output="both", return_dict=False, figsize=None, outer_pad=10.0, h_pad=5.0, file_prefix=None, logscale=False, plot_type="both", show_legend=True, legend_loc="best", reverse_legend=True, label_fontsize=12, tick_fontsize=10, title_wrap=50, tick_wrap=20, thousands_sep=True, pct_format=True, show_values=False, subtitle=None, remove_stacks=False, xlim=None, ylim=None)
 
    :param df: The DataFrame containing the data to plot.
    :type df: pandas.DataFrame
@@ -2714,7 +2731,9 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
       column in ``func_col``.
    :type legend_labels_list: list of list of str
 
-   :param title: List of titles for each plot generated.
+   :param title: List of titles for each plot generated. Each entry is
+      embedded in the auto-generated title string
+      ``"Prevalence of {title} by {col}"``.
    :type title: list of str
 
    :param kind: Type of plot to generate. ``"bar"`` for vertical bars,
@@ -2736,8 +2755,20 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
    :param image_path_svg: Directory path to save SVG plot images.
    :type image_path_svg: str, optional
 
-   :param save_formats: List, string, or tuple of file formats to save
-      the plots (e.g. ``["png", "svg"]``). Default is ``None``.
+   :param image_filename: Full destination path for the saved plot(s). If it
+      includes an extension, that extension selects the format unless
+      ``save_formats`` is given; the file is saved verbatim and no directory is
+      required. The ``func_col`` entry is appended to the stem so each generated
+      figure stays distinct. When provided, ``image_filename`` takes precedence
+      over the ``image_path_png`` / ``image_path_svg`` directory scheme.
+   :type image_filename: str, optional
+
+   :param save_formats: File formats to write (``"png"`` and/or ``"svg"``).
+      With the ``image_path_png`` / ``image_path_svg`` scheme these select
+      which directories are written. With ``image_filename`` they select which
+      formats are written; if omitted there, the format is taken from the
+      filename's extension (defaulting to ``"png"``). If neither a directory
+      nor ``image_filename`` is given, nothing is saved. Default is ``None``.
    :type save_formats: list, str, or tuple, optional
 
    :param color: List of colors to use for the plots. Default is the
@@ -2853,8 +2884,9 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
       ``legend_labels_list`` are unequal.
    :raises ValueError: If ``subtitle`` is provided and its length does
       not match ``func_col``.
-   :raises ValueError: If an invalid save format is specified without
-      the corresponding image path.
+   :raises ValueError: If a format in ``save_formats`` is not an available
+      save target (no corresponding image path, or not derivable from
+      ``image_filename``).
    :raises KeyError: If any column in ``col`` or ``func_col`` is missing
       from the DataFrame.
 
@@ -2862,13 +2894,15 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
 
       - Ensure ``save_formats`` aligns with provided paths. Specify
         ``image_path_png`` or ``image_path_svg`` when saving as ``"png"``
-        or ``"svg"`` respectively.
+        or ``"svg"`` respectively, or pass a full ``image_filename`` to save
+        verbatim.
       - The returned crosstabs dictionary includes both absolute and
         normalized values when ``return_dict=True``.
       - ``figsize``, ``outer_pad``, and ``h_pad`` replace the deprecated
         ``x``, ``y``, and ``p`` parameters from earlier versions.
       - ``title_wrap`` and ``tick_wrap`` replace the deprecated
         ``text_wrap`` parameter.
+
 
 Stacked Bar Plots With Crosstabs Example
 -----------------------------------------
@@ -2973,7 +3007,7 @@ In this example:
     )
 
 The above example generates stacked bar plots for ``"sex"`` and ``"income"`` 
-grouped by ``"education"``. The plots are executed with legends, labels, and 
+grouped by ``"age_group"``. The plots are executed with legends, labels, and 
 tick sizes customized for clarity. The function returns a dictionary of 
 crosstabs for further analysis or export.
 
@@ -3280,7 +3314,7 @@ crosstabs for further analysis or export.
 \
 
 When you set ``return_dict=True``, you can access these crosstabs as 
-DataFrames by assigning them to their own vriables. For example: 
+DataFrames by assigning them to their own variables. For example: 
 
 .. code-block:: python 
 
@@ -3394,7 +3428,7 @@ Outcome Crosstab Plots
 
 The ``outcome_crosstab_plot`` function produces stacked bar plots for each categorical variable provided, segmented by a binary outcome. It supports both count-based and normalized percentage views, optional value annotations, flexible color configurations, and output saving. Each subplot compares a predictor variable against the outcome.
 
-.. function:: outcome_crosstab_plot(df, list_name, outcome, bbox_to_anchor=(0.5, -0.25), w_pad=4, h_pad=4, figsize=(12, 8), label_fontsize=12, tick_fontsize=10, n_rows=None, n_cols=None, label_0=None, label_1=None, normalize=False, show_value_counts=False, color_schema=None, save_plots=False, image_path_png=None, image_path_svg=None, string=None)
+.. function:: outcome_crosstab_plot(df, list_name, outcome, bbox_to_anchor=(0.5, -0.25), w_pad=4, h_pad=4, figsize=(12, 8), label_fontsize=12, tick_fontsize=10, n_rows=None, n_cols=None, label_0=None, label_1=None, normalize=False, show_value_counts=False, color_schema=None, save_plots=False, image_path_png=None, image_path_svg=None, image_filename=None, string=None)
 
     :param df: The DataFrame containing your data.
     :type df: pandas.DataFrame
@@ -3431,13 +3465,23 @@ The ``outcome_crosstab_plot`` function produces stacked bar plots for each categ
                          - list/tuple (applies across all subplots)
                          - dict mapping variable name to color list
     :type color_schema: ``None``, list, tuple, or dict
-    :param save_plots: Whether to save the plots.
+    :param save_plots: Whether to save the plots via the legacy ``string`` /
+        directory scheme. Ignored when ``image_filename`` is given.
     :type save_plots: bool
-    :param image_path_png: Directory path to save PNG files.
+    :param image_path_png: Directory path to save PNG files. Required with
+        ``save_plots``, or with a bare-stem ``image_filename``.
     :type image_path_png: str, optional
-    :param image_path_svg: Directory path to save SVG files.
+    :param image_path_svg: Directory path to save SVG files. Required with
+        ``save_plots``, or with a bare-stem ``image_filename``.
     :type image_path_svg: str, optional
-    :param string: Base name for output files.
+    :param image_filename: Destination for the saved figure. With an extension
+        it is saved verbatim (no directory needed); without one it is combined
+        with ``image_path_png`` / ``image_path_svg``. Takes precedence over
+        ``save_plots``.
+    :type image_filename: str, optional
+    :param string: Base filename for the legacy ``save_plots`` path (sanitized:
+        spaces to underscores, colons removed, lowercased). Defaults to
+        ``"crosstab_plot"``.
     :type string: str, optional
 
     :returns: ``None``. Displays plots and optionally saves them.
@@ -3449,6 +3493,9 @@ The ``outcome_crosstab_plot`` function produces stacked bar plots for each categ
     - You can format outcome axis labels using ``label_0`` and ``label_1`` for better readability.
     - Normalization (``normalize=True``) adjusts bar heights to percentages rather than counts.
     - When ``show_value_counts=True``, each legend entry includes either ``n=`` counts or percentage values.
+    - The count axis and legend counts use thousands separators; the normalized axis and legend use whole-number percentages.
+    - If ``image_filename`` is provided without an extension and neither ``image_path_png`` nor ``image_path_svg`` is specified, a ``ValueError`` is raised.
+
 
 Outcome Crosstab Example
 -------------------------
@@ -3484,7 +3531,7 @@ This example demonstrates how to generate outcome-wise crosstab plots for multip
     - The labels ``<=50K`` and ``>50K`` are shown on the x-axis instead of default numeric values.
     - Setting ``normalize=False`` plots raw counts instead of percentages.
     - ``show_value_counts=True`` includes value counts in the legend.
-    - Output plots are saved as PNG and SVG files to the provided paths with the prefix ``outcome_by_feature``.
+    - ``string="outcome_by_feature"`` sets the base output filename; saving is triggered only when ``save_plots=True`` with an image path, or when ``image_filename`` is given.
 
 
 .. raw:: html
@@ -3547,10 +3594,12 @@ This function supports:
    :param image_path_svg: Directory path to save plots in SVG format.
    :type image_path_svg: str, optional
 
-   :param image_filename: Base filename (without extension) used when
-      saving figures. No files are saved if this is not provided. For
-      individual plots, the metric name and plot type are appended to
-      this base. For subplot grids, the plot type is appended.
+   :param image_filename: Filename used when saving figures. No files are
+      saved if this is not provided. May be a bare stem (requires
+      ``image_path_png`` / ``image_path_svg``) or a full path with extension
+      (saved verbatim, no directory needed). For individual plots the metric
+      name is appended to the stem. For the subplot grid a full path with
+      extension is used verbatim; a bare stem has the plot type appended.
    :type image_filename: str, optional
 
    :param show_legend: Whether to display the legend on the plots.
@@ -3637,14 +3686,14 @@ This function supports:
       is not a tuple or list of two numbers.
    :raises ValueError: If ``plot_type`` is not one of ``"boxplot"``,
       ``"violinplot"``, ``"box"``, or ``"violin"``.
-   :raises ValueError: If ``image_filename`` is provided but neither
-      ``image_path_png`` nor ``image_path_svg`` is specified.
+   :raises ValueError: If ``image_filename`` is provided without an
+      extension and neither ``image_path_png`` nor ``image_path_svg`` is
+      specified.
 
    .. admonition:: Notes
 
       - ``save_plots`` has been removed. Figures are saved only when
-        ``image_filename`` is provided alongside at least one output
-        path.
+        ``image_filename`` is provided.
       - ``custom_order`` is passed directly to Seaborn's ``order``
         parameter and controls category ordering on the comparison axis.
       - Shorthand aliases ``"box"`` and ``"violin"`` are accepted for
@@ -3654,6 +3703,9 @@ This function supports:
         subplots.
       - ``suptitle`` applies only to the subplot grid. Individual plots
         use per-subplot titles only.
+      - Tick labels on the numeric (metric) axis are formatted with
+        thousands separators. The categorical comparison axis is left
+        unformatted.
 
 
 This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, subplots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.
@@ -3673,11 +3725,10 @@ The plots are displayed in a subplots format, as indicated by the
 so the function generates boxplots for each metric in the list. The ``x``-axis
 labels are rotated by 90 degrees (``xlabel_rot=90``) to ensure legibility, and
 the legend is hidden by setting ``show_legend=False``, keeping the plots clean
-and focused on the data. The ``image_path_png``, ``image_path_svg``, and
-``image_filename`` parameters are specified to save the plots in both PNG and
-SVG formats. This configuration provides a comprehensive visual comparison of
-the specified metrics across different age groups, with all plots saved for
-future reference or publication.
+and focused on the data. The ``image_filename`` parameter is set to a full path 
+ending in ``.png``, so the figure is saved verbatim as a PNG. This configuration 
+provides a comprehensive visual comparison of the specified metrics across 
+different age groups, with the plot saved for future reference or publication.
 
 
 .. code-block:: python
@@ -3700,9 +3751,7 @@ future reference or publication.
         df=df,
         metrics_list=age_boxplot_list,
         metrics_comp=metrics_comp,
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
-        image_filename="age_group_boxplot",
+        image_filename="all_plots_comparisons_boxplot.png",
         show_plot="subplots",
         show_legend=False,
         plot_type="boxplot",
@@ -3858,7 +3907,7 @@ The function performs comprehensive input validation to prevent common errors, s
 - Invalid or missing column names in the DataFrame.
 - Incorrectly specified parameters like axis limits or figure sizes.
 
-.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, all_vars=None, exclude_combinations=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, legend_loc="best", xlabel_rot=0, show_plot="subplots", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, label_names=None, **kwargs)
+.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, all_vars=None, exclude_combinations=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, image_filename=None, save_plots=None, show_legend=True, legend_loc="best", xlabel_rot=0, show_plot="subplots", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, label_names=None, **kwargs)
 
     Generate scatter plots or subplots of scatter plots for the given ``x_vars`` and ``y_vars``, with optional best fit lines, correlation coefficients, and customizable aesthetics.
 
@@ -3892,7 +3941,19 @@ The function performs comprehensive input validation to prevent common errors, s
     :param image_path_svg: Directory path to save SVG images of scatter plots.
     :type image_path_svg: str, optional
 
-    :param save_plots: Specify which plots to save (``"all"``, ``"individual"``, or ``"subplots"``); uses a progress bar (``tqdm``) for saving.
+    :param image_filename: Destination for saved plots. May be a bare stem
+        (requires ``image_path_png`` / ``image_path_svg``) or a full path with
+        extension (saved verbatim, no directory needed). For individual saves
+        the ``{x}_vs_{y}`` name is substituted into the stem so each file stays
+        distinct; the subplot grid uses a single name. If ``None``, the
+        auto-generated name is used with the directory paths.
+    :type image_filename: str, optional
+
+    :param save_plots: Specify which plots to save (``"all"``, ``"individual"``,
+        or ``"subplots"``); individual saves use a progress bar (``tqdm``). If
+        ``None`` but an output target (``image_path_png``, ``image_path_svg``,
+        or ``image_filename``) is provided, defaults to ``"subplots"``. If
+        ``None`` with no target, plots are not saved.
     :type save_plots: str, optional
 
     :param show_legend: Toggle display of the plot legend. Default is ``True``.
@@ -3970,7 +4031,27 @@ The function performs comprehensive input validation to prevent common errors, s
     :param kwargs: Additional options for ``sns.scatterplot``.
     :type kwargs: dict, optional
 
-    :raises ValueError: See function docstring for detailed error conditions.
+    :raises ValueError: If ``all_vars`` is provided and either ``x_vars`` or
+        ``y_vars`` is also provided.
+    :raises ValueError: If neither ``all_vars`` nor both ``x_vars`` and
+        ``y_vars`` are provided.
+    :raises ValueError: If ``hue_palette`` is specified without ``hue``.
+    :raises ValueError: If ``show_plot`` is not one of ``"individual"``,
+        ``"subplots"``, ``"both"``, or ``"combinations"``.
+    :raises ValueError: If ``save_plots`` is not one of ``None``, ``"all"``,
+        ``"individual"``, or ``"subplots"``.
+    :raises ValueError: If ``save_plots`` is set (or a save target is implied)
+        without any of ``image_path_png``, ``image_path_svg``, or
+        ``image_filename``.
+    :raises ValueError: If ``rotate_plot`` is not a boolean value.
+    :raises ValueError: If ``individual_figsize`` is not a tuple or list of two
+        numbers.
+    :raises ValueError: If ``subplot_figsize`` is provided and is not a tuple or
+        list of two numbers.
+    :raises ValueError: If ``exclude_combinations`` contains invalid entries
+        (items that are not tuples of exactly two elements).
+    :raises ValueError: If any column names in ``exclude_combinations`` do not
+        exist in the DataFrame.
 
     :returns: ``None``. Generates and optionally saves scatter plots.
 
@@ -4060,9 +4141,8 @@ of the plots:
    helping to interpret the color coding of the data points.
 
 These changes allow for the creation of scatter plots that highlight the income levels 
-of individuals, with custom color coding and without additional elements like a best 
-fit line or correlation coefficient. The resulting subplots are then saved as 
-images in the specified paths.
+of individuals, with custom color coding and without additional elements like a 
+best fit line or correlation coefficient.
 
 
 .. code-block:: python
@@ -4121,7 +4201,7 @@ In this example, the ``scatter_fit_plot`` function is used to generate subplots 
 
 6. **Correlation Coefficient**: The ``show_correlation`` parameter is set to ``True``, so the Pearson correlation coefficient will be displayed in the plot titles. This helps to quantify the strength of the relationship between the variables.
 
-These settings allow for the creation of scatter plots that comprehensively explore the relationships between all numeric variables in the DataFrame. The plots are saved in subplots format, with added best fit lines and correlation coefficients for deeper analysis. The resulting images can be stored in the specified directory for future reference.
+These settings allow for the creation of scatter plots that comprehensively explore the relationships between all numeric variables in the DataFrame, displayed in subplots format with added best fit lines and correlation coefficients for deeper analysis.
 
 .. code-block:: python
 
@@ -4168,7 +4248,7 @@ scatter plots while excluding specific combinations of variables. This allows fo
 a more targeted exploration of relationships, omitting plots that may be redundant 
 or irrelevant. Below are key aspects of this example:
 
-1. **Exclude Combinations**: The ``exclude_combinations parameter`` is used to 
+1. **Exclude Combinations**: The ``exclude_combinations`` parameter is used to 
 specify pairs of variables that should be excluded from the scatter plot subplot grid. 
 
 For example:
@@ -4291,9 +4371,6 @@ Below is an example illustrating how to retrieve a list of combinations:
         add_best_fit_line=True,
         scatter_color="#808080",
         show_correlation=True,
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
-        save_plots="subplots",
     )
 
     print(combinations)
@@ -4352,7 +4429,7 @@ The function offers flexibility in configuring axis labels and titles:
 
 The ``flex_corr_matrix`` function allows you to display the heatmap directly or save it as PNG or SVG files for use in reports or presentations. If saving is enabled, you can specify file paths and names for the images.
 
-.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, image_filename=None, figsize=(10, 10), title=None, label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, label_names=None, cbar_padding=0.8, cbar_width_ratio=0.05, show_colorbar=True, corr_method="pearson", show_significance=False, significance_level=0.05, significance_method="stars", significance_legend_x=0.5, filter_significance=None, **kwargs)
+.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, image_filename=None, figsize=(10, 10), title=None, label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, label_names=None, cbar_padding=0.8, cbar_width_ratio=0.05, show_colorbar=True, corr_method="pearson", show_significance=False, significance_level=0.05, significance_method="stars", significance_legend_x=0.5, filter_significance=None, corr_threshold=None, return_corr=False, show_plot=False, **kwargs)
 
    Creates a correlation heatmap with extensive customization options,
    including triangular masking, alignment adjustments, title wrapping,
@@ -4500,11 +4577,35 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
       Default is ``None``.
    :type filter_significance: float or None, optional
 
+   :param corr_threshold: If provided, drops any variable whose strongest
+      off-diagonal absolute correlation is below this value, so only
+      features that correlate with at least one other feature at or above
+      the threshold remain in the matrix. This filters *variables*, not
+      individual cells: a surviving variable still displays its weaker
+      correlations against the other survivors. Must be in ``[0, 1]``
+      (e.g. ``0.3``). Raises if no variable qualifies. Default is ``None``.
+   :type corr_threshold: float or None, optional
+
+   :param return_corr: If ``True``, returns the (possibly filtered)
+      correlation matrix as a DataFrame. By default this also suppresses
+      the heatmap; pass ``show_plot=True`` to render it as well. If
+      ``False``, returns ``None`` and always plots. Default is ``False``.
+   :type return_corr: bool, optional
+
+   :param show_plot: Only has an effect when ``return_corr=True``. By
+      default, requesting the matrix suppresses the heatmap and returns
+      data only; set ``show_plot=True`` to also render the plot. Ignored
+      when ``return_corr=False`` (the heatmap always displays).
+      Default is ``False``.
+   :type show_plot: bool, optional
+
    :param kwargs: Additional keyword arguments passed to
       ``sns.heatmap()``.
 
-   :returns: ``None``
-   :rtype: None
+   :returns: The (possibly filtered) correlation matrix if
+      ``return_corr=True``, otherwise ``None``. The returned matrix is the
+      full square matrix; the triangular display mask is not applied to it.
+   :rtype: pandas.DataFrame or None
 
    :raises ValueError: If ``annot``, ``save_plots``, or ``triangular``
       is not a boolean value.
@@ -4519,6 +4620,8 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
       ``"stars"`` or ``"mask"``.
    :raises ValueError: If ``filter_significance`` is not ``None`` and
       is not a positive float.
+   :raises ValueError: If ``corr_threshold`` is not ``None`` and is not a
+      number in ``[0, 1]``.
 
    .. note::
 
@@ -4531,6 +4634,11 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
         before plotting to eliminate the ``-0.00`` display artifact.
       - ``image_filename`` takes precedence over ``save_plots`` when
         both are provided.
+      - ``corr_threshold`` removes whole variables, not cells. A kept
+        variable shows all of its correlations against other kept
+        variables, so some displayed values may be below the threshold.
+      - When ``return_corr=True``, the returned matrix is the full square
+        matrix; the triangular display mask is not applied to it.
 
 
 Triangular Correlation Matrix Example
@@ -4714,7 +4822,219 @@ when you want a comprehensive view of all correlations in the dataset.
    <div style="height: 50px;"></div>
 
 
+Subset by Threshold Cutoff
+----------------------------
+
+In this census [1]_ example, the ``corr_threshold`` parameter is used to reduce the
+matrix to only the variables that are meaningfully correlated with something. By
+setting ``corr_threshold=0.08``, any variable whose strongest off-diagonal absolute
+correlation falls below ``0.08`` is dropped, so the heatmap shows only the features
+that correlate with at least one other feature at or above that level. This filters
+*variables*, not individual cells: a surviving variable still displays its weaker
+correlations against the other survivors, so some annotated values may sit below the
+threshold.
+
+.. note::
+
+    ``corr_threshold`` is a correlation magnitude in ``[0, 1]`` (e.g. ``0.08``), not
+    a count. If no variable clears the threshold, the function raises rather than
+    drawing an empty heatmap, so lower the value if everything is dropped.
+
+Here the figure is saved by passing a full path with an extension to
+``image_filename``, which writes the file verbatim to that location with no separate
+output directory required.
+
+.. code-block:: python
+
+    from eda_toolkit import flex_corr_matrix
+
+    flex_corr_matrix(
+        df=df,
+        cols=df_num.columns.to_list(),
+        annot=True,
+        cmap="coolwarm",
+        figsize=(20, 4),
+        title="US Census Correlation Matrix",
+        xlabel_alignment="right",
+        label_fontsize=14,
+        tick_fontsize=12,
+        xlabel_rot=45,
+        ylabel_rot=0,
+        text_wrap=50,
+        vmin=-1,
+        vmax=1,
+        corr_threshold=0.08,
+        cbar_label="Correlation Index",
+        triangular=True,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/adult_inc_thresh_corr_matrix.svg
+   :alt: Correlation Matrix - Threshold Subset
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
 
 
+Correlation Matrix as a DataFrame
+----------------------------------
+
+Beyond drawing the heatmap, ``flex_corr_matrix`` can hand back the underlying
+correlation matrix as a DataFrame for further analysis. Setting
+``return_corr=True`` returns the matrix (after any ``corr_threshold`` /
+``filter_significance`` filtering) instead of ``None``. By default this also
+suppresses the heatmap and returns the data only; pass ``show_plot=True`` if you
+want both the figure and the returned DataFrame.
+
+In the example below, a 100-column DataFrame of random values is generated, and the
+full correlation matrix is pulled back as ``df_corr_thresh_100`` without rendering a
+plot.
+
+.. code-block:: python
+
+    import numpy as np
+    import pandas as pd
+
+    np.random.seed(42)
+    df_rand_100 = pd.DataFrame(
+        np.random.rand(100, 100),
+        columns=[f"col_{i}" for i in range(100)],
+    )
+
+.. code-block:: python
+
+    from eda_toolkit import flex_corr_matrix
+
+    df_corr_thresh_100 = flex_corr_matrix(
+        df=df_rand_100,
+        cols=df_rand_100.columns.to_list(),
+        return_corr=True,
+    )
+
+.. note::
+
+    The returned matrix is the full square matrix; the triangular display mask is a
+    plotting option only and is not applied to the returned DataFrame. When
+    ``corr_threshold`` or ``filter_significance`` is also set, the returned matrix
+    reflects that filtering.
+
+Combining ``corr_threshold`` with ``return_corr`` narrows the returned matrix to
+only the variables that clear the magnitude cutoff. Here a threshold of ``0.32`` is
+applied to the same random 100-column DataFrame, dropping every column whose
+strongest off-diagonal correlation falls below ``0.32`` and returning the surviving
+square submatrix as ``df_corr_thresh_32``.
+
+.. code-block:: python
+
+    df_corr_thresh_32 = flex_corr_matrix(
+        df=df_rand_100,
+        cols=df_rand_100.columns.to_list(),
+        corr_threshold=0.32,
+        return_corr=True,
+    )
+
+.. code-block:: python
+
+    df_corr_thresh_32
+
+Only six columns survive the ``0.32`` cutoff. The returned DataFrame is the full
+square matrix over those survivors, so each kept variable still shows its weaker
+correlations against the others (some below the threshold):
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg-corr {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg-corr td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:12px !important;
+      overflow:hidden;padding:4px 10px;word-break:normal;text-align:right;}
+    .tg-corr th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:12px !important;
+      font-weight:bold;overflow:hidden;padding:4px 10px;word-break:normal;text-align:right;}
+    .tg-corr .tg-idx{font-weight:bold;}
+    </style>
+    <div class="tg-wrap">
+      <table class="tg-corr">
+         <thead>
+         <tr>
+            <th></th>
+            <th>col_7</th>
+            <th>col_19</th>
+            <th>col_37</th>
+            <th>col_54</th>
+            <th>col_59</th>
+            <th>col_95</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr>
+            <td class="tg-idx">col_7</td>
+            <td>1.000000</td>
+            <td>0.017360</td>
+            <td>-0.029670</td>
+            <td>0.007622</td>
+            <td>-0.123199</td>
+            <td>-0.342008</td>
+         </tr>
+         <tr>
+            <td class="tg-idx">col_19</td>
+            <td>0.017360</td>
+            <td>1.000000</td>
+            <td>0.108189</td>
+            <td>-0.418063</td>
+            <td>0.000000</td>
+            <td>0.008834</td>
+         </tr>
+         <tr>
+            <td class="tg-idx">col_37</td>
+            <td>-0.029670</td>
+            <td>0.108189</td>
+            <td>1.000000</td>
+            <td>-0.033661</td>
+            <td>0.327352</td>
+            <td>0.093528</td>
+         </tr>
+         <tr>
+            <td class="tg-idx">col_54</td>
+            <td>0.007622</td>
+            <td>-0.418063</td>
+            <td>-0.033661</td>
+            <td>1.000000</td>
+            <td>0.051631</td>
+            <td>-0.051371</td>
+         </tr>
+         <tr>
+            <td class="tg-idx">col_59</td>
+            <td>-0.123199</td>
+            <td>0.000000</td>
+            <td>0.327352</td>
+            <td>0.051631</td>
+            <td>1.000000</td>
+            <td>-0.074195</td>
+         </tr>
+         <tr>
+            <td class="tg-idx">col_95</td>
+            <td>-0.342008</td>
+            <td>0.008834</td>
+            <td>0.093528</td>
+            <td>-0.051371</td>
+            <td>-0.074195</td>
+            <td>1.000000</td>
+         </tr>
+         </tbody>
+      </table>
+      </div>
+
+.. raw:: html
+
+    <div style="height: 70px;"></div>
 
 .. [1] Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. `https://doi.org/10.24432/C5GP7S <https://doi.org/10.24432/C5GP7S>`_.

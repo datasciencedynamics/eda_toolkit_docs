@@ -24,6 +24,227 @@
 Changelog
 ==========
 
+`Version 0.0.30`_
+----------------------
+
+.. _Version 0.0.30: https://lshpaner.github.io/eda_toolkit_docs/v0.0.30/index.html  
+
+.. _image-filename-saving:
+
+Add full-path ``image_filename`` saving and thousands-separator axis formatting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Summary
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This PR lets every plotting function save figures by passing a single full path
+through ``image_filename`` (directory and extension included), with no
+requirement to also pass ``image_path_png`` / ``image_path_svg``. It also adds
+comma grouping to numeric axes so large tick values render as ``40,000``
+instead of ``40000``.
+
+
+There are also three additive options for ``flex_corr_matrix``: a magnitude-based variable
+filter (``corr_threshold``), returning the plotted matrix as a DataFrame
+(``return_corr``), and suppressing the figure when only the data is wanted
+(``show_plot``). All default to no-op values, so existing calls plot and return
+``None`` exactly as before. Nothing was removed or renamed.
+
+
+All changes are additive. Existing call sites that pass ``filename=`` and/or the
+``image_path_*`` directory arguments keep working byte-for-byte. Nothing in the
+released API was removed or renamed.
+
+Two files change: ``_plot_utils.py`` (shared helpers) and ``plots.py`` (the
+public plotting functions).
+
+``_plot_utils.py``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``_save_figure`` **rewritten (backward compatible).**
+
+- Added an ``image_filename`` parameter. The old ``filename`` parameter is kept
+  as a legacy alias, so the existing call sites that pass ``filename=`` need no
+  edits (``if image_filename is None: image_filename = filename``).
+- If ``image_filename`` carries an extension, the figure is saved verbatim to
+  that exact path and no directory argument is needed.
+- If it has no extension, the old behavior applies: the stem is combined with
+  ``image_path_png`` / ``image_path_svg`` to write ``{dir}/{stem}.png|.svg``.
+- Output directories are now created automatically via
+  ``os.makedirs(..., exist_ok=True)`` instead of erroring on a missing folder.
+
+``_resolve_save_name`` **added.** Centralizes save-name logic for single-file
+vs fan-out callers. Single-file callers get the user's exact filename.
+Multi-file callers keep the user's directory and extension but substitute the
+function's auto-generated stem so the N files stay distinct. A bare name with
+no extension is treated as a directory (legacy behavior).
+
+``_apply_thousands(ax, axis="both")`` **added.** Comma-groups numeric tick
+labels using ``FuncFormatter(lambda v, _: f"{v:,.10g}")``. The ``.10g`` keeps
+decimals intact (``0.25`` stays ``0.25``; only large numbers gain commas). The
+caller chooses the axis (``"both"``, ``"x"``, or ``"y"``) because only the
+caller knows which of its axes is numeric.
+
+Also: added the ``matplotlib.ticker as mticker`` import, and a docstring typo
+fix ("Utilitys" to "Utilities").
+
+``plots.py``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Full-path ``image_filename`` support
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Across the plotting functions, three independent fixes let a full-path
+``image_filename`` work on its own:
+
+1. **Validation guards relaxed** (6 functions). The early "filename requires a
+   directory" guard now also passes when the filename already has an extension
+   (``and not os.path.splitext(image_filename)[1]``).
+2. **Save gates fixed** (6 sites). Gates that read
+   ``if image_path_png or image_path_svg:`` now also fire on ``image_filename``
+   alone, so a full-path filename with no directory no longer silently saves
+   nothing. This includes the ``save_plots``-based gates in ``scatter_fit_plot``
+   and ``outcome_crosstab_plot``.
+3. **Fan-out naming fixed.** Functions that append a per-figure suffix
+   (``plot_distributions``, ``box_violin_plot``, ``scatter_fit_plot``,
+   ``stacked_crosstab_plot``) previously concatenated the suffix onto the raw
+   filename, which corrupted the extension (e.g. ``plot.png_boxplot``). They now
+   split the extension off first, append the suffix to the stem, then reattach
+   the extension.
+
+``outcome_crosstab_plot`` previously had no ``image_filename`` parameter at all;
+it was added, routed through ``_save_figure``, with the legacy ``save_plots``
+path left intact.
+
+``stacked_crosstab_plot`` keeps its own ``save_formats`` system.
+``image_filename`` was added as an alternate destination that ``save_formats``
+(or the filename's own extension) targets without requiring directories. The
+legacy ``save_formats`` + directory filtering is unchanged.
+
+Axis formatting
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+- **Continuous numeric axes** use ``_apply_thousands``: ``scatter_fit_plot``
+  (both axes numeric) and ``box_violin_plot`` (the metric axis only, selected by
+  ``rotate_plot`` so categorical group labels are never overwritten).
+- **Count axes** use an inline ``:,.0f`` formatter: ``outcome_crosstab_plot``
+  count axis, ``grouped_distributions`` count branch, and the ``data_doctor``
+  histogram count axis. ``outcome_crosstab_plot`` also commas the ``n=`` counts
+  in its legend labels.
+- **Percent axes** keep their inline ``:.0%`` formatter.
+- ``data_doctor`` keeps its deliberate scientific-notation handler for very
+  large x-axis values; the thousands helper is intentionally not applied there
+  so it does not override that behavior.
+- ``distribution_gof_plots`` is unchanged on formatting; its QQ/CDF axes are
+  formatted inside their own ``_qq_plot`` / ``_cdf_exceedance_plot`` helpers.
+
+Minor
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+- ``kde_distributions``: deprecation message shortened (cosmetic; still points
+  users to ``plot_distributions``).
+
+Backward compatibility
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Legacy ``filename=`` call sites work unchanged via the alias.
+- Legacy ``image_path_png`` / ``image_path_svg`` directory saving is unchanged.
+- ``stacked_crosstab_plot``'s ``save_formats`` behavior is unchanged.
+
+Two intentional default-on cosmetic changes to be aware of:
+
+- Numeric count and continuous axes now show thousands separators by default on
+  the affected functions.
+- ``_save_figure`` now creates missing output directories instead of raising.
+
+Testing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each change was exercised in a sandbox (matplotlib Agg) confirming: legacy
+filenames save identically, full-path ``image_filename`` saves with no directory
+argument, the previously-crashing suffix-on-extension fan-out cases now save
+correctly, and the formatters preserve decimals on continuous axes while leaving
+categorical axis labels untouched.
+
+.. code-block:: text
+
+    ______ coverage: platform linux, python 3.12.7-final-0_______
+
+
+    Name                                     Stmts   Miss  Cover
+    ------------------------------------------------------------
+    src/eda_toolkit/__init__.py                 19      2    89%
+    src/eda_toolkit/_data_manager_utils.py      28      0   100%
+    src/eda_toolkit/_plot_utils.py             159     23    86%
+    src/eda_toolkit/art.py                      54      3    94%
+    src/eda_toolkit/data_manager.py            846     84    90%
+    src/eda_toolkit/plots.py                  1253    237    81%
+    ------------------------------------------------------------
+    TOTAL                                     2359    349    85%
+
+
+.. _flex-corr-matrix-options:
+
+Add ``corr_threshold``, ``return_corr``, and ``show_plot`` to ``flex_corr_matrix``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``corr_threshold``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Filters by correlation magnitude, complementing the p-value filter
+``filter_significance``. Drops any variable whose strongest off-diagonal
+``|r|`` is below the threshold, so only features correlated with something at or
+above it remain. This shrinks the matrix (no orphan rows or blank cells); if
+nothing qualifies it raises rather than drawing an empty plot.
+
+It filters variables, not cells: a surviving variable still shows its weaker
+correlations against other survivors. The drop runs before the significance
+block so p-values and the triangular mask stay aligned with the shrunk matrix.
+Requires a number in ``[0, 1]`` or ``None``.
+
+``return_corr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When ``True``, returns the plotted matrix (after any filtering) as a DataFrame;
+return annotation changed ``-> None`` to ``-> Optional[pd.DataFrame]``. Default
+``False`` returns ``None``. The returned matrix is the full square; the
+triangular mask is display-only and not applied to it.
+
+``show_plot``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only active when ``return_corr=True``. By default ``return_corr=True``
+suppresses the figure and returns data only; ``show_plot=True`` renders it too.
+When ``return_corr=False`` the plot always shows and this flag is ignored.
+
+- ``return_corr=False`` (default): plots, returns ``None`` (unchanged).
+- ``return_corr=True``, ``show_plot=False`` (default): no plot, returns the
+  DataFrame.
+- ``return_corr=True``, ``show_plot=True``: plots and returns the DataFrame.
+
+Testing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New tests cover the ``corr_threshold`` variable-drop and raise-on-empty,
+invalid-threshold validation, the ``return_corr`` True/False contract, and
+``show_plot`` suppress/draw/ignored-without-return. Existing tests are
+unaffected since all three default to no-op.
+
+.. code-block:: text
+
+    __________ coverage: platform linux, python 3.12.7-final-0 ____________
+    Name                                     Stmts   Miss  Cover
+    ------------------------------------------------------------
+    src/eda_toolkit/__init__.py                 19      2    89%
+    src/eda_toolkit/_data_manager_utils.py      28      0   100%
+    src/eda_toolkit/_plot_utils.py             161     23    86%
+    src/eda_toolkit/art.py                      54      3    94%
+    src/eda_toolkit/data_manager.py            846     84    90%
+    src/eda_toolkit/plots.py                  1266    237    81%
+    ------------------------------------------------------------
+    TOTAL                                     2374    349    85%
+
+
 `Version 0.0.29`_
 ----------------------
 
