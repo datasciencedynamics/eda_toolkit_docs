@@ -28,7 +28,7 @@ Contributors/Maintainers
 
    <div class="no-click">
 
-.. image:: https://www.leonshpaner.com/author/leon-shpaner/avatar_hu48de79c369d5f7d4ff8056a297b2c4c5_1681850_270x270_fill_q90_lanczos_center.jpg
+.. image:: ../assets/leon_shpaner.jpg
    :align: left
    :width: 150
    :height: 150
@@ -47,7 +47,7 @@ Contributors/Maintainers
 
    <div class="no-click">
 
-.. image:: https://oscargildata.com/portfolio_content/images/Oscar_LinkedIn_Pic.jpeg
+.. image:: ../assets/oscar_gil.jpg
    :align: left
    :width: 150
    :height: 150
