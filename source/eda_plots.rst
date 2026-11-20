@@ -1496,6 +1496,11 @@ Feature Scaling and Outliers
     
         - ``<feature_name>_<scale_conversion>``: If a transformation is applied.
         - ``<feature_name>_w_cutoff``: If only cutoffs are applied.
+
+        Since version ``0.0.31``, missing values in ``feature_name`` are
+        excluded from the transform and the summary statistics (an
+        ``[info]`` line reports how many) and remain missing in the new
+        column, so the write-back is index-aligned with the original frame.
         
         For Box-Cox transformation, if ``alpha`` is specified, the confidence interval for lambda is displayed. If ``lmbda`` is specified, the lambda value is displayed.
     :type apply_as_new_col_to_df: bool, optional (default=False)
@@ -4429,7 +4434,7 @@ The function offers flexibility in configuring axis labels and titles:
 
 The ``flex_corr_matrix`` function allows you to display the heatmap directly or save it as PNG or SVG files for use in reports or presentations. If saving is enabled, you can specify file paths and names for the images.
 
-.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, image_filename=None, figsize=(10, 10), title=None, label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, label_names=None, cbar_padding=0.8, cbar_width_ratio=0.05, show_colorbar=True, corr_method="pearson", show_significance=False, significance_level=0.05, significance_method="stars", significance_legend_x=0.5, filter_significance=None, corr_threshold=None, return_corr=False, show_plot=False, **kwargs)
+.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, image_filename=None, figsize=(10, 10), title=None, label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, label_names=None, cbar_padding=0.8, cbar_width_ratio=0.05, show_colorbar=True, corr_method="pearson", show_significance=False, significance_level=0.05, significance_method="stars", significance_legend_x=0.5, p_adjust=None, filter_significance=None, corr_threshold=None, return_corr=False, return_sig=False, show_n=False, return_n=False, n_format="count", show_plot=False, **kwargs)
 
    Creates a correlation heatmap with extensive customization options,
    including triangular masking, alignment adjustments, title wrapping,
@@ -4569,6 +4574,21 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
       position is computed automatically. Default is ``0.5``.
    :type significance_legend_x: float, optional
 
+   :param p_adjust: Multiple-comparison correction applied to the pairwise
+      p-values before anything consumes them. ``None`` reports p-values as
+      computed; ``"bonferroni"`` multiplies each p-value by the number of
+      tests and clips at ``1.0`` (controls the family-wise error rate);
+      ``"fdr_bh"`` applies the Benjamini-Hochberg step-up procedure
+      (controls the false discovery rate, usually the better choice on a
+      wide matrix). A matrix over :math:`k` variables runs
+      :math:`k(k-1)/2` unique pairwise tests, so uncorrected stars
+      overstate significance. The correction is computed once per unique
+      pair, excludes pairs with too few complete observations, and runs
+      before ``filter_significance``, the stars/mask overlay, and
+      ``return_sig``, so all of them see adjusted values. Default is
+      ``None``.
+   :type p_adjust: str or None, optional
+
    :param filter_significance: If provided, filters the correlation
       matrix to only include variables that have at least one significant
       pairwise correlation at the specified threshold. For example,
@@ -4592,10 +4612,49 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
       ``False``, returns ``None`` and always plots. Default is ``False``.
    :type return_corr: bool, optional
 
-   :param show_plot: Only has an effect when ``return_corr=True``. By
-      default, requesting the matrix suppresses the heatmap and returns
-      data only; set ``show_plot=True`` to also render the plot. Ignored
-      when ``return_corr=False`` (the heatmap always displays).
+   :param return_sig: If ``True``, returns the pairwise p-value matrix
+      (computed with ``corr_method``, corrected by ``p_adjust`` if set,
+      and subset to the same variables as the plotted matrix after any
+      filtering) as a DataFrame. The diagonal holds the placeholder value
+      ``1``. Like ``return_corr``, this suppresses the heatmap by default;
+      pass ``show_plot=True`` to render it as well. Default is ``False``.
+   :type return_sig: bool, optional
+
+   :param show_n: If ``True``, the heatmap plots the pairwise sample sizes
+      instead of the correlation coefficients: cells are colored by
+      :math:`n`, labeled with :math:`n`, and scaled on a count axis.
+      ``cmap``, ``vmin``, ``vmax``, and ``cbar_label`` pick up
+      sample-size defaults automatically and can still be overridden. The
+      result is a coverage map showing which pairs rest on most of the
+      data and which on a sliver of it. Honors ``n_format`` and
+      ``triangular``. Mutually exclusive with ``show_significance``.
+      Default is ``False``.
+   :type show_n: bool, optional
+
+   :param return_n: If ``True``, returns the pairwise sample-size matrix
+      as a DataFrame with the same shape, index, columns, and symmetry as
+      the correlation matrix. Each off-diagonal cell holds the number of
+      rows in which *both* variables are present, which is the number of
+      observations behind that cell's coefficient (correlations are
+      pairwise-complete, so this count differs from cell to cell). The
+      diagonal holds each variable's own non-null count. Like
+      ``return_corr``, this suppresses the heatmap by default; pass
+      ``show_plot=True`` to render it as well. Default is ``False``.
+   :type return_n: bool, optional
+
+   :param n_format: Units for the sample sizes, applied to both the matrix
+      returned by ``return_n`` and the heatmap drawn by ``show_n``.
+      ``"count"`` gives raw row counts; ``"percent"`` divides each count
+      by the total number of rows in the frame and multiplies by 100
+      (unrounded), so the diagonal reads as each variable's completeness.
+      Ignored when neither ``return_n`` nor ``show_n`` is set. Default is
+      ``"count"``.
+   :type n_format: str, optional
+
+   :param show_plot: Only has an effect when ``return_corr``,
+      ``return_sig``, or ``return_n`` is ``True``. By default, requesting
+      data suppresses the heatmap; set ``show_plot=True`` to also render
+      the plot. Ignored otherwise (the heatmap always displays).
       Default is ``False``.
    :type show_plot: bool, optional
 
@@ -4603,9 +4662,11 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
       ``sns.heatmap()``.
 
    :returns: The (possibly filtered) correlation matrix if
-      ``return_corr=True``, otherwise ``None``. The returned matrix is the
-      full square matrix; the triangular display mask is not applied to it.
-   :rtype: pandas.DataFrame or None
+      ``return_corr=True``, the p-value matrix if ``return_sig=True``, the
+      sample-size matrix if ``return_n=True`` (a tuple in that order when
+      more than one is requested), otherwise ``None``. Returned matrices
+      are full square matrices; the triangular display mask is not applied.
+   :rtype: pandas.DataFrame, tuple of pandas.DataFrame, or None
 
    :raises ValueError: If ``annot``, ``save_plots``, or ``triangular``
       is not a boolean value.
@@ -4622,6 +4683,10 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
       is not a positive float.
    :raises ValueError: If ``corr_threshold`` is not ``None`` and is not a
       number in ``[0, 1]``.
+   :raises ValueError: If ``p_adjust`` is not ``None``, ``"bonferroni"``,
+      or ``"fdr_bh"``.
+   :raises ValueError: If ``show_n`` and ``show_significance`` are both
+      ``True``.
 
    .. note::
 
@@ -4639,6 +4704,15 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
         variables, so some displayed values may be below the threshold.
       - When ``return_corr=True``, the returned matrix is the full square
         matrix; the triangular display mask is not applied to it.
+      - ``p_adjust`` does not change the star tiers (``p < 0.05``,
+        ``p < 0.01``, ``p < 0.001``); they are evaluated against corrected
+        p-values, so fewer cells earn stars. Combined with
+        ``corr_threshold``, the correction runs only over the variables
+        that survived the threshold.
+      - Correlations are computed pairwise-complete: rows missing either
+        member of a pair are dropped for that pair only, so every cell can
+        rest on a different number of observations. Use ``return_n`` or
+        ``show_n`` to see those counts.
 
 
 Triangular Correlation Matrix Example

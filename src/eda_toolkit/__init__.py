@@ -1,12 +1,11 @@
 # Import package modules
 from .plots import *
 from .data_manager import *
-from .art import *
-
-import builtins
+from .art import print_art, about
+from .art import eda_toolkit_logo as _eda_toolkit_logo
 
 # Detailed Documentation
-detailed_doc = """
+_detailed_doc = """
 Welcome to EDA Toolkit, a collection of utility functions designed to streamline 
 your exploratory data analysis (EDA) tasks. This repository offers tools for 
 directory management, some data preprocessing, reporting, visualizations, and 
@@ -14,50 +13,50 @@ more, helping you efficiently handle various aspects of data manipulation and
 analysis.
 
 PyPI: https://pypi.org/project/eda-toolkit/
-Documentation: https://lshpaner.github.io/eda_toolkit
+Documentation: https://datasciencedynamics.com/eda_toolkit_docs/
 
 Authors: Leonid Shpaner, Oscar Gil
 
 Acknowledgements
 
-We would like to express our deepest gratitude to Dr. Ebrahim Tarshizi, our 
-mentor during our time in the University of San Diego M.S. Applied Data Science 
-Program. His unwavering dedication and mentorship played a pivotal role in our 
-academic journey, guiding us to successfully graduate from the program and 
-pursue successful careers as data scientists.
+We would like to express our deepest gratitude to Dr. Ebrahim Tarshizi of the 
+Shiley-Marcos School of Engineering at the University of San Diego for his 
+mentorship in the M.S. in Applied Data Science Program. His unwavering dedication 
+and guidance played a pivotal role in our academic journey, supporting our 
+successful completion of the program and our pursuit of careers as data scientists.
 
-We also extend our thanks to the Shiley-Marcos School of Engineering at the 
-University of San Diego for providing an exceptional learning environment and 
-supporting our educational endeavors.
+We thank Robert Lanzafame, PhD, for his feedback, encouragement, and thoughtful 
+discussion following our presentation at JupyterCon, and Panayiotis Petousis, PhD, 
+and Arthur Funnell from the CTSI UCLA Health data science team for their helpful 
+comments, constructive feedback, and continued encouragement throughout the 
+development of this library.
 
+Leon Shpaner also wishes to acknowledge Gustavo Prado, his former manager,
+mentor, and friend at the Los Angeles Film School, who hired him early in his
+career, gave him room to grow, and first showed him what careful work with data
+could do. His trust and guidance left a lasting mark. May he rest in peace.
 
-Version: 0.0.16
+Version: 0.0.31
 """
 
 # Assign only the detailed documentation to __doc__
-__doc__ = detailed_doc
+__doc__ = _eda_toolkit_logo + _detailed_doc
 
 # Metadata
-__version__ = "0.0.16"
+__version__ = "0.0.31"
 __author__ = "Leonid Shpaner, Oscar Gil"
 __email__ = "lshpaner@ucla.edu; info@oscargildata.com"
 
-# Backup the original help function BEFORE redefining
-original_help = builtins.help
+# Keep the package namespace to eda_toolkit's own functions, classes and
+# submodules. Star-imports above also pull in third-party names (pandas,
+# typing aliases, flags) that would otherwise clutter help(eda_toolkit).
+import types as _types
 
+for _name, _obj in list(globals().items()):
+    if _name.startswith("_") or isinstance(_obj, _types.ModuleType):
+        continue
+    if callable(_obj) and getattr(_obj, "__module__", "").startswith("eda_toolkit"):
+        continue
+    del globals()[_name]
 
-def custom_help(obj=None):
-    if obj is None or obj is sys.modules[__name__]:
-        print(eda_toolkit_logo)
-        print(detailed_doc)
-    elif original_help != custom_help:
-        original_help(obj)
-    else:
-        # Safety: fallback to default help if somehow it got overridden incorrectly
-        import pydoc
-
-        pydoc.help(obj)
-
-
-# Override the global help
-builtins.help = custom_help
+del _name, _obj, _types

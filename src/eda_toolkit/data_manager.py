@@ -1,20 +1,23 @@
 import os
+import gc
 import sys
+from numpy.testing import verbose
 import pandas as pd
 import numpy as np
+import warnings
 from itertools import combinations
-
+from scipy.stats import ttest_ind, chi2_contingency, fisher_exact
 from tqdm import tqdm
 from pathlib import Path
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, Iterable, Optional, Union
 
 if TYPE_CHECKING:
     from pandas.io.formats.style import Styler
 
 from typing import Optional, List, Union, Tuple, Dict, Any
 
-from scipy.stats import ttest_ind, chi2_contingency, fisher_exact
+PathLike = Union[str, Path]
 
 
 if sys.version_info >= (3, 7):
@@ -22,13 +25,13 @@ if sys.version_info >= (3, 7):
 else:
     import datetime
 
+from ._data_manager_utils import _df_to_markdown, _flag_iqr, _flag_zscore
 
 ################################################################################
 ############################# Path Directories #################################
 ################################################################################
 
-
-def ensure_directory(path: Union[str, Path]) -> None:
+def ensure_directory(path: PathLike) -> None:
     """
     Ensure that the directory exists. If not, create it.
     """
@@ -39,6 +42,79 @@ def ensure_directory(path: Union[str, Path]) -> None:
     else:
         print(f"Directory exists: {path}")
 
+
+################################################################################
+######################### Read CSV with Progress Bar ###########################
+################################################################################
+
+def read_csv_with_progress(
+    file_path,
+    nrows=None,
+    chunksize=10000,
+    low_memory=False,
+    **kwargs,
+):
+    """
+    Read a CSV file with a progress bar. Optionally limit to the first
+    `nrows` rows.
+
+    Parameters:
+    - file_path (str): Path to the CSV file.
+    - nrows (int or None): If specified, limits the number of rows read.
+    - chunksize (int): Number of rows per chunk. Default is 10,000.
+    - low_memory (bool): If False, disables mixed-type inference for
+      better dtype consistency at the cost of higher memory usage.
+      Default is False.
+    - **kwargs: Additional keyword arguments passed to pd.read_csv
+      (e.g. sep, encoding, usecols, dtype, skiprows). Note that
+      `chunksize` cannot be passed via kwargs — use the explicit
+      parameter instead.
+
+    Returns:
+    - pd.DataFrame: DataFrame containing the read data.
+
+    Raises:
+    - ValueError: If `chunksize` is passed via kwargs.
+    """
+    if "chunksize" in kwargs:
+        raise ValueError(
+            "Pass `chunksize` as a direct argument, not via kwargs."
+        )
+
+    # Count total lines (minus header)
+    with open(file_path, "r") as f:
+        total_lines = sum(1 for _ in f) - 1  # exclude header
+
+    # Suppress DtypeWarning
+    warnings.filterwarnings("ignore", category=pd.errors.DtypeWarning)
+
+    chunks = []
+    total_read = 0
+
+    with tqdm(
+        total=nrows if nrows else total_lines,
+        desc=f"Reading {file_path}",
+        unit="line",
+    ) as pbar:
+        for chunk in pd.read_csv(
+            file_path,
+            chunksize=chunksize,
+            low_memory=low_memory,
+            **kwargs,
+        ):
+            if nrows:
+                remaining = nrows - total_read
+                if remaining <= 0:
+                    break
+                chunk = chunk.head(remaining)
+            chunks.append(chunk)
+            read_now = len(chunk)
+            total_read += read_now
+            pbar.update(read_now)
+            if nrows and total_read >= nrows:
+                break
+
+    return pd.concat(chunks, ignore_index=True)
 
 ################################################################################
 ############################ Generate Random IDs ###############################
@@ -489,14 +565,14 @@ def dataframe_profiler(
 def summarize_all_combinations(
     df: pd.DataFrame,
     variables: List[str],
-    data_path: Union[str, Path],
-    data_name: str,
+    data_path: Union[str, Path] = None,
+    data_name: str = None,
     min_length: int = 2,
 ) -> Tuple[Dict[Tuple[str, ...], pd.DataFrame], List[Tuple[str, ...]]]:
     """
     Generate summary tables for all possible combinations of the specified
-    variables in the DataFrame and save them to an Excel file with detailed
-    formatting.
+    variables in the DataFrame and optionally save them to an Excel file
+    with detailed formatting.
 
     Parameters:
     -----------
@@ -506,11 +582,13 @@ def summarize_all_combinations(
     variables : list of str
         List of column names from the DataFrame to generate combinations.
 
-    data_path : str
-        Directory path where the output Excel file will be saved.
+    data_path : str, optional
+        Directory path where the output Excel file will be saved. Required
+        only if saving the results to a file.
 
-    data_name : str
-        Name of the output Excel file.
+    data_name : str, optional
+        Name of the output Excel file. Required only if saving the results
+        to a file.
 
     min_length : int, optional (default=2)
         Minimum size of the combinations to generate.
@@ -531,10 +609,10 @@ def summarize_all_combinations(
         - Generates all combinations of the specified variables with a size
           greater than or equal to `min_length`.
         - Uses **`tqdm`** for progress tracking during combination generation.
-    - **Excel Output**:
-        - Each combination is saved as a separate sheet in an Excel file.
-        - A "Table of Contents" sheet is created with hyperlinks to each
-          combination's summary table.
+    - **Excel Output (optional)**:
+        - If both `data_path` and `data_name` are provided, results are saved
+          to an Excel file with a "Table of Contents" sheet linking to each
+          combination sheet.
         - Sheet names are truncated to 31 characters to meet Excel's limitations.
     - **Formatting**:
         - Headers in all sheets are bold, left-aligned, and borderless.
@@ -548,15 +626,18 @@ def summarize_all_combinations(
     Raises:
     -------
     ValueError
-        If the `variables` list is empty or not provided, or if `data_path` or
-        `data_name` is invalid.
+        If the `variables` list is empty or not provided.
 
     Outputs:
     --------
-    - An Excel file at the specified path with the following:
-        - A "Table of Contents" sheet linking to all combination sheets.
-        - Individual sheets for each variable combination, summarizing the
-          counts and proportions of combinations in the DataFrame.
+    - If `data_path` and `data_name` are provided:
+        - An Excel file at the specified path with the following:
+            - A "Table of Contents" sheet linking to all combination sheets.
+            - Individual sheets for each variable combination summarizing counts
+              and proportions.
+    - If not provided:
+        - The function still returns all generated summary tables and combinations
+          without writing any files.
     """
 
     summary_tables = {}
@@ -602,86 +683,92 @@ def summarize_all_combinations(
 
     file_path = f"{data_path}/{data_name}"
 
-    # Writing to Excel with progress tracking
-    with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
-        # Write the Table of Contents (legend sheet)
-        legend_df.to_excel(writer, sheet_name="Table of Contents", index=False)
+    if data_path and data_name:
+        file_path = Path(data_path) / data_name
+        # Writing to Excel with progress tracking
+        with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
+            # Write the Table of Contents (legend sheet)
+            legend_df.to_excel(writer, sheet_name="Table of Contents", index=False)
 
-        workbook = writer.book
-        toc_worksheet = writer.sheets["Table of Contents"]
+            workbook = writer.book
+            toc_worksheet = writer.sheets["Table of Contents"]
 
-        # Add hyperlinks to the sheet names
-        for i, sheet_name in enumerate(
-            tqdm(sheet_names, desc="Writing Table of Contents", leave=False),
-            start=2,
-        ):
-            cell = f"A{i}"
-            toc_worksheet.write_url(cell, f"#'{sheet_name}'!A1", string=sheet_name)
+            # Add hyperlinks to the sheet names
+            for i, sheet_name in enumerate(
+                tqdm(sheet_names, desc="Writing Table of Contents", leave=False),
+                start=2,
+            ):
+                cell = f"A{i}"
+                toc_worksheet.write_url(
+                    cell, f"internal:'{sheet_name}'!A1", string=sheet_name
+                )
 
-        # Set column widths and alignment for Table of Contents
-        toc_worksheet.set_column("A:A", 50)  # Set width for column A (Sheet Name)
-        toc_worksheet.set_column("B:B", 100)  # Set width for column B (Description)
+            # Set column widths and alignment for Table of Contents
+            toc_worksheet.set_column("A:A", 50)  # Set width for column A (Sheet Name)
+            toc_worksheet.set_column("B:B", 100)  # Set width for column B (Description)
 
-        # Create a format for left-aligned text
-        cell_format = workbook.add_format({"align": "left"})
-        toc_worksheet.set_column("A:A", 50, cell_format)  # Column A
-        toc_worksheet.set_column("B:B", 100, cell_format)  # Column B
+            # Create a format for left-aligned text
+            cell_format = workbook.add_format({"align": "left"})
+            toc_worksheet.set_column("A:A", 50, cell_format)  # Column A
+            toc_worksheet.set_column("B:B", 100, cell_format)  # Column B
 
-        # Format the header row of Table of Contents
-        header_format_toc = workbook.add_format(
-            {"bold": True, "align": "left", "border": 0}
-        )
-        toc_worksheet.write_row("A1", legend_df.columns, header_format_toc)
+            # Format the header row of Table of Contents
+            header_format_toc = workbook.add_format(
+                {"bold": True, "align": "left", "border": 0}
+            )
+            toc_worksheet.write_row("A1", legend_df.columns, header_format_toc)
 
-        # Define a format with no borders for the header row in other sheets
-        header_format_no_border = workbook.add_format(
-            {"bold": True, "border": 0, "align": "left"}
-        )
+            # Define a format with no borders for the header row in other sheets
+            header_format_no_border = workbook.add_format(
+                {"bold": True, "border": 0, "align": "left"}
+            )
 
-        # Define a format for left-aligned text in other sheets
-        left_align_format = workbook.add_format({"align": "left"})
+            # Define a format for left-aligned text in other sheets
+            left_align_format = workbook.add_format({"align": "left"})
 
-        # Third tqdm for writing summary tables
-        for sheet_name, table in tqdm(
-            summary_tables.items(),
-            desc="Writing summary tables",
-            leave=True,
-        ):
-            sheet_name_str = "_".join(sheet_name)[
-                :31
-            ]  # Ensure sheet name is <= 31 characters
-            table.to_excel(writer, sheet_name=sheet_name_str, index=False)
+            # Third tqdm for writing summary tables
+            for sheet_name, table in tqdm(
+                summary_tables.items(),
+                desc="Writing summary tables",
+                leave=True,
+            ):
+                sheet_name_str = "_".join(sheet_name)[
+                    :31
+                ]  # Ensure sheet name is <= 31 characters
+                table.to_excel(writer, sheet_name=sheet_name_str, index=False)
 
-            worksheet = writer.sheets[sheet_name_str]
+                worksheet = writer.sheets[sheet_name_str]
 
-            # Apply format to the header row (top row)
-            for col_num, col_name in enumerate(table.columns):
-                worksheet.write(0, col_num, col_name, header_format_no_border)
+                # Apply format to the header row (top row)
+                for col_num, col_name in enumerate(table.columns):
+                    worksheet.write(0, col_num, col_name, header_format_no_border)
 
-            # Apply left alignment to all columns
-            for row_num in range(1, len(table) + 1):
-                for col_num in range(len(table.columns)):
-                    worksheet.write(
-                        row_num,
-                        col_num,
-                        table.iloc[row_num - 1, col_num],
-                        left_align_format,
+                # Apply left alignment to all columns
+                for row_num in range(1, len(table) + 1):
+                    for col_num in range(len(table.columns)):
+                        worksheet.write(
+                            row_num,
+                            col_num,
+                            table.iloc[row_num - 1, col_num],
+                            left_align_format,
+                        )
+
+                # Auto-fit all columns with added space
+                for col_num, col_name in enumerate(table.columns):
+                    max_length = max(
+                        table[col_name].astype(str).map(len).max(), len(col_name)
                     )
+                    worksheet.set_column(
+                        col_num, col_num, max_length + 2, left_align_format
+                    )
+        # Add the Writing to Excel progress bar after everything else
+        with tqdm(desc="Finalizing Excel file", total=1, leave=True) as pbar:
+            pbar.update(1)
 
-            # Auto-fit all columns with added space
-            for col_num, col_name in enumerate(table.columns):
-                max_length = max(
-                    table[col_name].astype(str).map(len).max(), len(col_name)
-                )
-                worksheet.set_column(
-                    col_num, col_num, max_length + 2, left_align_format
-                )
+        print(f"Data saved to {file_path}")
 
-    # Add the Writing to Excel progress bar after everything else
-    with tqdm(desc="Finalizing Excel file", total=1, leave=True) as pbar:
-        pbar.update(1)
-
-    print(f"Data saved to {file_path}")
+    else:
+        print("Excel export skipped (no path or filename provided).")
 
     return summary_tables, all_combinations
 
@@ -908,6 +995,8 @@ def generate_table1(
     groupby_col: Optional[str] = None,
     use_fisher_exact: bool = False,
     use_welch: bool = True,
+    proportion_relative_to_cohort: bool = True,
+    include_overall: bool = True,
 ) -> Union[
     pd.DataFrame,
     Tuple[pd.DataFrame, pd.DataFrame],
@@ -947,6 +1036,8 @@ def generate_table1(
             .tolist()
         )
 
+    # slice copy [:] protects against skipping elements during in-place
+    # modification of continuous_cols while iterating
     if detect_binary_numeric:
         for col in continuous_cols[:]:
             unique_vals = df[col].dropna().unique()
@@ -970,7 +1061,6 @@ def generate_table1(
 
     if include_types in ["continuous", "both"]:
         for col in continuous_cols:
-
             series = df[col]
             non_missing = series.dropna()
             row = {
@@ -989,11 +1079,9 @@ def generate_table1(
                 "Missing (n)": series.isna().sum(),
                 "Missing (%)": 100 * series.isna().mean(),
                 "Count": non_missing.count(),
-                "Proportion (%)": 100 * non_missing.count() / total_rows,
+                "Proportion (%)": 100 * non_missing.count() / total_rows,  
             }
             if groupby_col:
-                # Perform Welch's t-test (unequal variance t-test) for continuous
-                # variables between the two groups
                 x1 = df[df[groupby_col] == g1][col].dropna()
                 x2 = df[df[groupby_col] == g2][col].dropna()
                 if use_welch:
@@ -1002,147 +1090,193 @@ def generate_table1(
                 else:
                     print(f"Using Student's t-test for continuous variable: {col}")
                     _, p = ttest_ind(x1, x2, equal_var=True)
-                    # always use t-test for continuous
+
                 row[group1_label] = (
-                    f"{len(x1):,} "
-                    f"({len(x1) / len(df[df[groupby_col] == g1]) * 100:.2f}%)"
+                    f"{x1.mean():.{decimal_places}f} "
+                    f"({x1.std():.{decimal_places}f})"
                 )
-
                 row[group2_label] = (
-                    f"{len(x2):,} "
-                    f"({len(x2) / len(df[df[groupby_col] == g2]) * 100:.2f}%)"
+                    f"{x2.mean():.{decimal_places}f} "
+                    f"({x2.std():.{decimal_places}f})"
                 )
-
+                row["_raw_pval"] = p
                 row["P-value"] = round(p, decimal_places)
             continuous_parts.append(row)
 
-    for col in categorical_cols:
-        series = df[col]
-        missing_n = series.isna().sum()
-        missing_pct = 100 * missing_n / total_rows
-        mode_val = series.mode().iloc[0] if not series.mode().empty else ""
+    if include_types in ["categorical", "both"]:
+        for col in categorical_cols:
+            series = df[col]
+            missing_n = series.isna().sum()
+            missing_pct = 100 * missing_n / total_rows
+            mode_val = series.mode().iloc[0] if not series.mode().empty else ""
 
-        if groupby_col:
-            if include_types in ["categorical", "both"] and groupby_col:
-                ct = pd.crosstab(df[col], df[groupby_col])
-                if ct.shape[1] == 2:
-                    if use_fisher_exact and ct.shape[0] == 2:
-                        print(f"Using Fisher's Exact Test for variable: {col}")
-                        _, p = fisher_exact(ct.to_numpy())
-                    else:
-                        if use_fisher_exact:
-                            print(
-                                f"Fisher's Exact Test requires a 2x2 table. "
-                                f"Falling back to chi-squared for '{col}'."
-                            )
-                        else:
-                            print(f"Using Chi-squared test for variable: {col}")
-                        _, p, _, _ = chi2_contingency(ct)
-
+            if groupby_col:
+                if series.dropna().empty:
                     summary_row = {
-                        "Variable": col,
-                        "Type": "Categorical",
-                        "Mean": "",
-                        "SD": "",
-                        "Median": "",
-                        "Min": "",
-                        "Max": "",
+                        "Variable": col, "Type": "Categorical",
+                        "Mean": "", "SD": "", "Median": "", "Min": "", "Max": "",
                         "Mode": mode_val,
-                        "Missing (n)": missing_n,
-                        "Missing (%)": missing_pct,
-                        "Count": series.notna().sum(),
-                        "Proportion (%)": 100 * series.notna().sum() / total_rows,
-                        group1_label: ct[g1].sum() if g1 in ct.columns else 0,
-                        group2_label: ct[g2].sum() if g2 in ct.columns else 0,
-                        "P-value": round(p, 4),
+                        "Missing (n)": missing_n, "Missing (%)": missing_pct,
+                        "Count": 0, "Proportion (%)": 0,
+                        group1_label: "0 (0.00%)",
+                        group2_label: "0 (0.00%)",
+                        "P-value": "",
                     }
                     categorical_parts.append(summary_row)
+                    continue
 
-        elif not groupby_col:
-            summary_row = {
-                "Variable": col,
-                "Type": "Categorical",
-                "Mean": "",
-                "SD": "",
-                "Median": "",
-                "Min": "",
-                "Max": "",
-                "Mode": mode_val,
-                "Missing (n)": missing_n,
-                "Missing (%)": missing_pct,
-                "Count": series.notna().sum(),
-                "Proportion (%)": 100 * series.notna().sum() / total_rows,
-            }
-            categorical_parts.append(summary_row)
+                ct = pd.crosstab(df[col], df[groupby_col])
+                ## warn instead of silently dropping non-2-column tables
+                if ct.shape[1] != 2:
+                    import warnings
+                    warnings.warn(
+                        f"Skipping '{col}': crosstab has {ct.shape[1]} group "
+                        f"columns, expected 2. Check `groupby_col` values.",
+                        UserWarning,
+                        stacklevel=2,
+                    )
+                    continue
 
-        if value_counts:
-            counts = series.value_counts(dropna=False)
-            if max_categories:
-                counts = counts.head(max_categories)
-            for cat_val, count in counts.items():
-                label = f"{col} = {cat_val}" if pd.notna(cat_val) else f"{col} = NaN"
-                if groupby_col:
-                    g1_mask = (df[col] == cat_val) & (df[groupby_col] == g1)
-                    g2_mask = (df[col] == cat_val) & (df[groupby_col] == g2)
-                    g1_count = g1_mask.sum()
-                    g2_count = g2_mask.sum()
-                    g1_total = (df[groupby_col] == g1).sum()
-                    g2_total = (df[groupby_col] == g2).sum()
-                    g1_prop = 100 * g1_count / g1_total if g1_total else 0
-                    g2_prop = 100 * g2_count / g2_total if g2_total else 0
-                    g1_str = f"{g1_count:,} ({g1_prop:.{decimal_places}f}%)"
-                    g2_str = f"{g2_count:,} ({g2_prop:.{decimal_places}f}%)"
-
-                    row = {
-                        "Variable": label,
-                        "Type": "Categorical",
-                        "Mean": "",
-                        "SD": "",
-                        "Median": "",
-                        "Min": "",
-                        "Max": "",
-                        "Mode": mode_val,
-                        "Missing (n)": missing_n,
-                        "Missing (%)": missing_pct,
-                        "Count": count,
-                        "Proportion (%)": 100 * count / total_rows,
-                        group1_label: g1_str,
-                        group2_label: g2_str,
-                    }
+                if use_fisher_exact and ct.shape[0] == 2:
+                    print(f"Using Fisher's Exact Test for variable: {col}")
+                    _, p = fisher_exact(ct.to_numpy())
                 else:
-                    row = {
-                        "Variable": label,
-                        "Type": "Categorical",
-                        "Mean": "",
-                        "SD": "",
-                        "Median": "",
-                        "Min": "",
-                        "Max": "",
-                        "Mode": mode_val,
-                        "Missing (n)": missing_n,
-                        "Missing (%)": missing_pct,
-                        "Count": count,
-                        "Proportion (%)": 100 * count / total_rows,
-                    }
-                categorical_parts.append(row)
+                    if use_fisher_exact:
+                        print(
+                            f"Fisher's Exact Test requires a 2x2 table. "
+                            f"Falling back to chi-squared for '{col}'."
+                        )
+                    else:
+                        print(f"Using Chi-squared test for variable: {col}")
+                    _, p, _, _ = chi2_contingency(ct)
 
-    if apply_bonferroni:
+                summary_row = {
+                    "Variable": col,
+                    "Type": "Categorical",
+                    "Mean": "",
+                    "SD": "",
+                    "Median": "",
+                    "Min": "",
+                    "Max": "",
+                    "Mode": mode_val,
+                    "Missing (n)": missing_n,
+                    "Missing (%)": missing_pct,
+                    "Count": series.notna().sum(),
+                    "Proportion (%)": 100 * series.notna().sum() / total_rows,
+                    group1_label: (
+                        f"{(df[groupby_col] == g1).sum():,} "
+                        f"({100 * (df[groupby_col] == g1).sum() / total_rows:.{decimal_places}f}%)"
+                        if g1 in ct.columns
+                        else "0"
+                    ),
+                    group2_label: (
+                        f"{(df[groupby_col] == g2).sum():,} "
+                        f"({100 * (df[groupby_col] == g2).sum() / total_rows:.{decimal_places}f}%)"
+                        if g2 in ct.columns
+                        else "0"
+                    ),
+                    "_raw_pval": p,
+                    "P-value": round(p, decimal_places),
+                }
+                categorical_parts.append(summary_row)
+
+            else:
+                summary_row = {
+                    "Variable": col,
+                    "Type": "Categorical",
+                    "Mean": "",
+                    "SD": "",
+                    "Median": "",
+                    "Min": "",
+                    "Max": "",
+                    "Mode": mode_val,
+                    "Missing (n)": missing_n,
+                    "Missing (%)": missing_pct,
+                    "Count": series.notna().sum(),
+                    "Proportion (%)": 100 * series.notna().sum() / total_rows,
+                }
+                categorical_parts.append(summary_row)
+
+            if value_counts:
+                counts = series.value_counts(dropna=False)
+                if max_categories:
+                    counts = counts.head(max_categories)
+                for cat_val, count in counts.items():
+                    label = (
+                        f"{col} = {cat_val}"
+                        if pd.notna(cat_val)
+                        else f"{col} = NaN"
+                    )
+                    if groupby_col:
+                        if pd.isna(cat_val):
+                            col_mask = df[col].isna()
+                        else:
+                            col_mask = df[col] == cat_val
+                        g1_mask = col_mask & (df[groupby_col] == g1)
+                        g2_mask = col_mask & (df[groupby_col] == g2)
+                        g1_count = g1_mask.sum()
+                        g2_count = g2_mask.sum()
+                        g1_total = (df[groupby_col] == g1).sum()
+                        g2_total = (df[groupby_col] == g2).sum()
+                        g1_prop = 100 * g1_count / g1_total if g1_total else 0
+                        g2_prop = 100 * g2_count / g2_total if g2_total else 0
+                        g1_str = f"{g1_count:,} ({g1_prop:.{decimal_places}f}%)"
+                        g2_str = f"{g2_count:,} ({g2_prop:.{decimal_places}f}%)"
+                        row = {
+                            "Variable": label,
+                            "Type": "Categorical",
+                            "Mean": "",
+                            "SD": "",
+                            "Median": "",
+                            "Min": "",
+                            "Max": "",
+                            "Mode": mode_val,
+                            "Missing (n)": missing_n,
+                            "Missing (%)": missing_pct,
+                            "Count": count,
+                            "Proportion (%)": (
+                                100 * count / total_rows
+                                if proportion_relative_to_cohort
+                                else 100 * count / series.notna().sum()
+                            ),
+                            group1_label: g1_str,
+                            group2_label: g2_str,
+                        }
+                    else:
+                        row = {
+                            "Variable": label,
+                            "Type": "Categorical",
+                            "Mean": "",
+                            "SD": "",
+                            "Median": "",
+                            "Min": "",
+                            "Max": "",
+                            "Mode": mode_val,
+                            "Missing (n)": missing_n,
+                            "Missing (%)": missing_pct,
+                            "Count": count,
+                            "Proportion (%)": (
+                                100 * count / total_rows
+                                if proportion_relative_to_cohort
+                                else 100 * count / series.notna().sum()
+                            ),
+                        }
+                    categorical_parts.append(row)
+
+    if apply_bonferroni or apply_bh_fdr:
         all_pval_keys = []
         all_raw_pvals = []
 
-        # Collect continuous p-values
         for i, row in enumerate(continuous_parts):
-            if "P-value" in row:
+            if "_raw_pval" in row:
                 all_pval_keys.append(("continuous", i))
-                all_raw_pvals.append(row["P-value"])
+                all_raw_pvals.append(row["_raw_pval"])
 
-        # Collect categorical p-values
         for i, row in enumerate(categorical_parts):
-            if "P-value" in row:
+            if "_raw_pval" in row:
                 all_pval_keys.append(("categorical", i))
-                all_raw_pvals.append(row["P-value"])
+                all_raw_pvals.append(row["_raw_pval"])
 
-        # Apply Bonferroni or Benjamini-Hochberg correction globally
         if apply_bonferroni:
             corrected = [min(p * len(all_raw_pvals), 1.0) for p in all_raw_pvals]
         elif apply_bh_fdr:
@@ -1152,9 +1286,7 @@ def generate_table1(
             bh_adjusted = np.empty(n)
             for i in range(n):
                 bh_adjusted[i] = sorted_pvals[i] * n / (i + 1)
-            bh_adjusted = np.minimum.accumulate(bh_adjusted[::-1])[
-                ::-1
-            ]  # enforce monotonicity
+            bh_adjusted = np.minimum.accumulate(bh_adjusted[::-1])[::-1]
             bh_adjusted = np.clip(bh_adjusted, 0, 1.0)
             corrected = np.empty_like(bh_adjusted)
             corrected[sorted_indices] = bh_adjusted
@@ -1163,83 +1295,117 @@ def generate_table1(
 
         for (section, i), p_adj in zip(all_pval_keys, corrected):
             if section == "continuous":
-                continuous_parts[i]["P-value"] = round(p_adj, 4)
+                continuous_parts[i]["P-value"] = p_adj
+                del continuous_parts[i]["_raw_pval"]
             else:
-                categorical_parts[i]["P-value"] = round(p_adj, 4)
+                categorical_parts[i]["P-value"] = p_adj
+                del categorical_parts[i]["_raw_pval"]
 
+    for row in continuous_parts + categorical_parts:
+        row.pop("_raw_pval", None)
+
+    if include_overall:     
+        def make_overall(row):
+            if row.get("Type") == "Continuous":
+                mean = row.get("Mean", "")
+                sd = row.get("SD", "")
+                if mean != "" and sd != "":
+                    return (
+                        f"{mean:,.{decimal_places}f} "
+                        f"({sd:,.{decimal_places}f})"
+                    )
+                return ""
+            elif row.get("Type") == "Categorical":
+                count = row.get("Count", "")
+                prop = row.get("Proportion (%)", "")
+                if count != "" and prop != "":
+                    return f"{int(count):,} ({prop:.{decimal_places}f}%)"
+                return ""
+            return ""
+
+        overall_continuous = [make_overall(r) for r in continuous_parts]
+        overall_categorical = [make_overall(r) for r in categorical_parts]
+
+    
     df_continuous = pd.DataFrame(continuous_parts).replace({np.nan: ""})
-
     df_categorical = pd.DataFrame(categorical_parts).replace({np.nan: ""})
 
     def format_numeric_cols(df):
-        # which floats to format
-        float_cols = [
-            "Mean",
-            "SD",
-            "Median",
-            "Min",
-            "Max",
-            "Mode",
-            "Missing (%)",
-            "Proportion (%)",
-            "P-value",  # now gets the same decimal/comma formatting
-        ]
-        # which ints to format
-        int_cols = ["Count", "Missing (n)"]
-        # include the two dynamic group columns if we're grouped
-        if groupby_col:
-            int_cols.extend([group1_label, group2_label])
+            float_cols = [
+                "Mean", "SD", "Median", "Min", "Max", "Mode",
+                "Missing (%)", "Proportion (%)", "P-value",
+            ]
+            int_cols = ["Count", "Missing (n)"]
 
-        def is_numeric_string(x):
-            try:
-                return x != "" and float(str(x).replace(",", "")) == float(
-                    str(x).replace(",", "")
-                )
-            except:
-                return False
-
-        # format all float columns with commas and fixed decimal places
-        for col in float_cols:
-            if col in df.columns:
-                df[col] = df[col].apply(
-                    lambda x: (
-                        f"{float(str(x).replace(',', '')):,.{decimal_places}f}"
-                        if is_numeric_string(x)
-                        else "" if pd.isna(x) else x
+            def is_numeric_string(x):
+                try:
+                    return x != "" and float(str(x).replace(",", "")) == float(
+                        str(x).replace(",", "")
                     )
-                )
+                except Exception:
+                    return False
 
-        # format all int columns with commas
-        for col in int_cols:
-            if col in df.columns:
-                df[col] = df[col].apply(
-                    lambda x: (
-                        f"{int(float(str(x).replace(',', ''))):,}"
-                        if is_numeric_string(x)
-                        else "" if pd.isna(x) else x
+            for col in float_cols:
+                if col in df.columns:
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            f"{float(str(x).replace(',', '')):,.{decimal_places}f}"
+                            if is_numeric_string(x)
+                            else "" if pd.isna(x) else x
+                        )
                     )
-                )
 
-        return df
+            for col in int_cols:
+                if col in df.columns:
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            f"{int(float(str(x).replace(',', ''))):,}"
+                            if is_numeric_string(x)
+                            else "" if pd.isna(x) else x
+                        )
+                    )
 
+            return df
+    
     df_continuous = format_numeric_cols(df_continuous)
     df_categorical = format_numeric_cols(df_categorical)
+
+    if include_overall:
+        if not df_continuous.empty:
+            df_continuous.insert(1, "Overall", overall_continuous)
+        if not df_categorical.empty:
+            df_categorical.insert(1, "Overall", overall_categorical)
 
     drop_cols = ["Mean", "SD", "Median", "Min", "Max"]
     df_categorical.drop(columns=drop_cols, inplace=True, errors="ignore")
 
-    def df_to_markdown(df):
-        lines = []
-        header = "| " + " | ".join(df.columns) + " |"
-        separator = "| " + " | ".join(["---"] * len(df.columns)) + " |"
-        lines.append(header)
-        lines.append(separator)
-        for _, row in df.iterrows():
-            row_str = (
-                "| " + " | ".join(str(val) if val != "" else "" for val in row) + " |"
-            )
-            lines.append(row_str)
-        return "\n".join(lines)
+    if drop_columns:
+        df_continuous = df_continuous.drop(columns=drop_columns, errors="ignore")
+        df_categorical = df_categorical.drop(columns=drop_columns, errors="ignore")
+
+    if drop_variables:
+        if not df_continuous.empty and "Variable" in df_continuous.columns:
+            df_continuous = df_continuous[
+                ~df_continuous["Variable"]
+                .astype(str)
+                .apply(
+                    lambda x: any(
+                        x == var or x.startswith(f"{var} =")
+                        for var in drop_variables
+                    )
+                )
+            ]
+        if not df_categorical.empty and "Variable" in df_categorical.columns:
+            df_categorical = df_categorical[
+                ~df_categorical["Variable"]
+                .astype(str)
+                .apply(
+                    lambda x: any(
+                        x == var or x.startswith(f"{var} =")
+                        for var in drop_variables
+                    )
+                )
+            ]
 
     if export_markdown:
         if not markdown_path:
@@ -1247,49 +1413,21 @@ def generate_table1(
         else:
             markdown_path = str(markdown_path)
 
-        if drop_columns:
-            df_continuous = df_continuous.drop(columns=drop_columns, errors="ignore")
-            df_categorical = df_categorical.drop(columns=drop_columns, errors="ignore")
-
-        if drop_variables:
-            if not df_continuous.empty and "Variable" in df_continuous.columns:
-                df_continuous = df_continuous[
-                    ~df_continuous["Variable"]
-                    .astype(str)
-                    .apply(
-                        lambda x: any(
-                            x == var or x.startswith(f"{var} =")
-                            for var in drop_variables
-                        )
-                    )
-                ]
-            if not df_categorical.empty and "Variable" in df_categorical.columns:
-                df_categorical = df_categorical[
-                    ~df_categorical["Variable"]
-                    .astype(str)
-                    .apply(
-                        lambda x: any(
-                            x == var or x.startswith(f"{var} =")
-                            for var in drop_variables
-                        )
-                    )
-                ]
-
         if include_types == "continuous":
-            markdown_str = df_to_markdown(df_continuous)
+            markdown_str = _df_to_markdown(df_continuous)
             with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
                 f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
         elif include_types == "categorical":
-            markdown_str = df_to_markdown(df_categorical)
+            markdown_str = _df_to_markdown(df_categorical)
             with open(markdown_path.replace(".md", "_categorical.md"), "w") as f:
                 f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
         else:
-            md_cont = df_to_markdown(df_continuous)
-            md_cat = df_to_markdown(df_categorical)
+            md_cont = _df_to_markdown(df_continuous)
+            md_cat = _df_to_markdown(df_categorical)
             with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
                 f.write(md_cont)
             with open(markdown_path.replace(".md", "_categorical.md"), "w") as f:
@@ -1314,37 +1452,16 @@ def generate_table1(
     else:
         result = result.fillna("")
 
-    def attach_pretty_string(df, string):
-        return df
-
-    if isinstance(result, pd.DataFrame):
-        result = attach_pretty_string(result, "")
-    elif isinstance(result, tuple):
-        result = tuple(attach_pretty_string(r, "") for r in result)
-
     if return_markdown_only:
         if include_types == "continuous":
-            return df_to_markdown(df_continuous)
+            return _df_to_markdown(df_continuous)
         elif include_types == "categorical":
-            return df_to_markdown(df_categorical)
+            return _df_to_markdown(df_categorical)
         else:
             return {
-                "continuous": df_to_markdown(df_continuous),
-                "categorical": df_to_markdown(df_categorical),
+                "continuous": _df_to_markdown(df_continuous),
+                "categorical": _df_to_markdown(df_categorical),
             }
-
-    if not combine:
-        if (
-            hasattr(sys, "_getframe")
-            and sys._getframe(1).f_globals.get("__name__") == "__main__"
-        ):
-            if isinstance(result, tuple):
-                for i, r in enumerate(result):
-                    print(r)
-                    if i < len(result) - 1:
-                        print()
-            else:
-                print(result)
 
     if isinstance(result, pd.DataFrame):
         pretty = table1_to_str(result, float_precision=decimal_places)
@@ -1357,7 +1474,6 @@ def generate_table1(
         return TableWrapper(cont, pretty_cont), TableWrapper(cat, pretty_cat)
 
     return result
-
 
 ################################################################################
 ############################## Contingency Table ###############################
@@ -1503,3 +1619,1016 @@ def highlight_columns(
         ]
 
     return df.style.apply(highlight, axis=1)
+
+
+################################################################################
+############################## Group_by Imputer ################################
+################################################################################
+
+
+def groupby_imputer(
+    df: pd.DataFrame,
+    impute_col: str,
+    by: Union[List[str], str],
+    stat: str = "mean",
+    fallback: Union[str, float, int] = "global",
+    as_new_col: bool = True,
+    new_col_name: Optional[str] = None,
+):
+    """
+    Impute missing values in `target` using group-level statistics from `by`.
+
+    - impute_col: column with nulls (e.g. "age")
+    - by: one or more categorical columns to group on (e.g. ["sex", "education"])
+    - stat: "mean", "median", "min", "max"
+    - fallback: what to use if a group has no non-null target
+        - "global" -> use overall stat of `target`
+        - a number -> use that number
+    - as_new_col: if True, don't overwrite; create a new column
+    """
+    if isinstance(by, str):
+        by = [by]
+
+    df_out = df.copy()
+
+    # 1) compute group-level stats
+    if stat == "mean":
+        grp = df_out.groupby(by)[impute_col].mean()
+    elif stat == "median":
+        grp = df_out.groupby(by)[impute_col].median()
+    elif stat == "min":
+        grp = df_out.groupby(by)[impute_col].min()
+    elif stat == "max":
+        grp = df_out.groupby(by)[impute_col].max()
+    else:
+        raise ValueError("stat must be one of: mean, median, min, max")
+
+    # 2) attach back to df
+    # this gives you a column with group-level value for every row
+    df_out["_grp_stat"] = df_out[by].merge(
+        grp.rename("_grp_stat"), left_on=by, right_index=True, how="left"
+    )["_grp_stat"]
+
+    # 3) compute fallback
+    if fallback == "global":
+        if stat == "mean":
+            fb_val = df_out[impute_col].mean()
+        elif stat == "median":
+            fb_val = df_out[impute_col].median()
+        elif stat == "min":
+            fb_val = df_out[impute_col].min()
+        elif stat == "max":
+            fb_val = df_out[impute_col].max()
+    else:
+        fb_val = fallback
+
+    # 4) build final series
+    if as_new_col:
+        out_col = new_col_name or f"{impute_col}_{stat}_imputed"
+        df_out[out_col] = df_out[impute_col]
+    else:
+        out_col = impute_col
+
+    # where target is null → use group stat → if still null → fallback
+    df_out.loc[df_out[out_col].isna(), out_col] = df_out.loc[
+        df_out[out_col].isna(), "_grp_stat"
+    ]
+    df_out.loc[df_out[out_col].isna(), out_col] = fb_val
+
+    # clean up helper
+    df_out = df_out.drop(columns=["_grp_stat"])
+
+    return df_out
+
+
+################################################################################
+######################### Delete Inactive Dataframes ###########################
+################################################################################
+
+# ---------------------------------------------
+# optional imports for del_inactive_dataframes
+# ---------------------------------------------
+try:
+    import psutil  # optional, for process memory
+except Exception:  # pragma: no cover
+    psutil = None
+
+try:
+    from rich.console import Console  # type: ignore[import-not-found]
+    from rich.table import Table  # type: ignore[import-not-found]
+except Exception:  # pragma: no cover
+    Console = None
+    Table = None
+
+
+def del_inactive_dataframes(
+    dfs_to_keep: Union[str, Iterable[str]],
+    del_dataframes: bool = False,
+    namespace: Optional[Dict[str, Any]] = None,
+    include_ipython_cache: bool = False,
+    dry_run: bool = False,
+    run_gc: bool = True,
+    track_memory: bool = False,
+    memory_mode: str = "dataframes",
+    verbose: bool = True,
+) -> Dict[str, Any]:
+    """
+    Delete inactive pandas DataFrames from a namespace to help reduce memory usage,
+    while keeping only the DataFrames named in `dfs_to_keep`.
+
+    This utility is notebook friendly and cloud friendly:
+    - It can optionally include IPython/Jupyter output-cache variables like `_14`, `_15`.
+      These can hold references to large DataFrames and keep memory from being reclaimed.
+    - It uses Rich for pretty tables when available (Python 3.8+ and rich installed).
+      Otherwise it falls back to plain-text output (works on Python 3.7+).
+    - It can optionally report memory usage before and after. Process memory reporting uses
+      `psutil` if installed. DataFrame memory reporting uses pandas `memory_usage(deep=True)`.
+
+    Parameters
+    ----------
+    dfs_to_keep : str or Iterable[str]
+        Name or names of DataFrame variables to keep. Anything not in this list may be deleted
+        if `del_dataframes=True`.
+
+    del_dataframes : bool, default False
+        If True, delete DataFrames not listed in `dfs_to_keep`.
+        If False, do not delete anything (list and report only).
+
+    namespace : dict or None, default None
+        The namespace dictionary to inspect and optionally modify.
+        - If None, uses globals() of the module where this function is executed.
+        - In notebooks or scripts, passing `namespace=globals()` is often what you want.
+        - In other contexts, you can pass `locals()` or a custom dict.
+
+        Mental model:
+        - A namespace is simply a dictionary mapping variable names (strings) to objects.
+          This function searches that dictionary for values that are pandas DataFrames and,
+          if requested, deletes them by removing their names from the dictionary.
+
+        When to use which:
+        - Use `globals()` when DataFrames are defined at the notebook or script top level.
+        - Use `locals()` when DataFrames are defined inside a function and you want to inspect them there.
+        - Use a custom dict when you explicitly manage DataFrames in a container (for example, `frames`).
+
+        Important note about `locals()`:
+        - Modifying `locals()` inside a function is not guaranteed to affect actual local variables.
+          For reliable memory cleanup inside functions, prefer storing DataFrames in a dict and
+          passing that dict as `namespace`.
+
+    include_ipython_cache : bool, default False
+        If True, include IPython output-cache names of the form `_<number>` (example: `_14`)
+        when searching for and deleting DataFrames.
+        If False, these names are ignored.
+
+    dry_run : bool, default False
+        If True, compute and display what would be deleted, but do not actually delete anything.
+
+    run_gc : bool, default True
+        If True and deletions occur, call `gc.collect()` afterward.
+
+    track_memory : bool, default False
+        If True, capture and report memory usage before and after.
+
+    memory_mode : {"dataframes", "all"}, default "dataframes"
+        Controls which memory metrics are reported:
+        - "dataframes": report only total DataFrame memory using pandas `memory_usage(deep=True)`.
+        - "all": also report process RSS if `psutil` is installed.
+
+        Notes:
+        - Process RSS is an advisory metric and may not decrease immediately.
+
+    verbose : bool, default True
+        If True, print results (Rich tables if available, otherwise plain text).
+        If False, do not print anything and only return the summary dictionary.
+
+    Returns
+    -------
+    dict
+        Summary dictionary with:
+        - "active": sorted list of DataFrame names found before deletion
+        - "to_delete": sorted list of DataFrame names marked for deletion
+        - "deleted": sorted list of DataFrame names actually deleted
+        - "remaining": sorted list of DataFrame names remaining after deletion
+        - "used_rich": bool indicating whether Rich output was used
+        - "memory": dict with dataframe memory (and optional RSS) when track_memory=True
+    """
+
+    ns = globals() if namespace is None else namespace
+    used_rich = Console is not None and Table is not None
+
+    if memory_mode not in {"dataframes", "all"}:
+        raise ValueError("memory_mode must be one of: 'dataframes', 'all'")
+
+    # Normalize keep list
+    if isinstance(dfs_to_keep, str):
+        keep = {dfs_to_keep}
+    else:
+        keep = set(dfs_to_keep or [])
+
+    def is_ipython_cache_name(name: str) -> bool:
+        return name.startswith("_") and name[1:].isdigit()
+
+    def get_process_mem_mb() -> Optional[float]:
+        if psutil is None:
+            return None
+        try:
+            proc = psutil.Process(os.getpid())
+            return proc.memory_info().rss / (1024**2)
+        except Exception:
+            return None
+
+    def get_total_df_mem_mb(namespace_dict: Dict[str, Any]) -> float:
+        total_bytes = 0
+        for name, obj in namespace_dict.items():
+            if isinstance(obj, pd.DataFrame):
+                if (not include_ipython_cache) and is_ipython_cache_name(name):
+                    continue
+                try:
+                    total_bytes += int(obj.memory_usage(deep=True).sum())
+                except Exception:
+                    pass
+        return total_bytes / (1024**2)
+
+    # Output helpers
+    def plain_rule(title: str) -> None:
+        print("\n" + "=" * len(title))
+        print(title)
+        print("=" * len(title))
+
+    def plain_list(title: str, names: Iterable[str]) -> None:
+        print(title)
+        names = list(names)
+        if not names:
+            print("  (none)")
+            return
+        for n in names:
+            print(f"  - {n}")
+
+    def make_rich_table(title: str, names: Iterable[str], color: str):
+        table = Table(title=title)
+        table.add_column("DataFrame Name", justify="left", style=color, no_wrap=True)
+        for n in names:
+            table.add_row(n)
+        return table
+
+    def make_rich_memory_table(mem: Dict[str, Any]):
+        table = Table(title="Memory Usage (MB)")
+        table.add_column("Metric", no_wrap=True)
+        table.add_column("Before", justify="right")
+        table.add_column("After", justify="right")
+        table.add_column("Delta", justify="right")
+
+        rows = [("DataFrames total", mem["dataframes_mb"])]
+
+        if mem.get("mode") == "all" and "process_mb" in mem:
+            rows.insert(0, ("Process RSS", mem["process_mb"]))
+
+        for label, payload in rows:
+            b, a, d = payload["before"], payload["after"], payload["delta"]
+            if b is None or a is None or d is None:
+                table.add_row(label, "n/a", "n/a", "n/a")
+            else:
+                table.add_row(label, f"{b:.1f}", f"{a:.1f}", f"{d:+.1f}")
+
+        return table
+
+    def plain_memory_block(mem: Dict[str, Any]) -> None:
+        plain_rule("Memory Usage (MB)")
+
+        rows = [("DataFrames total", mem["dataframes_mb"])]
+
+        if mem.get("mode") == "all" and "process_mb" in mem:
+            rows.insert(0, ("Process RSS", mem["process_mb"]))
+
+        for label, payload in rows:
+            b, a, d = payload["before"], payload["after"], payload["delta"]
+            if b is None or a is None or d is None:
+                print(f"{label}: (unavailable)")
+            else:
+                print(f"{label}: {b:.1f} -> {a:.1f} ({d:+.1f})")
+
+    # Memory snapshot before
+    want_rss = memory_mode == "all"
+    mem_before_proc = get_process_mem_mb() if (track_memory and want_rss) else None
+    mem_before_df = get_total_df_mem_mb(ns) if track_memory else None
+
+    # Collect active DataFrames
+    active = {}
+    for name, obj in ns.items():
+        if isinstance(obj, pd.DataFrame):
+            if (not include_ipython_cache) and is_ipython_cache_name(name):
+                continue
+            active[name] = obj
+    active_names = sorted(active.keys())
+
+    # Determine deletions
+    to_delete = sorted(
+        [name for name in active.keys() if del_dataframes and name not in keep]
+    )
+
+    # Perform deletions
+    deleted = []
+    if del_dataframes and (not dry_run):
+        for name in to_delete:
+            if name in ns:
+                ns.pop(name, None)
+                deleted.append(name)
+        if run_gc and deleted:
+            gc.collect()
+    deleted = sorted(deleted)
+
+    # Remaining
+    remaining = []
+    if del_dataframes:
+        remaining = sorted(
+            name
+            for name, obj in ns.items()
+            if isinstance(obj, pd.DataFrame)
+            and (include_ipython_cache or not is_ipython_cache_name(name))
+        )
+
+    # Memory snapshot after
+    mem_after_proc = get_process_mem_mb() if (track_memory and want_rss) else None
+    mem_after_df = get_total_df_mem_mb(ns) if track_memory else None
+
+    memory = None
+    if track_memory:
+
+        def _delta(b, a):
+            return None if (b is None or a is None) else (a - b)
+
+        memory = {
+            "dataframes_mb": {
+                "before": mem_before_df,
+                "after": mem_after_df,
+                "delta": _delta(mem_before_df, mem_after_df),
+            },
+            "mode": memory_mode,
+        }
+
+        if want_rss:
+            memory["process_mb"] = {
+                "before": mem_before_proc,
+                "after": mem_after_proc,
+                "delta": _delta(mem_before_proc, mem_after_proc),
+            }
+
+    # Output
+    if verbose:
+        if used_rich:
+            console = Console()
+
+            console.rule("[bold cyan]Active DataFrames[/bold cyan]")
+            console.print(
+                make_rich_table("Current Active DataFrames", active_names, "magenta")
+            )
+
+            if del_dataframes:
+                console.rule("[bold yellow]Planned Deletions[/bold yellow]")
+                if to_delete:
+                    console.print(
+                        make_rich_table(
+                            "DataFrames Marked for Deletion", to_delete, "yellow"
+                        )
+                    )
+                else:
+                    console.print("[dim]No DataFrames match deletion criteria.[/dim]")
+
+                if dry_run:
+                    console.print(
+                        "[dim]Dry run enabled. No DataFrames were deleted.[/dim]"
+                    )
+                else:
+                    console.rule("[bold red]Deleted DataFrames[/bold red]")
+                    if deleted:
+                        console.print(
+                            make_rich_table("Deleted DataFrames", deleted, "red")
+                        )
+                    else:
+                        console.print("[dim]No DataFrames were deleted.[/dim]")
+
+                console.rule("[bold green]Remaining DataFrames[/bold green]")
+                console.print(
+                    make_rich_table("Remaining Active DataFrames", remaining, "green")
+                )
+
+            if track_memory and memory is not None:
+                console.rule("[bold blue]Memory[/bold blue]")
+                console.print(make_rich_memory_table(memory))
+
+        else:
+            plain_rule("Active DataFrames")
+            plain_list("Current Active DataFrames:", active_names)
+
+            if del_dataframes:
+                plain_rule("Planned Deletions")
+                plain_list("DataFrames Marked for Deletion:", to_delete)
+
+                if dry_run:
+                    print("Dry run enabled. No DataFrames were deleted.")
+                else:
+                    plain_rule("Deleted DataFrames")
+                    plain_list("Deleted DataFrames:", deleted)
+
+                plain_rule("Remaining DataFrames")
+                plain_list("Remaining Active DataFrames:", remaining)
+
+            if track_memory and memory is not None:
+                plain_memory_block(memory)
+
+    return {
+        "active": active_names,
+        "to_delete": to_delete,
+        "deleted": deleted,
+        "remaining": remaining if del_dataframes else [],
+        "used_rich": used_rich,
+        "memory": memory,
+    }
+
+################################################################################
+############################## Outlier Detection ###############################
+################################################################################
+
+def detect_outliers(
+    df: pd.DataFrame,
+    features: Optional[List[str]] = None,
+    method: str = "iqr",
+    threshold: float = 1.5,
+    contamination: float = 0.05,
+    return_mask: bool = False,
+    return_bounds: bool = False,
+    flag_col: Optional[str] = None,
+    groupby: Optional[str] = None,
+    verbose: bool = False,
+) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+    """
+    Detect outliers in numeric columns of a DataFrame using IQR, Z-score,
+    or Isolation Forest methods.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame to analyze for outliers.
+
+    features : list of str, optional
+        List of numeric column names to check for outliers. If None, all
+        numeric columns are used.
+
+    method : str, optional (default="iqr")
+        Outlier detection method. Options are:
+        - ``"iqr"``: flags values beyond ``threshold * IQR`` from Q1/Q3.
+        - ``"zscore"``: flags values whose absolute Z-score exceeds
+          ``threshold``.
+        - ``"isoforest"``: uses sklearn's IsolationForest with
+          ``contamination`` as the expected outlier fraction.
+
+    threshold : float, optional (default=1.5)
+        For ``"iqr"``: the IQR multiplier (e.g. 1.5 for standard Tukey
+        fences, 3.0 for extreme outliers).
+        For ``"zscore"``: the absolute Z-score cutoff (e.g. 3.0).
+        Ignored when ``method="isoforest"``.
+
+    contamination : float, optional (default=0.05)
+        Expected proportion of outliers in the dataset. Only used when
+        ``method="isoforest"``. Must be between 0 and 0.5.
+
+    return_mask : bool, optional (default=False)
+        If True, also returns a boolean DataFrame of the same shape as the
+        input (restricted to `features`) where ``True`` indicates an outlier.
+
+    return_bounds : bool, optional (default=False)
+        If True, also returns a dictionary mapping each feature name to a
+        ``(lower_bound, upper_bound)`` tuple. Bounds are ``"N/A"`` when
+        ``method="isoforest"``. The bounds dict can be passed directly to
+        ``data_doctor()`` as ``lower_cutoff`` / ``upper_cutoff`` inputs for
+        feature-level treatment.
+
+    flag_col : str or None, optional (default=None)
+        If provided, adds a boolean column with this name to ``df`` that is
+        ``True`` for any row where at least one feature is an outlier.
+        The DataFrame is modified in place.
+
+    groupby : str or None, optional (default=None)
+        If provided, outlier detection is performed within each group of this
+        column rather than across the full dataset. Useful when distributions
+        differ meaningfully between groups (e.g. by diagnosis, age group).
+
+    verbose : bool, optional (default=False)
+        If True, prints a formatted ASCII summary report to the console
+        showing each feature's outlier count, percentage, and bounds —
+        similar to the report style used in ``data_doctor()``.
+
+    Returns:
+    --------
+    summary : pd.DataFrame
+        A summary DataFrame with columns:
+        ``Variable``, ``Outlier (n)``, ``Outlier (%)``,
+        ``Lower Bound``, ``Upper Bound``.
+        When ``method="isoforest"``, bounds are shown as ``N/A``.
+
+    mask : pd.DataFrame
+        Boolean outlier mask, only returned when ``return_mask=True``.
+
+    bounds : dict
+        Dictionary mapping feature names to ``(lower_bound, upper_bound)``
+        tuples, only returned when ``return_bounds=True``.
+
+    Raises:
+    -------
+    ValueError
+        If ``method`` is not one of ``"iqr"``, ``"zscore"``, or
+        ``"isoforest"``.
+
+    ValueError
+        If ``threshold`` is not a positive number.
+
+    ValueError
+        If ``contamination`` is not between 0 and 0.5.
+
+    ValueError
+        If ``groupby`` column is not found in the DataFrame.
+
+    ValueError
+        If none of the specified ``features`` are numeric.
+
+    Notes:
+    ------
+    - Rows with NaN in a feature are excluded from outlier calculation for
+      that feature and are never flagged as outliers.
+    - When ``groupby`` is specified, IQR and Z-score bounds are computed
+      per group; IsolationForest is fit per group.
+    - ``flag_col`` marks a row as an outlier if *any* feature is flagged,
+      making it easy to filter the full outlier set with
+      ``df[df[flag_col]]``.
+    - Use the ``Lower Bound`` and ``Upper Bound`` values from the summary
+      or the ``bounds`` dict directly as ``lower_cutoff`` / ``upper_cutoff``
+      inputs to ``data_doctor()`` for feature-level transformation and
+      treatment.
+    """
+
+    # ------------------------------------------------------------------
+    # Validation
+    # ------------------------------------------------------------------
+    valid_methods = ["iqr", "zscore", "isoforest"]
+    if method not in valid_methods:
+        raise ValueError(
+            f"Invalid `method` '{method}'. Choose from {valid_methods}."
+        )
+
+    if threshold <= 0:
+        raise ValueError("`threshold` must be a positive number.")
+
+    if not (0 < contamination <= 0.5):
+        raise ValueError("`contamination` must be between 0 and 0.5.")
+
+    if groupby is not None and groupby not in df.columns:
+        raise ValueError(
+            f"`groupby` column '{groupby}' not found in DataFrame."
+        )
+
+    # ------------------------------------------------------------------
+    # Resolve features
+    # ------------------------------------------------------------------
+    if features is None:
+        features = df.select_dtypes(include="number").columns.tolist()
+        if groupby in features:
+            features.remove(groupby)
+    else:
+        features = [
+            f for f in features
+            if f in df.columns and pd.api.types.is_numeric_dtype(df[f])
+        ]
+
+    if not features:
+        raise ValueError(
+            "No numeric features found. Ensure `features` contains "
+            "numeric columns present in the DataFrame."
+        )
+
+    # ------------------------------------------------------------------
+    # Build boolean outlier mask (same index as df)
+    # ------------------------------------------------------------------
+    mask = pd.DataFrame(False, index=df.index, columns=features)
+
+    # Store bounds for the summary
+    bounds: Dict[str, Tuple] = {}
+
+    if method == "isoforest":
+        from sklearn.ensemble import IsolationForest
+
+        if groupby is None:
+            clean = df[features].dropna()
+            iso = IsolationForest(contamination=contamination, random_state=0)
+            preds = iso.fit_predict(clean)
+            outlier_idx = clean.index[preds == -1]
+            for feat in features:
+                mask.loc[outlier_idx, feat] = True
+                bounds[feat] = ("N/A", "N/A")
+        else:
+            for grp, grp_df in df.groupby(groupby, observed=True):
+                clean = grp_df[features].dropna()
+                if len(clean) < 2:
+                    continue
+                iso = IsolationForest(contamination=contamination, random_state=0)
+                preds = iso.fit_predict(clean)
+                outlier_idx = clean.index[preds == -1]
+                for feat in features:
+                    mask.loc[outlier_idx, feat] = True
+            for feat in features:
+                bounds[feat] = ("N/A", "N/A")
+
+    else:
+        for feat in features:
+            series = df[feat].dropna()
+
+            if groupby is None:
+                if method == "iqr":
+                    low_mask, high_mask, lower, upper = _flag_iqr(series, threshold)
+                else:
+                    low_mask, high_mask, lower, upper = _flag_zscore(series, threshold)
+                outlier_idx = series[low_mask | high_mask].index
+                mask.loc[outlier_idx, feat] = True
+                bounds[feat] = (round(lower, 4), round(upper, 4))
+
+            else:
+                all_lower, all_upper = [], []
+                for grp, grp_df in df.groupby(groupby, observed=True):
+                    grp_series = grp_df[feat].dropna()
+                    if len(grp_series) < 2:
+                        continue
+                    if method == "iqr":
+                        low_m, high_m, lower, upper = _flag_iqr(grp_series, threshold)
+                    else:
+                        low_m, high_m, lower, upper = _flag_zscore(grp_series, threshold)
+                    outlier_idx = grp_series[low_m | high_m].index
+                    mask.loc[outlier_idx, feat] = True
+                    all_lower.append(lower)
+                    all_upper.append(upper)
+                bounds[feat] = (
+                    round(min(all_lower), 4) if all_lower else np.nan,
+                    round(max(all_upper), 4) if all_upper else np.nan,
+                )
+
+    # ------------------------------------------------------------------
+    # Add flag column to df if requested
+    # ------------------------------------------------------------------
+    if flag_col is not None:
+        df[flag_col] = mask.any(axis=1)
+
+    # ------------------------------------------------------------------
+    # Build summary DataFrame
+    # ------------------------------------------------------------------
+    total = len(df)
+    summary_rows = []
+    for feat in features:
+        n_outliers = mask[feat].sum()
+        pct = round(100 * n_outliers / total, 2)
+        lower_b, upper_b = bounds[feat]
+        summary_rows.append(
+            {
+                "Variable": feat,
+                "Outlier (n)": int(n_outliers),
+                "Outlier (%)": pct,
+                "Lower Bound": lower_b,
+                "Upper Bound": upper_b,
+            }
+        )
+
+    summary = pd.DataFrame(summary_rows).sort_values(
+        "Outlier (%)", ascending=False
+    ).reset_index(drop=True)
+
+    # ------------------------------------------------------------------
+    # Verbose ASCII report
+    # ------------------------------------------------------------------
+    if verbose:
+        method_label = {
+            "iqr": f"IQR (threshold={threshold})",
+            "zscore": f"Z-Score (threshold={threshold})",
+            "isoforest": (
+                f"Isolation Forest "
+                f"(contamination={contamination})"
+            ),
+        }[method]
+
+        # Column widths — fixed so header and data rows always align
+        c0, c1, c2, c3, c4 = 22, 12, 12, 14, 14
+        # Top info table value col spans remaining cols + separators
+        info_key_w = c0
+        info_val_w = c1 + c2 + c3 + c4 + 9
+        total_width = c0 + c1 + c2 + c3 + c4 + 14
+
+        sep = (
+            f"+{'-'*(c0+2)}+{'-'*(c1+2)}"
+            f"+{'-'*(c2+2)}+{'-'*(c3+2)}+{'-'*(c4+2)}+"
+        )
+
+        print(
+            "OUTLIER DETECTION SUMMARY REPORT".center(total_width)
+        )
+        print(f"+{'-'*(info_key_w+2)}+{'-'*(info_val_w+2)}+")
+        print(
+            f"| {'Method':<{info_key_w}} "
+            f"| {method_label:<{info_val_w}} |"
+        )
+        print(
+            f"| {'Total rows':<{info_key_w}} "
+            f"| {total:<{info_val_w},} |"
+        )
+        if groupby:
+            print(
+                f"| {'Grouped by':<{info_key_w}} "
+                f"| {groupby:<{info_val_w}} |"
+            )
+        print(sep)
+        print(
+            f"| {'Variable':<{c0}} | {'Outlier (n)':>{c1}} | "
+            f"{'Outlier (%)':>{c2}} | "
+            f"{'Lower Bound':>{c3}} | {'Upper Bound':>{c4}} |"
+        )
+        print(sep)
+        for _, row in summary.iterrows():
+            lb = (
+                f"{row['Lower Bound']}"
+                if row['Lower Bound'] == "N/A"
+                else f"{row['Lower Bound']:,.4f}"
+            )
+            ub = (
+                f"{row['Upper Bound']}"
+                if row['Upper Bound'] == "N/A"
+                else f"{row['Upper Bound']:,.4f}"
+            )
+            print(
+                f"| {str(row['Variable']):<{c0}} "
+                f"| {row['Outlier (n)']:>{c1},} | "
+                f"{row['Outlier (%)']:>{c2}.2f} | "
+                f"{lb:>{c3}} | {ub:>{c4}} |"
+            )
+        print(sep)
+        total_flagged = mask.any(axis=1).sum()
+        print(
+            f"\nTotal flagged rows (any feature): "
+            f"{total_flagged:,} "
+            f"({100 * total_flagged / total:.2f}%)"
+        )
+
+    # ------------------------------------------------------------------
+    # Return
+    # ------------------------------------------------------------------
+    returns = [summary]
+    if return_mask:
+        returns.append(mask)
+    if return_bounds:
+        returns.append(bounds)
+
+    # When verbose=True and no structured returns are requested, suppress
+    # auto-display in Jupyter by returning None — the ASCII report is sufficient
+    if verbose and not (return_mask or return_bounds):
+        return None
+
+    if len(returns) == 1:
+        return returns[0]
+    return tuple(returns)
+
+################################################################################
+############################## Normality Tests #################################
+################################################################################
+
+def normality_tests(
+    df: pd.DataFrame,
+    features: Optional[List[str]] = None,
+    alpha: float = 0.05,
+    tests: Optional[List[str]] = None,
+    decimal_places: int = 6,
+) -> pd.DataFrame:
+    """
+    Run batch normality tests across numeric columns of a DataFrame.
+
+    Applies Shapiro-Wilk, D'Agostino K², and/or Anderson-Darling tests
+    to each specified feature and returns a summary DataFrame with test
+    statistics, p-values, and a pass/fail determination at the given
+    significance level.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame to analyze.
+
+    features : list of str, optional
+        List of numeric column names to test. If ``None``, all numeric
+        columns are used.
+
+    alpha : float, optional (default=0.05)
+        Significance level for the pass/fail determination. A feature
+        is considered normally distributed (``True``) if the p-value
+        exceeds ``alpha``. For Anderson-Darling, the test statistic is
+        compared to the critical value at the significance level closest
+        to ``alpha``.
+
+    tests : list of str, optional
+        List of tests to run. Options are ``"shapiro"``,
+        ``"dagostino"``, and ``"anderson"``. Defaults to all three if
+        not specified.
+
+    decimal_places : int, optional (default=6)
+        Number of decimal places to round the ``Statistic`` and
+        ``P-value`` columns in the returned summary DataFrame.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A summary DataFrame with columns:
+        ``Variable``, ``Test``, ``Statistic``, ``P-value``,
+        ``Normal``.
+
+        - ``P-value`` for Anderson-Darling is interpolated from
+          pre-calculated tables when scipy >= 1.17 is installed.
+          On older scipy versions, ``"-"`` is shown and pass/fail is
+          determined by comparing the statistic against the critical
+          value at ``alpha``.
+        - ``Normal`` is ``True`` if the feature passes the normality
+          test at the given ``alpha``, ``False`` otherwise.
+
+    Raises:
+    -------
+    ValueError
+        If ``alpha`` is not between 0 and 1.
+
+    ValueError
+        If any value in ``tests`` is not one of ``"shapiro"``,
+        ``"dagostino"``, or ``"anderson"``.
+
+    ValueError
+        If no numeric features are found.
+
+    Notes:
+    ------
+    - Shapiro-Wilk is most reliable for small samples (n < 5,000).
+      For larger samples it tends to reject normality even for
+      distributions that are approximately normal.
+    - D'Agostino K² is better suited for larger samples and tests
+      for skewness and kurtosis jointly.
+    - Anderson-Darling does not produce a p-value. Pass/fail is
+      determined by comparing the test statistic against the critical
+      value at the significance level closest to ``alpha`` from the
+      set ``[15%, 10%, 5%, 2.5%, 1%]``.
+    - NaN values are dropped per feature before testing.
+    - Results are sorted by ``Variable`` then ``Test`` for readability.
+    """
+
+    from scipy import stats as _stats
+
+    # ------------------------------------------------------------------
+    # Validation
+    # ------------------------------------------------------------------
+    valid_tests = ["shapiro", "dagostino", "anderson"]
+
+    if tests is None:
+        tests = valid_tests
+
+    invalid = [t for t in tests if t not in valid_tests]
+    if invalid:
+        raise ValueError(
+            f"Invalid test(s) {invalid}. "
+            f"Choose from {valid_tests}."
+        )
+
+    if not (0 < alpha < 1):
+        raise ValueError("`alpha` must be between 0 and 1.")
+
+    # ------------------------------------------------------------------
+    # Resolve features
+    # ------------------------------------------------------------------
+    if features is None:
+        features = df.select_dtypes(include="number").columns.tolist()
+    else:
+        features = [
+            f for f in features
+            if f in df.columns and pd.api.types.is_numeric_dtype(df[f])
+        ]
+
+    if not features:
+        raise ValueError(
+            "No numeric features found. Ensure `features` contains "
+            "numeric columns present in the DataFrame."
+        )
+
+    # Anderson-Darling significance levels available from scipy
+    _anderson_sig_levels = [0.15, 0.10, 0.05, 0.025, 0.01]
+
+    def _closest_anderson_idx(alpha):
+        """Return index of the significance level closest to alpha."""
+        return min(
+            range(len(_anderson_sig_levels)),
+            key=lambda i: abs(_anderson_sig_levels[i] - alpha),
+        )
+
+    # ------------------------------------------------------------------
+    # Run tests
+    # ------------------------------------------------------------------
+    rows = []
+
+    for feat in features:
+        series = df[feat].dropna().values
+
+        if "shapiro" in tests:
+            if len(series) < 3:
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Shapiro-Wilk",
+                    "Statistic": np.nan,
+                    "P-value": np.nan,
+                    "Normal": np.nan,
+                })
+            elif len(series) > 5000:
+                # Shapiro-Wilk is unreliable for n > 5,000 — skip it
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Shapiro-Wilk",
+                    "Statistic": "-",
+                    "P-value": "-",
+                    "Normal": "-",
+                })
+            else:
+                stat, p = _stats.shapiro(series)
+                normal = bool(p > alpha)
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Shapiro-Wilk",
+                    "Statistic": round(stat, decimal_places),
+                    "P-value": round(p, decimal_places),
+                    "Normal": normal,
+                })
+
+        if "dagostino" in tests:
+            if len(series) < 8:
+                stat, p, normal = np.nan, np.nan, np.nan
+            else:
+                stat, p = _stats.normaltest(series)
+                normal = bool(p > alpha)
+            rows.append({
+                "Variable": feat,
+                "Test": "D'Agostino K²",
+                "Statistic": round(stat, decimal_places) if not np.isnan(stat) else np.nan,
+                "P-value": round(p, decimal_places) if not np.isnan(p) else np.nan,
+                "Normal": normal,
+            })
+
+        if "anderson" in tests:
+            if len(series) < 3:
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Anderson-Darling",
+                    "Statistic": np.nan,
+                    "P-value": "-",
+                    "Normal": "-",
+                })
+            else:
+                # scipy >= 1.17 supports method="interpolate" which
+                # returns a p-value and silences the FutureWarning.
+                # Fall back to critical value comparison on older scipy.
+                try:
+                    result = _stats.anderson(
+                        series,
+                        dist="norm",
+                        method="interpolate",
+                    )
+                    p_ad = round(float(result.pvalue), decimal_places)
+                    normal = bool(p_ad > alpha)
+                except TypeError:
+                    result = _stats.anderson(series, dist="norm")
+                    idx = _closest_anderson_idx(alpha)
+                    critical_val = result.critical_values[idx]
+                    normal = bool(result.statistic < critical_val)
+                    p_ad = "-"
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Anderson-Darling",
+                    "Statistic": round(
+                        result.statistic, decimal_places
+                    ),
+                    "P-value": p_ad,
+                    "Normal": normal,
+                })
+
+    summary = (
+        pd.DataFrame(rows)
+        .sort_values(["Variable", "Test"])
+        .reset_index(drop=True)
+    )
+
+    # Notify user if any features were too large for Shapiro-Wilk
+    shapiro_skipped = summary[
+        (summary["Test"] == "Shapiro-Wilk") & (summary["Statistic"] == "-")
+    ]["Variable"].tolist()
+    if shapiro_skipped:
+        skipped_str = ", ".join(shapiro_skipped)
+        print(
+            f"\nNote: Shapiro-Wilk was skipped for: {skipped_str}"
+        )
+        print("Reason: n > 5,000. The test is unreliable at large n")
+        print("— even trivial deviations cause rejection.")
+        print("Use D'Agostino K\u00b2 or Anderson-Darling instead.")
+        print()
+
+    return summary

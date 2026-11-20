@@ -10,9 +10,9 @@ from docutils.parsers.rst import roles
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "EDA Toolkit"
-copyright = "2024, Leon Shpaner, Oscar Gil"
+copyright = "2024-2026, Leon Shpaner, Oscar Gil"
 author = "Leonid Shpaner, Oscar Gil"
-release = "0.0.30"
+release = "0.0.31"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -28,7 +28,7 @@ extensions = [
     # "sphinxcontrib.bibtex",
 ]
 
-smv_tag_whitelist = r"^v0\.0\.(1[6-9]|2[0-9])$"
+smv_tag_whitelist = r"^v0\.0\.(1[6-9]|2[0-9]|3[0-9])$"
 smv_branch_whitelist = r"^main$"  # Whitelist the main branch
 
 # Add this line to specify the bibliography file

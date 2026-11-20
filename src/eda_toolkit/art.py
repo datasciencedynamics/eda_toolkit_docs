@@ -555,7 +555,13 @@ ascii_art = {
 ###################################################################################
 
 
-def print_art(*art_names, all=False, suffix=None, output_file=None, output_path=None):
+def print_art(
+    *art_names,
+    all=False,
+    suffix=None,
+    output_file=None,
+    output_path=None,
+):
     """
     Print ASCII art based on user input and optionally save output to a
     specified path.
@@ -659,3 +665,10 @@ def print_art(*art_names, all=False, suffix=None, output_file=None, output_path=
     if output_file and output:
         with open(output_file, "w") as file:
             file.writelines(output)
+
+
+def about():
+    """Print the eda_toolkit logo, package overview, and version."""
+    import eda_toolkit
+
+    print(eda_toolkit.__doc__)

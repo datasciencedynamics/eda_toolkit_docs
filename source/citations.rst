@@ -24,18 +24,18 @@
 Citing EDA Toolkit
 ===================
 
-Shpaner, L., & Gil, O. (2024). EDA Toolkit (0.0.30). Zenodo. https://doi.org/10.5281/zenodo.13163208
+Shpaner, L., & Gil, O. (2026). EDA Toolkit (0.0.31). Zenodo. https://doi.org/10.5281/zenodo.13162633
 
 .. code:: bash
 
-    @software{shpaner_2024_13162633,
+    @software{shpaner_2026_13162633,
     author       = {Shpaner, Leonid and
                     Gil, Oscar},
     title        = {EDA Toolkit},
-    month        = aug,
-    year         = 2024,
+    month        = nov,
+    year         = 2026,
     publisher    = {Zenodo},
-    version      = {0.0.30},
+    version      = {0.0.31},
     doi          = {10.5281/zenodo.13162633},
     url          = {https://doi.org/10.5281/zenodo.13162633}
     }

@@ -24,6 +24,86 @@
 Changelog
 ==========
 
+`Version 0.0.31`_
+----------------------
+
+.. _Version 0.0.31: https://lshpaner.github.io/eda_toolkit_docs/v0.0.31/index.html
+
+Multiple-comparison adjustment, sample-size maps, missing-value handling, and packaging cleanup
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Summary
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This release adds p-value adjustment and sample-size reporting to
+``flex_corr_matrix``, fixes two long-standing plotting issues, makes
+``data_doctor`` safe on columns with missing values, and loosens the
+dependency pins so the library installs cleanly against current releases
+of the scientific Python stack. All changes are additive; nothing in the
+released API was removed or renamed. The minimum Python version remains
+``3.8``.
+
+``plots.py``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``flex_corr_matrix``
+
+- Added ``p_adjust`` (``None``, ``"bonferroni"``, ``"fdr_bh"``). The
+  correction is computed once per unique pair and runs before
+  ``filter_significance``, the stars/mask overlay, and ``return_sig``, so
+  every consumer sees adjusted p-values.
+- Added ``return_sig`` to return the pairwise p-value matrix as a DataFrame.
+- Added ``show_n``, ``return_n``, and ``n_format`` to draw or return the
+  pairwise sample sizes behind each coefficient (``"count"`` or
+  ``"percent"``). ``show_n`` is a mode switch and is mutually exclusive with
+  ``show_significance``.
+- Significance computation is decoupled from display, so p-values can be
+  returned without drawing the heatmap.
+
+``plot_distributions``
+
+- With ``hue`` set, the seaborn hue legend is preserved as-is instead of
+  being relabeled ``"kde"`` for every group.
+
+``data_doctor``
+
+- Missing values in the target feature are excluded from the transform and
+  the summary statistics, an ``[info]`` line reports how many were excluded,
+  and the new column written back with ``apply_as_new_col_to_df=True`` keeps
+  them missing (index-aligned, no length mismatch).
+- The cutoff footer is drawn only when ``apply_cutoff=True``.
+
+``data_manager.py``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``save_dataframes_to_excel``
+
+- Table-of-contents links now use the ``internal:`` URL form, which is
+  required by ``xlsxwriter`` 3.3 and later and accepted by earlier versions.
+
+``art.py`` and ``__init__.py``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Importing ``eda_toolkit`` no longer overrides the built-in ``help()``.
+- New ``about()`` prints the logo and the library overview.
+- ``help(eda_toolkit)`` shows the logo and overview only; the module namespace
+  is pruned of re-exported third-party names so the listing is no longer the
+  entire dependency tree.
+
+Packaging
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Dependencies declare minimum versions only (no upper caps); tested against
+  current releases including ``pandas`` 3 and ``numpy`` 2.
+- ``plotly`` and ``nbformat`` removed as dependencies (they were never
+  imported).
+- Added ``CITATION.cff`` with author ORCIDs and a pytest workflow running on
+  Python 3.10 through 3.13 (3.8 and 3.9 remain supported; they are no longer
+  available on GitHub's ``ubuntu-latest`` runners).
+- Repository URLs point at ``datasciencedynamics/eda_toolkit``.
+
+Test suite: 485 tests, 85 percent statement coverage.
+
 `Version 0.0.30`_
 ----------------------
 
