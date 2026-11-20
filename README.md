@@ -19,6 +19,7 @@ eda_toolkit_docs/
 │   ├── index.html     # latest version
 │   ├── main/          # build of the main branch
 │   └── v0.0.*/        # one directory per released version
+├── scripts/           # post-build fixes (patch_headshots.py)
 ├── src/eda_toolkit/   # copy of the library at the documented version
 ├── requirements.txt   # library and example dependencies
 └── requirements_docs.txt
@@ -47,6 +48,7 @@ sphinx-autobuild source build/html
    ```bash
    sphinx-multiversion source docs
    cp -r docs/v0.0.X/. docs/
+   python scripts/patch_headshots.py   # older versions hot-linked photos that no longer exist
    ```
 4. Commit `docs/` and push. GitHub Pages redeploys within a few minutes.
 
