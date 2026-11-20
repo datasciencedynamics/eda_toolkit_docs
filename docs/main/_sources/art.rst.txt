@@ -50,6 +50,19 @@ The ``ascii_art`` dictionary contains the following predefined artworks:
 - **ca_state_bb**: ASCII art of the State of California with a black background.
 - **ca_state_wb**: ASCII art of the State of California with a white background.
 
+.. function:: about()
+
+    Print the ``eda_toolkit`` logo followed by the library overview (the
+    module docstring). Added in version ``0.0.31`` as a replacement for the
+    former override of the built-in ``help()``: importing ``eda_toolkit`` no
+    longer changes ``help``, and ``help(eda_toolkit)`` now shows only the logo
+    and overview rather than every function in the package.
+
+    .. code-block:: python
+
+        import eda_toolkit
+        eda_toolkit.about()
+
 .. function:: print_art(*art_names, all=False, output_file=None, output_path=None)
 
     Print ASCII art based on user input and optionally save output to a specified path.

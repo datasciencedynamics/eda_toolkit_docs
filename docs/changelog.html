@@ -6,23 +6,23 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.30 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.31 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c9a2aafd" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c9a2aafd" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.js?v=fecc5f50" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.js" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=1986f1d6"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=bdfe75cf"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="_static/copybutton.js?v=a0ccc04e"></script>
-      <script src="_static/custom.js?v=fecc5f50"></script>
+      <script src="_static/custom.js"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -93,11 +93,22 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-31">Version 0.0.31</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-comparison-adjustment-sample-size-maps-missing-value-handling-and-packaging-cleanup">Multiple-comparison adjustment, sample-size maps, missing-value handling, and packaging cleanup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plots-py"><code class="docutils literal notranslate"><span class="pre">plots.py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-manager-py"><code class="docutils literal notranslate"><span class="pre">data_manager.py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#art-py-and-init-py"><code class="docutils literal notranslate"><span class="pre">art.py</span></code> and <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#packaging">Packaging</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-30">Version 0.0.30</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#add-full-path-image-filename-saving-and-thousands-separator-axis-formatting">Add full-path <code class="docutils literal notranslate"><span class="pre">image_filename</span></code> saving and thousands-separator axis formatting</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Summary</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plot-utils-py"><code class="docutils literal notranslate"><span class="pre">_plot_utils.py</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#plots-py"><code class="docutils literal notranslate"><span class="pre">plots.py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">plots.py</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#backward-compatibility">Backward compatibility</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
@@ -106,14 +117,14 @@
 <li class="toctree-l4"><a class="reference internal" href="#corr-threshold"><code class="docutils literal notranslate"><span class="pre">corr_threshold</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#return-corr"><code class="docutils literal notranslate"><span class="pre">return_corr</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#show-plot"><code class="docutils literal notranslate"><span class="pre">show_plot</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id3">Testing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Testing</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-29">Version 0.0.29</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-28">Version 0.0.28</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Summary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#new-parameters">New Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#edge-case-handling">Edge Case Handling</a></li>
@@ -125,7 +136,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-26">Version 0.0.26</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id9">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Summary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#motivation">Motivation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changes">Changes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#include-overall-parameter-default-true">1. <code class="docutils literal notranslate"><span class="pre">include_overall</span></code> parameter (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)</a></li>
@@ -134,8 +145,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#removed-duplicate-helpers-from-detect-outliers">4. Removed duplicate helpers from <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id10">Testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11">Backward Compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Backward Compatibility</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-25">Version 0.0.25</a><ul>
@@ -146,7 +157,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-24">Version 0.0.24</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enhancements">Enhancements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id14">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dependency-updates">Dependency Updates</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#infrastructure">Infrastructure</a></li>
 </ul>
@@ -186,9 +197,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id34">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id35">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id36">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id37">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id38">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id39">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -221,12 +232,90 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-31">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.31/index.html">Version 0.0.31</a><a class="headerlink" href="#version-0-0-31" title="Permalink to this heading"></a></h2>
+<section id="multiple-comparison-adjustment-sample-size-maps-missing-value-handling-and-packaging-cleanup">
+<h3>Multiple-comparison adjustment, sample-size maps, missing-value handling, and packaging cleanup<a class="headerlink" href="#multiple-comparison-adjustment-sample-size-maps-missing-value-handling-and-packaging-cleanup" title="Permalink to this heading"></a></h3>
+<section id="summary">
+<h4>Summary<a class="headerlink" href="#summary" title="Permalink to this heading"></a></h4>
+<p>This release adds p-value adjustment and sample-size reporting to
+<code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code>, fixes two long-standing plotting issues, makes
+<code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> safe on columns with missing values, and loosens the
+dependency pins so the library installs cleanly against current releases
+of the scientific Python stack. All changes are additive; nothing in the
+released API was removed or renamed. The minimum Python version remains
+<code class="docutils literal notranslate"><span class="pre">3.8</span></code>.</p>
+</section>
+<section id="plots-py">
+<h4><code class="docutils literal notranslate"><span class="pre">plots.py</span></code><a class="headerlink" href="#plots-py" title="Permalink to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code></p>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">p_adjust</span></code> (<code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bonferroni&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;fdr_bh&quot;</span></code>). The
+correction is computed once per unique pair and runs before
+<code class="docutils literal notranslate"><span class="pre">filter_significance</span></code>, the stars/mask overlay, and <code class="docutils literal notranslate"><span class="pre">return_sig</span></code>, so
+every consumer sees adjusted p-values.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">return_sig</span></code> to return the pairwise p-value matrix as a DataFrame.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">show_n</span></code>, <code class="docutils literal notranslate"><span class="pre">return_n</span></code>, and <code class="docutils literal notranslate"><span class="pre">n_format</span></code> to draw or return the
+pairwise sample sizes behind each coefficient (<code class="docutils literal notranslate"><span class="pre">&quot;count&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;percent&quot;</span></code>). <code class="docutils literal notranslate"><span class="pre">show_n</span></code> is a mode switch and is mutually exclusive with
+<code class="docutils literal notranslate"><span class="pre">show_significance</span></code>.</p></li>
+<li><p>Significance computation is decoupled from display, so p-values can be
+returned without drawing the heatmap.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">plot_distributions</span></code></p>
+<ul class="simple">
+<li><p>With <code class="docutils literal notranslate"><span class="pre">hue</span></code> set, the seaborn hue legend is preserved as-is instead of
+being relabeled <code class="docutils literal notranslate"><span class="pre">&quot;kde&quot;</span></code> for every group.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">data_doctor</span></code></p>
+<ul class="simple">
+<li><p>Missing values in the target feature are excluded from the transform and
+the summary statistics, an <code class="docutils literal notranslate"><span class="pre">[info]</span></code> line reports how many were excluded,
+and the new column written back with <code class="docutils literal notranslate"><span class="pre">apply_as_new_col_to_df=True</span></code> keeps
+them missing (index-aligned, no length mismatch).</p></li>
+<li><p>The cutoff footer is drawn only when <code class="docutils literal notranslate"><span class="pre">apply_cutoff=True</span></code>.</p></li>
+</ul>
+</section>
+<section id="data-manager-py">
+<h4><code class="docutils literal notranslate"><span class="pre">data_manager.py</span></code><a class="headerlink" href="#data-manager-py" title="Permalink to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code></p>
+<ul class="simple">
+<li><p>Table-of-contents links now use the <code class="docutils literal notranslate"><span class="pre">internal:</span></code> URL form, which is
+required by <code class="docutils literal notranslate"><span class="pre">xlsxwriter</span></code> 3.3 and later and accepted by earlier versions.</p></li>
+</ul>
+</section>
+<section id="art-py-and-init-py">
+<h4><code class="docutils literal notranslate"><span class="pre">art.py</span></code> and <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code><a class="headerlink" href="#art-py-and-init-py" title="Permalink to this heading"></a></h4>
+<ul class="simple">
+<li><p>Importing <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> no longer overrides the built-in <code class="docutils literal notranslate"><span class="pre">help()</span></code>.</p></li>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">about()</span></code> prints the logo and the library overview.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">help(eda_toolkit)</span></code> shows the logo and overview only; the module namespace
+is pruned of re-exported third-party names so the listing is no longer the
+entire dependency tree.</p></li>
+</ul>
+</section>
+<section id="packaging">
+<h4>Packaging<a class="headerlink" href="#packaging" title="Permalink to this heading"></a></h4>
+<ul class="simple">
+<li><p>Dependencies declare minimum versions only (no upper caps); tested against
+current releases including <code class="docutils literal notranslate"><span class="pre">pandas</span></code> 3 and <code class="docutils literal notranslate"><span class="pre">numpy</span></code> 2.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plotly</span></code> and <code class="docutils literal notranslate"><span class="pre">nbformat</span></code> removed as dependencies (they were never
+imported).</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">CITATION.cff</span></code> with author ORCIDs and a pytest workflow running on
+Python 3.10 through 3.13 (3.8 and 3.9 remain supported; they are no longer
+available on GitHub’s <code class="docutils literal notranslate"><span class="pre">ubuntu-latest</span></code> runners).</p></li>
+<li><p>Repository URLs point at <code class="docutils literal notranslate"><span class="pre">datasciencedynamics/eda_toolkit</span></code>.</p></li>
+</ul>
+<p>Test suite: 485 tests, 85 percent statement coverage.</p>
+</section>
+</section>
+</section>
 <section id="version-0-0-30">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.30/index.html">Version 0.0.30</a><a class="headerlink" href="#version-0-0-30" title="Permalink to this heading"></a></h2>
 <section id="add-full-path-image-filename-saving-and-thousands-separator-axis-formatting">
 <span id="image-filename-saving"></span><h3>Add full-path <code class="docutils literal notranslate"><span class="pre">image_filename</span></code> saving and thousands-separator axis formatting<a class="headerlink" href="#add-full-path-image-filename-saving-and-thousands-separator-axis-formatting" title="Permalink to this heading"></a></h3>
-<section id="summary">
-<h4>Summary<a class="headerlink" href="#summary" title="Permalink to this heading"></a></h4>
+<section id="id4">
+<h4>Summary<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
 <p>This PR lets every plotting function save figures by passing a single full path
 through <code class="docutils literal notranslate"><span class="pre">image_filename</span></code> (directory and extension included), with no
 requirement to also pass <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> / <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code>. It also adds
@@ -270,8 +359,8 @@ caller knows which of its axes is numeric.</p>
 <p>Also: added the <code class="docutils literal notranslate"><span class="pre">matplotlib.ticker</span> <span class="pre">as</span> <span class="pre">mticker</span></code> import, and a docstring typo
 fix (“Utilitys” to “Utilities”).</p>
 </section>
-<section id="plots-py">
-<h4><code class="docutils literal notranslate"><span class="pre">plots.py</span></code><a class="headerlink" href="#plots-py" title="Permalink to this heading"></a></h4>
+<section id="id5">
+<h4><code class="docutils literal notranslate"><span class="pre">plots.py</span></code><a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
 <section id="full-path-image-filename-support">
 <h5>Full-path <code class="docutils literal notranslate"><span class="pre">image_filename</span></code> support<a class="headerlink" href="#full-path-image-filename-support" title="Permalink to this heading"></a></h5>
 <p>Across the plotting functions, three independent fixes let a full-path
@@ -397,8 +486,8 @@ DataFrame.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">return_corr=True</span></code>, <code class="docutils literal notranslate"><span class="pre">show_plot=True</span></code>: plots and returns the DataFrame.</p></li>
 </ul>
 </section>
-<section id="id3">
-<h4>Testing<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
+<section id="id6">
+<h4>Testing<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h4>
 <p>New tests cover the <code class="docutils literal notranslate"><span class="pre">corr_threshold</span></code> variable-drop and raise-on-empty,
 invalid-threshold validation, the <code class="docutils literal notranslate"><span class="pre">return_corr</span></code> True/False contract, and
 <code class="docutils literal notranslate"><span class="pre">show_plot</span></code> suppress/draw/ignored-without-return. Existing tests are
@@ -432,8 +521,8 @@ TOTAL                                     2374    349    85%
 </section>
 <section id="version-0-0-28">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.28/index.html">Version 0.0.28</a><a class="headerlink" href="#version-0-0-28" title="Permalink to this heading"></a></h2>
-<section id="id6">
-<h3>Summary<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<section id="id9">
+<h3>Summary<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
 <p>This PR spans three functions, <code class="docutils literal notranslate"><span class="pre">grouped_distributions</span></code>,
 <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code>, and <code class="docutils literal notranslate"><span class="pre">box_violin_plot</span></code>, addressing a y-axis
 formatting bug, a clinical Table 1 convention fix, a shared helper
@@ -526,8 +615,8 @@ other column.</p>
 </section>
 <section id="version-0-0-26">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit_docs/v0.0.26/index.html">Version 0.0.26</a><a class="headerlink" href="#version-0-0-26" title="Permalink to this heading"></a></h2>
-<section id="id9">
-<h3>Summary<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<section id="id12">
+<h3>Summary<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
 <p>Adds three enhancements to <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> to improve output correctness and
 usability, driven by reviewer feedback on a clinical Table 1. Also removes locally
 redefined <code class="docutils literal notranslate"><span class="pre">_flag_iqr</span></code> and <code class="docutils literal notranslate"><span class="pre">_flag_zscore</span></code> helpers from inside <code class="docutils literal notranslate"><span class="pre">detect_outliers</span></code>
@@ -645,8 +734,8 @@ file; the local copies were silently shadowing those imports.</p></li>
 </ul>
 </section>
 </section>
-<section id="id10">
-<h3>Testing<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<section id="id13">
+<h3>Testing<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Updated <code class="docutils literal notranslate"><span class="pre">test_table1_return_markdown_only</span></code> to reflect the new column order.
 The assertion was changed from <code class="docutils literal notranslate"><span class="pre">&quot;|</span> <span class="pre">Variable</span> <span class="pre">|</span> <span class="pre">Type</span> <span class="pre">|</span> <span class="pre">Mode&quot;</span></code> to
@@ -666,8 +755,8 @@ TOTAL                                     2294    356    84%
 </pre></div>
 </div>
 </section>
-<section id="id11">
-<h3>Backward Compatibility<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<section id="id14">
+<h3>Backward Compatibility<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
 <p>All changes are fully backward compatible. <code class="docutils literal notranslate"><span class="pre">include_overall=True</span></code> and
 <code class="docutils literal notranslate"><span class="pre">proportion_relative_to_cohort=True</span></code> are the defaults, so existing call sites receive
 the improved behavior automatically. Users who want the previous output can pass
@@ -712,8 +801,8 @@ IQR, Z-score, and Isolation Forest methods with <code class="docutils literal no
 passthrough to <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code></p></li>
 </ul>
 </section>
-<section id="id14">
-<h3>Bug Fixes<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<section id="id17">
+<h3>Bug Fixes<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code>: Fixed title misalignment, <code class="docutils literal notranslate"><span class="pre">-0.00</span></code> display artifact,
 diagonal now shows <code class="docutils literal notranslate"><span class="pre">1.00</span></code> in both stars and mask modes; fixed <code class="docutils literal notranslate"><span class="pre">abs()</span></code> stripping
@@ -1687,8 +1776,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id34">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h2>
+<section id="id37">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -1706,8 +1795,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id35">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h2>
+<section id="id38">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -1789,8 +1878,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id36">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h2>
+<section id="id39">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
@@ -1823,7 +1912,7 @@ plots, and pass additional parameters to <code class="docutils literal notransla
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Leon Shpaner, Oscar Gil.</p>
+    <p>&#169; Copyright 2024-2026, Leon Shpaner, Oscar Gil.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
